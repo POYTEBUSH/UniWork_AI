@@ -22,13 +22,14 @@ public:
 
 	virtual void	Update(float deltaTime, SDL_Event e);
 	virtual void	Render();
-	Rect2D			GetAdjustedBoundingBox();
+
+	void			UpdateAdjustedBoundingBox();
 
 	//Attributes.
 	int				GetHealth()												{return mHealth;}
 	int				GetBullets()											{return mBullets;}
 	int				GetRockets()											{return mRockets;}
-	int				GetFuel()												{return mFuel;}
+	float			GetFuel()												{return mFuel;}
 	int				GetMines()												{return mMines;}
 
 	//Movement.
@@ -43,10 +44,8 @@ public:
 	float			GetNoiseRadius();
 
 	void			SetPosition(Vector2D newPosition)						{mPosition = newPosition;}
-	//Vector2D		GetPointAtFrontOfTank();
-	//Vector2D		GetPointAtRearOfTank();
-	
-	void			GetCornersOfTank(Vector2D* topLeft, Vector2D* topRight, Vector2D* bottomLeft, Vector2D* bottomRight);
+	Vector2D		GetPointAtFrontOfTank();
+	Vector2D		GetPointAtRearOfTank();
 
 	void			IncrementTankRotationAngle(double deg);
 	void			IncrementManRotationAngle(double deg);
@@ -59,11 +58,10 @@ public:
 	void			AddRockets(int numToAdd)								{mRockets += numToAdd;}
 	void			TakeDamage(GAMEOBJECT_TYPE projectile);
 	void			AddHealth(int numToAdd)									{mHealth += numToAdd;}
+	void			AddFuel(float fuelToAdd)								{mFuel += fuelToAdd;}
 
 	void			AddToScore(SCORE_TYPE scoreType);							
 	void			OutputScoreDetails();
-
-	//void			Rebound(Vector2D position);
 
 	Vector2D		GetHeading()											{return mHeading;}
 	Vector2D		GetVelocity()											{return mVelocity;}
@@ -96,14 +94,9 @@ private:
 	SDL_Rect		GetCurrentExplosionSprite();
 
 	void			DrawFoV();
-	void			DrawDebugCircle(Vector2D centrePoint, float radius, int red, int green, int blue);
-	void			DrawDebugLine(Vector2D startPoint, Vector2D endPoint, int red, int green, int blue);
-
+	
 	//---------------------------------------------------------------
 private:
-	//We need this to pass on to bullets.
-	SDL_Renderer*		mRenderer;
-
 	TANK_TYPE			mTankType;
 
 	//Animating man in tank.
@@ -118,6 +111,7 @@ private:
 	float				mRocketDelay;
 	float				mMineDelay;
 	float				mExplosionDelay;
+	float				mNoiseDelay;
 
 	Vector2D			mManOffset;
 	double				mManRotationAngle;
@@ -146,7 +140,7 @@ private:
 	//Attributes.
 	int					mHealth;
 	int					mBullets;
-	int					mFuel;
+	float				mFuel;
 	int					mMines;
 	int					mRockets;
 	

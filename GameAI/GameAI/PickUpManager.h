@@ -7,6 +7,7 @@
 #include <SDL.h>
 #include <vector>
 #include "Commons.h"
+
 using namespace::std;
 
 class GameObject;
@@ -21,7 +22,7 @@ public:
 	~PickUpManager();
 
 	static PickUpManager*		Instance();
-	void						Init(SDL_Renderer* renderer);
+	void						Init(SDL_Renderer* renderer, string mapDataPath);
 	void						RenderPickUps();
 	void						UpdatePickUps(float deltaTime);
 
@@ -33,7 +34,7 @@ public:
 private:
 	PickUpManager();
 
-	void LoadPickUps();
+	void LoadPickUps(string mapDataPath);
 	void CheckForACollision(BaseTank* tank);
 	void GenerateAPickUp();
 	bool CollisionWithAnObstacle(Vector2D positionToCheck);

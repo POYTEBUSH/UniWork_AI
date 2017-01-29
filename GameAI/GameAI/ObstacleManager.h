@@ -21,7 +21,7 @@ public:
 
 	static ObstacleManager* Instance();
 
-	void				Init(SDL_Renderer* renderer);
+	void				Init(SDL_Renderer* renderer, string mapDataPath);
 	vector<GameObject*> GetObstacles()									{return mObstacles;}
 	void				UpdateObstacles(float deltaTime, SDL_Event e);
 	void				RenderObstacles();
@@ -30,7 +30,7 @@ public:
 private:
 	ObstacleManager();
 
-	void   LoadObstacles(SDL_Renderer* renderer);
+	void   LoadObstacles(SDL_Renderer* renderer, string mapDataPath);
 
 	//---------------------------------------------------------------
 private:

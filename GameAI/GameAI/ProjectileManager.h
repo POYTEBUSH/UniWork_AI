@@ -8,6 +8,7 @@
 #include <SDL.h>
 #include "Commons.h"
 #include <vector>
+
 using namespace::std;
 
 class Projectile;

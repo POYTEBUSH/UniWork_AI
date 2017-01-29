@@ -8,13 +8,13 @@ using namespace::std;
 
 //--------------------------------------------------------------------------------------------------
 
-LevelMap::LevelMap(SDL_Renderer* renderer)
+LevelMap::LevelMap(SDL_Renderer* renderer, string mapDataPath)
 {
 	mSpritesheet = new Texture2D(renderer);
 
 	//Get the whole xml document.
 	TiXmlDocument doc;
-	if(!doc.LoadFile(kTilemapPath))
+	if(!doc.LoadFile(mapDataPath))
 	{
 		cerr << doc.ErrorDesc() << endl;
 	}

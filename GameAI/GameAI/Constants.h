@@ -43,18 +43,22 @@ const float kTimeBetweenPickups				= 15.0f;
 const float kSurvivalTimeUntilBonus			= 30.0f;
 
 //Scores
-const float kScore_BulletHit				= 2.0f;
-const float kScore_RocketHit				= 1.0f;
-const float kScore_MineHit					= 3.0f;
-const float kScore_DestroyedTank			= 10.0f;
-const float kScore_SurvivalBonus			= 5.0f;
-const float kScore_PickUp					= 2.5f;
+const float kScore_BulletHit				= 0.2f;
+const float kScore_RocketHit				= 0.1f;
+const float kScore_MineHit					= 0.3f;
+const float kScore_DestroyedTank			= 2.0f;
+const float kScore_SurvivalBonus			= 1.0f;
+const float kScore_PickUp					= 0.5f;
 const float kMaxScore						= 20.0f;
 
-//Weapon damage
+//Weapons
 const int		kBulletDamage				= 1;
 const int		kRocketDamage				= 5;
 const int		kMineDamage					= 10;
+
+const double	kCollisionBulletRadius		= 2.0f;
+const double	kCollisionRocketRadius		= 6.0f;
+const double	kCollisionMineRadius		= 10.0f;
 
 //Speeds
 const float		kSpeedIncrement				= 1000.0f;
@@ -72,5 +76,13 @@ const float		kAudioLargeRadius			= 60.0f;
 const float		kAudioMediumRadius			= 47.0f;
 const float		kAudioMediumRadius2			= 45.0f;
 const float		kAudioSmallRadius			= 30.0f;
+
+const double	kCollisionSmallRadius		= 15.0f;
+const double	kCollisionMediumRadius		= 19.5f;
+const double	kCollisionLargeRadius		= 22.0f;
+
+//Pickup details.
+const float		kSafeCrateDistance			= 25.0f;
+const double	kCollisionCrateRadius		= 9.0f;
 
 #endif //CONSTANTS_H

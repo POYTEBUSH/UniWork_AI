@@ -19,6 +19,9 @@
     <Filter Include="XML Data Files">
       <UniqueIdentifier>{b9834924-ea92-46ba-8dd5-33a1015f005b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PeterBush">
+      <UniqueIdentifier>{081c1468-9b3e-44d7-beaa-dee812aab109}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Waypoint.h">
@@ -86,6 +89,12 @@
     </ClInclude>
     <ClInclude Include="LevelMap.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Mine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PeterBush\B013432f_Tank.h">
+      <Filter>PeterBush</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -155,6 +164,12 @@
     <ClCompile Include="DumbTank.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Mine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PeterBush\B013432f_Tank.cpp">
+      <Filter>PeterBush</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Library Include="SDL\SDL2.lib" />
@@ -175,5 +190,10 @@
     <Xml Include="XML Data Files\Arena.xml">
       <Filter>XML Data Files</Filter>
     </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="XML Data Files\LevelData.xml">
+      <Filter>XML Data Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

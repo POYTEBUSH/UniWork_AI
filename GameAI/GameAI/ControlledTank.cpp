@@ -147,15 +147,15 @@ void ControlledTank::Update(float deltaTime, SDL_Event e)
 	{
 		if(mTankMoveDirection == DIRECTION_FORWARD)
 		{
-			mCurrentSpeed -= kSpeedIncrement*deltaTime;
-			if(mCurrentSpeed < -GetMaxSpeed())
-				mCurrentSpeed = -GetMaxSpeed();
+			mCurrentSpeed += kSpeedIncrement*deltaTime;
+			if(mCurrentSpeed > -GetMaxSpeed())
+				mCurrentSpeed = GetMaxSpeed();
 		}
 		else if(mTankMoveDirection == DIRECTION_BACKWARD)
 		{
-			mCurrentSpeed += kSpeedIncrement*deltaTime;
-			if(mCurrentSpeed > GetMaxSpeed())
-				mCurrentSpeed = GetMaxSpeed();
+			mCurrentSpeed -= kSpeedIncrement*deltaTime;
+			if(mCurrentSpeed < GetMaxSpeed())
+				mCurrentSpeed = -GetMaxSpeed();
 		}
 	}
 

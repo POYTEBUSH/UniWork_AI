@@ -8,6 +8,7 @@
 #include "Commons.h"
 #include <SDL.h>
 #include <vector>
+#include "GameScreenLevel1.h"
 using namespace::std;
 
 class BaseTank;
@@ -17,28 +18,29 @@ class GameObject;
 
 class TankManager
 {
+	friend void GameScreenLevel1::Update(float deltaTime, SDL_Event e);
 	//---------------------------------------------------------------
 public:
 	~TankManager();
 	static TankManager* Instance();
 
-	void				Init(SDL_Renderer* renderer);
-
-	//Note: You are not allowed to use this function in your version of an AI Tank - Any use will be deemed as cheating and result in disqualification - Use GetVisibleTanks() instead.
-	vector<BaseTank*>	GetTanks()									{return mTanks;}
+	void				Init(SDL_Renderer* renderer, string tankDataPath);
 
 	vector<BaseTank*>	GetVisibleTanks(BaseTank* lookingTank);
 	vector<BaseTank*>	GetAudibleTanks(BaseTank* hearingTank);
 	void				UpdateTanks(float deltaTime, SDL_Event e);
 	void				RenderTanks();
 
-	void				CheckForCollisions();
+	//void				CheckForCollisions();
 
 	//---------------------------------------------------------------
 private:
 	TankManager();
-	void		LoadTanks(SDL_Renderer* renderer);
+	void		LoadTanks(SDL_Renderer* renderer, string tankDataPath);
 	BaseTank*	GetTankObject(SDL_Renderer* renderer, TankSetupDetails details);
+
+	//Note: You are not allowed to use this function in your version of an AI Tank - Any use will be deemed as cheating and result in disqualification - Use GetVisibleTanks() instead.
+	vector<BaseTank*>	GetTanks()									{return mTanks;}
 
 	//---------------------------------------------------------------
 private:

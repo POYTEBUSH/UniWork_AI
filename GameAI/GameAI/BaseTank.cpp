@@ -1,4 +1,5 @@
 #include "BaseTank.h"
+#include "GameObject.h"
 #include "Texture2D.h"
 #include <SDL.h>
 #include <iostream>
@@ -10,6 +11,8 @@
 #include "C2DMatrix.h"
 #include "Commons.h"
 
+#include "GameScreenLevel1.h"
+
 using namespace::std;
 
 //--------------------------------------------------------------------------------------------------
@@ -17,16 +20,15 @@ using namespace::std;
 BaseTank::BaseTank(SDL_Renderer* renderer, TankSetupDetails details) 
 	: GameObject(renderer, GAMEOBJECT_TANK, details.StartPosition, details.TankImagePath)
 {
-	mRenderer				= renderer;
-	mManSpritesheet			= new Texture2D(renderer);
+	mManSpritesheet					= new Texture2D(renderer);
 	mManSpritesheet->LoadFromFile(details.ManImagePath);
-	mManSingleSpriteWidth	= mManSpritesheet->GetWidth();
-	mManSingleSpriteHeight  = mManSpritesheet->GetHeight()/kNumberOfSpritesPerMan;
-	mManOffset.x			= (mTexture->GetWidth()*0.5f)-(mManSingleSpriteWidth*0.5f);
-	mManOffset.y			= (mTexture->GetHeight()*0.5f)-(mManSingleSpriteHeight*0.5f);
+	mManSingleSpriteWidth			= mManSpritesheet->GetWidth();
+	mManSingleSpriteHeight			= mManSpritesheet->GetHeight()/kNumberOfSpritesPerMan;
+	mManOffset.x					= (mTexture->GetWidth()*0.5f)-(mManSingleSpriteWidth*0.5f);
+	mManOffset.y					= (mTexture->GetHeight()*0.5f)-(mManSingleSpriteHeight*0.5f);
 
-	mManRotationAngle		= 0.0f;
-	mManFireDirection		= Vector2D(0.0f, -1.0f);
+	mManRotationAngle				= 0.0f;
+	mManFireDirection				= Vector2D(0.0f, -1.0f);
 
 	mExplosionSpritesheet			= new Texture2D(renderer);
 	mExplosionSpritesheet->LoadFromFile(kExplosionImagePath);
@@ -34,35 +36,36 @@ BaseTank::BaseTank(SDL_Renderer* renderer, TankSetupDetails details)
 	mExplosionSingleSpriteHeight	= mExplosionSpritesheet->GetHeight()/kNumberOfSpritesPerExplosion;
 	mExploding						= false;
 	mExplosionTime					= 0.0f;
-	mExplosionOffset.x	= -(mExplosionSingleSpriteWidth*0.5f);
-	mExplosionOffset.y	= -(mExplosionSingleSpriteHeight*0.5f);
+	mExplosionOffset.x				= -(mExplosionSingleSpriteWidth*0.5f);
+	mExplosionOffset.y				= -(mExplosionSingleSpriteHeight*0.5f);
 
-	mBulletDelay			= kTimeBetweenBullets;
-	mRocketDelay			= kTimeBetweenRockets;
-	mMineDelay				= kTimeBetweenMines;
+	mBulletDelay					= kTimeBetweenBullets;
+	mRocketDelay					= kTimeBetweenRockets;
+	mMineDelay						= kTimeBetweenMines;
 
 	//Set starting state.
 	ChangeState(TANKSTATE_IDLE);
 
 	//Tank details.
-	mTankType				= (TANK_TYPE)details.TankType;
-	mHealth					= details.Health;
-	mCurrentSpeed			= 0.0f;
+	mTankType						= (TANK_TYPE)details.TankType;
+	mHealth							= details.Health;
+	mCurrentSpeed					= 0.0f;
 	mVelocity.Zero();
-	mHeading				= Vector2D(0.0f, 1.0f);
-	mSide					= Vector2D(1.0f, 0.0f);
-	mMass					= details.Mass;
-	mMaxSpeed				= details.MaxSpeed;
+	mHeading						= Vector2D(0.0f, -1.0f);
+	mSide							= Vector2D(1.0f, 0.0f);
+	mMass							= details.Mass;
+	mMaxSpeed						= details.MaxSpeed;
+	mFuel							= details.Fuel;
 
 	//TODO: Read these details in from xml.
-	mMaxForce				= 10.0f;
-	mMaxTurnRate			= details.TurnRate / 500.0f;
+	mMaxForce						= 10.0f;
+	mMaxTurnRate					= 5000;// details.TurnRate / 500.0f;
 
-	mRockets				= details.NumOfRockets;
-	mBullets				= details.NumOfBullets;
-	mMines					= details.NumOfMines;
-	mCannonAttachedLeft		= details.LeftCannonAttached;
-	mCannonAttachedRight	= details.RightCannonAttached;
+	mRockets						= details.NumOfRockets;
+	mBullets						= details.NumOfBullets;
+	mMines							= details.NumOfMines;
+	mCannonAttachedLeft				= details.LeftCannonAttached;
+	mCannonAttachedRight			= details.RightCannonAttached;
 
 	if(mCannonAttachedLeft || mCannonAttachedRight)
 	{
@@ -85,21 +88,26 @@ BaseTank::BaseTank(SDL_Renderer* renderer, TankSetupDetails details)
 	mAlive					= true;
 
 	//Set up audio / noise image sizes.
+	mGunfireNoiseAffect = 0.0f;
+	mNoiseDelay			= 0.0f;
 	switch(mTankType)
 	{
 		case TANK_SMALL:
-			mNoiseRadius = kAudioSmallRadius;
-			mHearingRadius = kAudioLargeRadius;
+			mNoiseRadius	 = kAudioSmallRadius;
+			mHearingRadius	 = kAudioLargeRadius;
+			SetCollisionRadius(kCollisionSmallRadius);
 		break;
 
 		case TANK_MEDIUM:
-			mNoiseRadius = kAudioMediumRadius;
-			mHearingRadius = kAudioMediumRadius2;
+			mNoiseRadius	 = kAudioMediumRadius;
+			mHearingRadius	 = kAudioMediumRadius2;
+			SetCollisionRadius(kCollisionMediumRadius);
 		break;
 
 		case TANK_LARGE:
-			mNoiseRadius = kAudioLargeRadius;
-			mHearingRadius = kAudioSmallRadius;
+			mNoiseRadius	 = kAudioLargeRadius;
+			mHearingRadius	 = kAudioSmallRadius;
+			SetCollisionRadius(kCollisionLargeRadius);
 		break;
 	}
 }
@@ -115,6 +123,9 @@ BaseTank::~BaseTank()
 
 	delete mManSpritesheet;
 	mManSpritesheet = NULL;
+
+	delete mExplosionSpritesheet;
+	mExplosionSpritesheet = NULL;
 
 	if(mCannonSpritesheet != NULL)
 	{
@@ -142,7 +153,7 @@ void BaseTank::OutputScoreDetails()
 
 	//Output to file - Append data if the file already exists.
 	ofstream scorefile;
-	scorefile.open(kScorePath, ios::out | ios::app);
+	scorefile.open(GameScreenLevel1::ScorePath, ios::out | ios::app);
 	scorefile << "-------------------------------------------------------------" << endl;
 	scorefile << "Tank name: "		  << mStudentName			 << "   SCORE: " << mScore << endl;
 	scorefile << "Bullets hit: "	  << mNumberOfBulletHits	 << "\t\t= " << mNumberOfBulletHits*kScore_BulletHit << endl;
@@ -215,6 +226,11 @@ void BaseTank::Update(float deltaTime, SDL_Event e)
 	}
 	else
 	{
+		//Reset noise from firing a weapon after a delay.
+		mNoiseDelay -= deltaTime;
+		if(mNoiseDelay <= 0.0f)
+			mGunfireNoiseAffect = 0.0f;
+
 		mBulletDelay -= deltaTime;
 		mRocketDelay -= deltaTime;
 		mMineDelay   -= deltaTime;
@@ -273,14 +289,20 @@ void BaseTank::Update(float deltaTime, SDL_Event e)
 		mTanksICanSee  = TankManager::Instance()->GetVisibleTanks(this);
 		mTanksICanHear = TankManager::Instance()->GetAudibleTanks(this);
 
-		MoveInHeadingDirection(deltaTime);
-
-	
-		mGunfireNoiseAffect = 0.0f;
-		if(mCurrentState == TANKSTATE_MANFIRE || mCurrentState == TANKSTATE_CANNONFIRE)
-			mGunfireNoiseAffect = 5.0f;
+		//Deduct fuel each frame.
+		if(mFuel > 0.0f)
+		{
+			mFuel -= deltaTime;
+			MoveInHeadingDirection(deltaTime);
+		}
+		else
+		{
+			//Destroy tanks without fuel.
+			TakeDamage(GAMEOBJECT_MINE);
+		}
 	}
 
+	UpdateAdjustedBoundingBox();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -290,8 +312,9 @@ void BaseTank::Render()
 	if(mAlive == true)
 	{
 		//Draw the noise radius.
-		DrawDebugCircle(GetCentralPosition(), mNoiseRadius+mGunfireNoiseAffect, 0, 255, 0);
-
+#ifdef AUDIO_VISIBLE
+		DrawDebugCircle(GetCentralPosition(), GetNoiseRadius(), 0, 255, 0);
+#endif
 		//Call parent render function.
 		GameObject::Render();
 
@@ -310,7 +333,9 @@ void BaseTank::Render()
 		}
 
 		//Draw the hearing radius.
-		DrawDebugCircle(GetCentralPosition(), mHearingRadius-mGunfireNoiseAffect, 255, 255, 0);
+#ifdef AUDIO_VISIBLE
+		DrawDebugCircle(GetCentralPosition(), GetHearingRadius(), 255, 255, 0);
+#endif
 
 		//Draw the man image.
 		SDL_Rect destRect = {(int)(mPosition.x+mManOffset.x), (int)(mPosition.y+mManOffset.y), mManSingleSpriteWidth, mManSingleSpriteHeight};
@@ -491,6 +516,7 @@ void BaseTank::RotateHeadingByRadian(double radian, int sign, float deltaTime)
 		radian = mMaxTurnRate;
 	else if(radian < -mMaxTurnRate)
 		radian = -mMaxTurnRate;
+
 	//IncrementTankRotationAngle(RadsToDegs(radian));
     mRotationAngle += RadsToDegs(radian)*sign;
 
@@ -501,11 +527,6 @@ void BaseTank::RotateHeadingByRadian(double radian, int sign, float deltaTime)
 	RotationMatrix.Rotate(radian * sign);	
 	//Get the new heading.
 	RotationMatrix.TransformVector2Ds(mHeading);
-
-	//cout << "RotateHeadingByRadian -- Heading x = " << mHeading.x << " y = " << mHeading.y << endl;
-
-	//Get the new velocity.
-	//RotationMatrix.TransformVector2Ds(mVelocity);
 
 	//Side vector must always be perpendicular to the heading.
 	mSide = mHeading.Perp();
@@ -566,41 +587,9 @@ void BaseTank::RotateManByRadian(double radian, int sign, float deltaTime)
   
 	//Calculate the direction of rotation.
 	RotationMatrix.Rotate(radian * sign);	
+
 	//Get the new fire direction.
 	RotationMatrix.TransformVector2Ds(mManFireDirection);
-}
-
-//--------------------------------------------------------------------------------------------------
-
-Rect2D BaseTank::GetAdjustedBoundingBox()
-{
-	Rect2D adjustedBoundingBox = GameObject::GetAdjustedBoundingBox();
-
-	switch(mTankType)
-	{
-		case TANK_SMALL:
-			adjustedBoundingBox.x += adjustedBoundingBox.width*0.3f;
-			adjustedBoundingBox.y += adjustedBoundingBox.height*0.25f;	//Top of tank
-			adjustedBoundingBox.width *= 0.4f;
-			adjustedBoundingBox.height *= 0.55f;						//From top down to bottom.
-		break;
-
-		case TANK_MEDIUM:
-			adjustedBoundingBox.x += adjustedBoundingBox.width*0.2f;
-			adjustedBoundingBox.y += adjustedBoundingBox.height*0.2f;
-			adjustedBoundingBox.width *= 0.6f;
-			adjustedBoundingBox.height *= 0.6f;
-		break;
-
-		case TANK_LARGE:
-			adjustedBoundingBox.x += adjustedBoundingBox.width*0.15f;
-			adjustedBoundingBox.y += adjustedBoundingBox.height*0.05f;
-			adjustedBoundingBox.width *= 0.7f;
-			adjustedBoundingBox.height *= 0.8f;
-		break;
-	}
-
-	return adjustedBoundingBox;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -626,6 +615,9 @@ void BaseTank::FireABullet()
 			details.StartPosition	= firePos;
 
 			ProjectileManager::Instance()->CreateProjectile(mRenderer, details, this);
+		
+			mNoiseDelay			= kTimeBetweenBullets+0.1f;
+			mGunfireNoiseAffect = 5.0f;
 		}
 	}	
 }
@@ -641,9 +633,8 @@ void BaseTank::FireRockets()
 		mFiringRocket = true;
 
 		//Get the direction of fire from the current heading.
-		Vector2D fireDirection = mHeading * -1;
-		//fireDirection.y *= -1;
-
+		Vector2D fireDirection = mHeading;
+		
 		//Set the projectile setup details.
 		ProjectileSetupDetails details;
 		details.Direction		= fireDirection;
@@ -657,6 +648,9 @@ void BaseTank::FireRockets()
 			details.StartPosition = GetCentralPosition();
 			details.StartPosition += fireDirection.Perp()*-14.0f;
 			ProjectileManager::Instance()->CreateProjectile(mRenderer, details, this);
+
+			mNoiseDelay			= kTimeBetweenRockets+0.1f;
+			mGunfireNoiseAffect = 5.0f;
 		}
 
 		//Fire right rocket.
@@ -665,6 +659,9 @@ void BaseTank::FireRockets()
 			details.StartPosition = GetCentralPosition();
 			details.StartPosition += fireDirection.Perp()*14.0f;
 			ProjectileManager::Instance()->CreateProjectile(mRenderer, details, this);
+
+			mNoiseDelay			= kTimeBetweenRockets+0.1f;
+			mGunfireNoiseAffect = 5.0f;
 		}
 	}
 }
@@ -688,28 +685,6 @@ void BaseTank::DropAMine()
 		//Drop the mine.
 		ProjectileManager::Instance()->CreateProjectile(mRenderer, details, this);
 	}
-}
-
-//--------------------------------------------------------------------------------------------------
-/*
-void BaseTank::GetCornersOfTank(Vector2D* topLeft, Vector2D* topRight, Vector2D* bottomLeft, Vector2D* bottomRight)
-{
-	double left = GetCentralPosition().x - (mHeading.x*mManSingleSpriteHeight*0.3f);
-	double right = GetCentralPosition().x + (mHeading.x*mManSingleSpriteHeight*0.3f);
-	double top = GetCentralPosition().y - mHeading.y*mManSingleSpriteHeight*0.3f;
-	double bottom = GetCentralPosition().y + mHeading.y*mManSingleSpriteHeight*0.3f;
-
-	topLeft->x = left;
-	topLeft->y = top;
-
-	topRight->x = right;
-	topRight->y = top;
-
-	bottomLeft->x = left;
-	bottomLeft->y = bottom;
-
-	bottomRight->x = right;
-	bottomRight->y = bottom;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -743,27 +718,6 @@ Vector2D BaseTank::GetPointAtRearOfTank()
 
 //--------------------------------------------------------------------------------------------------
 
-void BaseTank::Rebound(Vector2D position)
-{
-	//DEBUG: Alert on colliding.
-	//cout << "Collision" << endl;
-
-	//We need to rebound, but which direction?
-	Vector2D newHeading = GetCentralPosition()-position;
-	newHeading.Normalize();
-
-	//Flip the y coordinate because of the 0,0 position of SDL.
-	newHeading.y *= -1.0f;
-
-	//Set new velocity.
-	mVelocity = newHeading*-kReboundSpeed;
-
-	//Cut the speed.
-	mCurrentSpeed = 0.0f;
-}
-*/
-//--------------------------------------------------------------------------------------------------
-
 void BaseTank::TakeDamage(GAMEOBJECT_TYPE projectileType)
 {
 	//Different projectiles do different damage.
@@ -778,6 +732,10 @@ void BaseTank::TakeDamage(GAMEOBJECT_TYPE projectileType)
 		break;
 
 		case GAMEOBJECT_MINE:
+			mHealth -= kMineDamage;
+		break;
+
+		case GAMEOBJECT_OBSTACLE_BORDER:
 			mHealth -= kMineDamage;
 		break;
 	}
@@ -826,17 +784,17 @@ void BaseTank::DrawFoV()
 	Vector2D polarVec(0.0f, kFieldOfViewLength);
 
 	//Get the dot product of heading by RIGHT vector
-	Vector2D normalisedVelocity = Vec2DNormalize(mVelocity);
+	Vector2D normalisedHeading = Vec2DNormalize(mHeading);
 
-	//Create point rotated to the left of velocity.
+	//Create point rotated to the left of heading.
 	Vector2D leftPoint;
-	leftPoint.x = (normalisedVelocity.x * cos(kFieldOfView)) - (normalisedVelocity.y * sin(kFieldOfView));
-	leftPoint.y = (normalisedVelocity.x * sin(kFieldOfView)) + (normalisedVelocity.y * cos(kFieldOfView));
+	leftPoint.x = (normalisedHeading.x * cos(kFieldOfView)) - (normalisedHeading.y * sin(kFieldOfView));
+	leftPoint.y = (normalisedHeading.x * sin(kFieldOfView)) + (normalisedHeading.y * cos(kFieldOfView));
 
-	//Create point rotated to the right of velocity.
+	//Create point rotated to the right of heading.
 	Vector2D rightPoint;
-	rightPoint.x = (normalisedVelocity.x * cos(-kFieldOfView)) - (normalisedVelocity.y * sin(-kFieldOfView));
-	rightPoint.y = (normalisedVelocity.x * sin(-kFieldOfView)) + (normalisedVelocity.y * cos(-kFieldOfView));
+	rightPoint.x = (normalisedHeading.x * cos(-kFieldOfView)) - (normalisedHeading.y * sin(-kFieldOfView));
+	rightPoint.y = (normalisedHeading.x * sin(-kFieldOfView)) + (normalisedHeading.y * cos(-kFieldOfView));
 
 	//Move the left point out from the centre of the tank to the distance set by kFieldOfViewLength.
 	Vector2D m_viewFrustumLeft;
@@ -852,42 +810,75 @@ void BaseTank::DrawFoV()
 	DrawDebugLine(GetCentralPosition(), m_viewFrustumRight, 255, 0, 0);
 	DrawDebugLine(GetCentralPosition(), m_viewFrustumLeft, 255, 0, 0);
 
-	//Draw a line in the direction the tank is moving.
+	//Draw a line in the direction the tank is heading (HEADING).
+	DrawDebugLine(GetCentralPosition(), GetCentralPosition()+mHeading*kFieldOfViewLength, 255, 0, 0);
+
+	//Draw a line in the direction the tank is moving (VELOCITY).
 	DrawDebugLine(GetCentralPosition(), GetCentralPosition()+mVelocity, 255, 255, 0);
+
+	DrawDebugLine(mAdjustedBoundingBox[0], mAdjustedBoundingBox[1], 225, 225, 225);
+	DrawDebugLine(mAdjustedBoundingBox[1], mAdjustedBoundingBox[2], 225, 225, 225);
+	DrawDebugLine(mAdjustedBoundingBox[2], mAdjustedBoundingBox[3], 225, 225, 225);
+	DrawDebugLine(mAdjustedBoundingBox[3], mAdjustedBoundingBox[0], 225, 225, 225);
 #endif
 }
 
 //--------------------------------------------------------------------------------------------------
 
-void BaseTank::DrawDebugCircle(Vector2D centrePoint, float radius, int red, int green, int blue)
+void BaseTank::UpdateAdjustedBoundingBox()
 {
-#ifdef DEBUG_LINES_VISIBLE 
-	Vector2D polarVec(0.0f, radius);
+	//Return texture size - Override for more precise collision.
+	//This assumes there is only one image on the texture.
+	Vector2D center = GetCentralPosition();
+	float    width  = 0.0f;
+	float    height = 0.0f;
 
-	float stepSize = 0.02f;
-	float _360DegAsRads = (float)DegsToRads(360.0f);
-
-	while (polarVec.x < _360DegAsRads)
+	switch (mTankType)
 	{
-		Vector2D polarAsCart(polarVec.y * cosf(polarVec.x), polarVec.y * sinf(polarVec.x));
-		Vector2D drawPoint(centrePoint.x + polarAsCart.x, centrePoint.y + polarAsCart.y);
+		case TANK_SMALL:
+			width = (mTexture->GetWidth() / 4.5f);
+			height = (mTexture->GetWidth() / 4.0f);
+		break;
 
-		SDL_SetRenderDrawColor(mRenderer, red, green, blue, 255);
-		SDL_RenderDrawPoint(mRenderer, (int)drawPoint.x, (int)drawPoint.y);
+		case TANK_MEDIUM:
+			width = (mTexture->GetWidth() / 4.0f);
+			height = (mTexture->GetWidth() / 3.3f);
+		break;
 
-		polarVec.x += stepSize;
+		case TANK_LARGE:
+			width = (mTexture->GetWidth() / 3.4);
+			height = (mTexture->GetWidth() / 2.5);
+		break;
 	}
-#endif
-}
 
-//--------------------------------------------------------------------------------------------------
+	float minX = (float)center.x - width;
+	float minY = (float)center.y - height;
 
-void BaseTank::DrawDebugLine(Vector2D startPoint, Vector2D endPoint, int red, int green, int blue)
-{
-#ifdef DEBUG_LINES_VISIBLE
-	SDL_SetRenderDrawColor(mRenderer, red, green, blue, 255);
-	SDL_RenderDrawLine(mRenderer, (int)startPoint.x, (int)startPoint.y, (int)endPoint.x, (int)endPoint.y);
-#endif
+	float maxX = (float)center.x + width;
+	float maxY = (float)center.y + height;
+
+	double botLeftXRotated = (minX - center.x) * cos(mRotationAngle * M_PI / 180) - (minY - center.y) * sin(mRotationAngle * M_PI / 180);
+	double botLeftYRotated = (minX - center.x) * sin(mRotationAngle * M_PI / 180) + (minY - center.y) * cos(mRotationAngle * M_PI / 180);
+
+	double botRightXRotated = (maxX - center.x) * cos(mRotationAngle * M_PI / 180) - (minY - center.y) * sin(mRotationAngle * M_PI / 180);
+	double botRightYRotated = (maxX - center.x) * sin(mRotationAngle * M_PI / 180) + (minY - center.y) * cos(mRotationAngle * M_PI / 180);
+
+	double topRightXRotated = (maxX - center.x) * cos(mRotationAngle * M_PI / 180) - (maxY - center.y) * sin(mRotationAngle * M_PI / 180);
+	double topRightYRotated = (maxX - center.x) * sin(mRotationAngle * M_PI / 180) + (maxY - center.y) * cos(mRotationAngle * M_PI / 180);
+
+	double topLeftXRotated = (minX - center.x) * cos(mRotationAngle * M_PI / 180) - (maxY - center.y) * sin(mRotationAngle * M_PI / 180);
+	double topLeftYRotated = (minX - center.x) * sin(mRotationAngle * M_PI / 180) + (maxY - center.y) * cos(mRotationAngle * M_PI / 180);
+
+	Vector2D rotatedRect[4];
+	rotatedRect[0] = Vector2D(botLeftXRotated, botLeftYRotated) + center; //Bottom Left
+	rotatedRect[1] = Vector2D(botRightXRotated, botRightYRotated) + center; //Bottom Right
+	rotatedRect[2] = Vector2D(topRightXRotated, topRightYRotated) + center; //Top Right
+	rotatedRect[3] = Vector2D(topLeftXRotated, topLeftYRotated) + center; //Top Left
+
+	mAdjustedBoundingBox[0] = rotatedRect[0];
+	mAdjustedBoundingBox[1] = rotatedRect[1];
+	mAdjustedBoundingBox[2] = rotatedRect[2];
+	mAdjustedBoundingBox[3] = rotatedRect[3];
 }
 
 //--------------------------------------------------------------------------------------------------

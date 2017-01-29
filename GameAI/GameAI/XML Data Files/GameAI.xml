@@ -1,44 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="30" height="20" tilewidth="32" tileheight="32">
  <tileset firstgid="1" name="GameAITileset" tilewidth="32" tileheight="32">
-   <image source="Images/BackgroundTiles.png" width="32" height="640"/>
+   <image source="Images/BackgroundTiles.png" width="32" height="672"/>
  </tileset>
  <layer name="BackgroundLayer" width="30" height="20">
   <data>
     <!--Row 1-->
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
 
     <!--Row 2-->
-    <tile gid="20"/>
+    <tile gid="21"/>
     <tile gid="9"/>
     <tile gid="1"/>
     <tile gid="11"/>
@@ -67,10 +67,10 @@
     <tile gid="9"/>
     <tile gid="9"/>
     <tile gid="9"/>
-    <tile gid="20"/>
+    <tile gid="21"/>
 
     <!--Row 3-->
-    <tile gid="20"/>
+    <tile gid="21"/>
     <tile gid="9"/>
     <tile gid="10"/>
     <tile gid="9"/>
@@ -99,10 +99,10 @@
     <tile gid="9"/>
     <tile gid="9"/>
     <tile gid="9"/>
-    <tile gid="20"/>
+    <tile gid="21"/>
 
     <!--Row 4-->
-    <tile gid="20"/>
+    <tile gid="21"/>
     <tile gid="9"/>
     <tile gid="10"/>
     <tile gid="9"/>
@@ -131,10 +131,10 @@
     <tile gid="9"/>
     <tile gid="9"/>
     <tile gid="9"/>
-    <tile gid="20"/>
+    <tile gid="21"/>
 
     <!--Row 5-->
-    <tile gid="20"/>
+    <tile gid="21"/>
     <tile gid="9"/>
     <tile gid="10"/>
     <tile gid="9"/>
@@ -163,10 +163,10 @@
     <tile gid="9"/>
     <tile gid="9"/>
     <tile gid="9"/>
-    <tile gid="20"/>
+    <tile gid="21"/>
 
     <!--Row 6-->
-    <tile gid="20"/>
+    <tile gid="21"/>
     <tile gid="9"/>
     <tile gid="10"/>
     <tile gid="9"/>
@@ -195,10 +195,10 @@
     <tile gid="9"/>
     <tile gid="9"/>
     <tile gid="9"/>
-    <tile gid="20"/>
+    <tile gid="21"/>
 
     <!--Row 7-->
-    <tile gid="20"/>
+    <tile gid="21"/>
     <tile gid="9"/>
     <tile gid="4"/>
     <tile gid="13"/>
@@ -227,10 +227,10 @@
     <tile gid="9"/>
     <tile gid="9"/>
     <tile gid="9"/>
-    <tile gid="20"/>
+    <tile gid="21"/>
 
     <!--Row 8-->
-    <tile gid="20"/>
+    <tile gid="21"/>
     <tile gid="9"/>
     <tile gid="9"/>
     <tile gid="10"/>
@@ -259,10 +259,10 @@
     <tile gid="9"/>
     <tile gid="9"/>
     <tile gid="9"/>
-    <tile gid="20"/>
+    <tile gid="21"/>
 
     <!--Row 9-->
-    <tile gid="20"/>
+    <tile gid="21"/>
     <tile gid="9"/>
     <tile gid="9"/>
     <tile gid="10"/>
@@ -291,10 +291,10 @@
     <tile gid="9"/>
     <tile gid="16"/>
     <tile gid="9"/>
-    <tile gid="20"/>
+    <tile gid="21"/>
 
     <!--Row 10-->
-    <tile gid="20"/>
+    <tile gid="21"/>
     <tile gid="9"/>
     <tile gid="9"/>
     <tile gid="10"/>
@@ -323,10 +323,10 @@
     <tile gid="9"/>
     <tile gid="10"/>
     <tile gid="9"/>
-    <tile gid="20"/>
+    <tile gid="21"/>
 
     <!--Row 11-->
-    <tile gid="20"/>
+    <tile gid="21"/>
     <tile gid="9"/>
     <tile gid="9"/>
     <tile gid="10"/>
@@ -355,10 +355,10 @@
     <tile gid="9"/>
     <tile gid="10"/>
     <tile gid="9"/>
-    <tile gid="20"/>
+    <tile gid="21"/>
 
     <!--Row 12-->
-    <tile gid="20"/>
+    <tile gid="21"/>
     <tile gid="9"/>
     <tile gid="9"/>
     <tile gid="12"/>
@@ -387,10 +387,10 @@
     <tile gid="9"/>
     <tile gid="10"/>
     <tile gid="9"/>
-    <tile gid="20"/>
+    <tile gid="21"/>
 
     <!--Row 13-->
-    <tile gid="20"/>
+    <tile gid="21"/>
     <tile gid="9"/>
     <tile gid="9"/>
     <tile gid="10"/>
@@ -419,10 +419,10 @@
     <tile gid="11"/>
     <tile gid="14"/>
     <tile gid="9"/>
-    <tile gid="20"/>
+    <tile gid="21"/>
 
     <!--Row 14-->
-    <tile gid="20"/>
+    <tile gid="21"/>
     <tile gid="9"/>
     <tile gid="1"/>
     <tile gid="15"/>
@@ -451,10 +451,10 @@
     <tile gid="9"/>
     <tile gid="10"/>
     <tile gid="9"/>
-    <tile gid="20"/>
+    <tile gid="21"/>
 
     <!--Row 15-->
-    <tile gid="20"/>
+    <tile gid="21"/>
     <tile gid="9"/>
     <tile gid="10"/>
     <tile gid="9"/>
@@ -483,10 +483,10 @@
     <tile gid="9"/>
     <tile gid="10"/>
     <tile gid="9"/>
-    <tile gid="20"/>
+    <tile gid="21"/>
 
     <!--Row 16-->
-    <tile gid="20"/>
+    <tile gid="21"/>
     <tile gid="9"/>
     <tile gid="10"/>
     <tile gid="9"/>
@@ -515,10 +515,10 @@
     <tile gid="9"/>
     <tile gid="10"/>
     <tile gid="9"/>
-    <tile gid="20"/>
+    <tile gid="21"/>
 
     <!--Row 17-->
-    <tile gid="20"/>
+    <tile gid="21"/>
     <tile gid="9"/>
     <tile gid="10"/>
     <tile gid="9"/>
@@ -547,10 +547,10 @@
     <tile gid="9"/>
     <tile gid="10"/>
     <tile gid="9"/>
-    <tile gid="20"/>
+    <tile gid="21"/>
 
     <!--Row 18-->
-    <tile gid="20"/>
+    <tile gid="21"/>
     <tile gid="9"/>
     <tile gid="10"/>
     <tile gid="9"/>
@@ -579,10 +579,10 @@
     <tile gid="11"/>
     <tile gid="3"/>
     <tile gid="9"/>
-    <tile gid="20"/>
+    <tile gid="21"/>
 
     <!--Row 19-->
-    <tile gid="20"/>
+    <tile gid="21"/>
     <tile gid="9"/>
     <tile gid="4"/>
     <tile gid="11"/>
@@ -611,39 +611,39 @@
     <tile gid="9"/>
     <tile gid="9"/>
     <tile gid="9"/>
-    <tile gid="20"/>
+    <tile gid="21"/>
 
     <!--Row 20-->
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
-    <tile gid="20"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
+    <tile gid="21"/>
   </data>
  </layer>
   <objectgroup name="ObjectLayer" width="30" height="20">

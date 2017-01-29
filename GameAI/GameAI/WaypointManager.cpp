@@ -38,9 +38,9 @@ WaypointManager* WaypointManager::Instance()
 
 //--------------------------------------------------------------------------------------------------
 
-void WaypointManager::Init(SDL_Renderer* renderer)
+void WaypointManager::Init(SDL_Renderer* renderer, string mapDataPath)
 {
-	mInstance->LoadWaypoints(renderer);
+	mInstance->LoadWaypoints(renderer, mapDataPath);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -57,11 +57,11 @@ void WaypointManager::RenderWaypoints()
 
 //--------------------------------------------------------------------------------------------------
 
-void WaypointManager::LoadWaypoints(SDL_Renderer* renderer)
+void WaypointManager::LoadWaypoints(SDL_Renderer* renderer, string mapDataPath)
 {
 	//Get the whole xml document.
 	TiXmlDocument doc;
-	if(!doc.LoadFile(kTilemapPath))
+	if(!doc.LoadFile(mapDataPath))
 	{
 		cerr << doc.ErrorDesc() << endl;
 	}

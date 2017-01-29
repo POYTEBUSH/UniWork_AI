@@ -8,29 +8,35 @@
 #include "TankManager.h"
 #include "ProjectileManager.h"
 #include "PickUpManager.h"
+#include "TinyXML\tinyxml.h"
 
 using namespace::std;
+
+string GameScreenLevel1::ScorePath = "Scores/TestScores.txt";
 
 //--------------------------------------------------------------------------------------------------
 
 GameScreenLevel1::GameScreenLevel1(SDL_Renderer* renderer) : GameScreen(renderer)
 {
 	srand(NULL);
-		
+
+	//Load in file paths from LevelData.xml
+	LoadLevelData();
+
 	//Set the level map.
-	mLevelMap = new LevelMap(renderer);
+	mLevelMap = new LevelMap(renderer, mMapPath);
 
 	//Set up the waypoints.
-	WaypointManager::Instance()->Init(renderer);
+	WaypointManager::Instance()->Init(renderer, mMapPath);
 
 	//Set up the obstacles.
-	ObstacleManager::Instance()->Init(renderer);
+	ObstacleManager::Instance()->Init(renderer, mMapPath);
 
 	//Set up the tanks.
-	TankManager::Instance()->Init(renderer);
+	TankManager::Instance()->Init(renderer, mTanksPath);
 
 	//Set up PickUps
-	PickUpManager::Instance()->Init(renderer);
+	PickUpManager::Instance()->Init(renderer, mMapPath);
 
 	//Set up projectiles that start on screen.
 	ProjectileManager::Instance()->Init(renderer);
@@ -104,6 +110,40 @@ void GameScreenLevel1::Update(float deltaTime, SDL_Event e)
 	PickUpManager::Instance()->UpdatePickUps(deltaTime);
 	PickUpManager::Instance()->CheckForCollisions(TankManager::Instance()->GetTanks());
 
+}
+
+//--------------------------------------------------------------------------------------------------
+
+void GameScreenLevel1::LoadLevelData()
+{
+	//Get the whole xml document.
+	TiXmlDocument doc;
+	if(!doc.LoadFile("XML Data Files/LevelData.xml"))
+	{
+		cerr << doc.ErrorDesc() << endl;
+	}
+
+	//Now get the root element.
+	TiXmlElement* root = doc.FirstChildElement();
+	if(!root)
+	{
+		cerr << "Failed to load file: No root element." << endl;
+		doc.Clear();
+	}
+	else
+	{	
+		//Jump to the the 'map' element - within 'data'
+		TiXmlElement* mapElement = root->FirstChildElement("map");
+		mMapPath = mapElement->Attribute("mapPath");
+
+		//Jump to the the 'tanks' element - within 'data'
+		TiXmlElement* tanksElement = root->FirstChildElement("tanks");
+		mTanksPath = tanksElement->Attribute("tanksPath");
+
+		//Jump to the the 'score' element - within 'data'
+		TiXmlElement* scoreElement = root->FirstChildElement("score");
+		ScorePath = scoreElement->Attribute("scorePath");
+	}
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -1,4 +1,5 @@
 #include "DumbTank.h"
+#include "BaseTank.h"
 #include "TankManager.h"
 #include "C2DMatrix.h"
 
@@ -6,15 +7,6 @@
 
 DumbTank::DumbTank(SDL_Renderer* renderer, TankSetupDetails details) : BaseTank(renderer, details)
 {
-	//Give the dumb tank a range to move in.
-	//Don't allow to wrap around.
-	Vector2D offset = Vector2D(0.0f, 250.0f);
-	mPosition1		= details.StartPosition-offset;
-	if(mPosition1.y < kTileDimensions+mTexture->GetHeight())
-		mPosition1.y = kTileDimensions;
-	mPosition2		= details.StartPosition+offset;
-	if(mPosition2.y > kScreenHeight-kTileDimensions-mTexture->GetHeight())
-		mPosition2.y = kScreenHeight-kTileDimensions-mTexture->GetHeight();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -44,27 +36,27 @@ void DumbTank::Update(float deltaTime, SDL_Event e)
 		//If there are no visible tanks, then keep moving.
 
 		//Check if we reached position before turning.
-		if(mPosition.y < mPosition1.y && mHeading.y != -1.0f)
+		if(mPosition.y < kTileDimensions)
 		{
-			mHeading = Vector2D(0.0f, -1.0f);
-			mRotationAngle = 180.0f;
-			mVelocity = Vector2D();
-			return;
+			if(mHeading.y < 0.9999f)
+				RotateHeadingByRadian(3.0f, -1, deltaTime);
+			else
+				mHeading.y = 1.0f;
+
+			mVelocity = mHeading;
 		}
-		else if(mPosition.y > mPosition2.y && mHeading.y != 1.0f)
+		else if(mPosition.y > kScreenHeight-(kTileDimensions*2))
 		{
-			mHeading = Vector2D(0.0f, 1.0f);
-			mRotationAngle = 0.0f;
-			mVelocity = Vector2D();
-			return;
+			if(mHeading.y > -0.99999f)
+				RotateHeadingByRadian(3.0f, -1, deltaTime);
+			else
+				mHeading.y = -1.0f;
+
+			mVelocity = mHeading;
 		}
-		else
-		{
-			//Move if we are facing the correct direction.
-			mCurrentSpeed -= kSpeedIncrement*deltaTime;
-			if(mCurrentSpeed < -GetMaxSpeed())
-				mCurrentSpeed = -GetMaxSpeed();
-		}
+
+		
+			mCurrentSpeed = GetMaxSpeed();
 	}
 	else
 	{

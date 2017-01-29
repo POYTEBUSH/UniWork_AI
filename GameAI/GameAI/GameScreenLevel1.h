@@ -23,8 +23,18 @@ public:
 
 //--------------------------------------------------------------------------------------------------
 private:
+	void LoadLevelData();
+
+//--------------------------------------------------------------------------------------------------
+private:
 	Texture2D*				 mBackgroundTexture;
 	LevelMap*				 mLevelMap;
+
+	string					 mTanksPath;
+	string					 mMapPath;
+
+public:
+	static string			 ScorePath;
 };
 
 

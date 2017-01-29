@@ -8,8 +8,8 @@
 #include "Collisions.h"
 #include "ObstacleManager.h"
 #include "DumbTank.h"
+#include "PeterBush\B013432f_Tank.h"
 #include <cassert>
-
 
 //Initialise the instance to null.
 TankManager* TankManager::mInstance = NULL;
@@ -44,10 +44,10 @@ TankManager* TankManager::Instance()
 
 //--------------------------------------------------------------------------------------------------
 
-void TankManager::Init(SDL_Renderer* renderer)
+void TankManager::Init(SDL_Renderer* renderer, string tankDataPath)
 {
-	mTankIndexToDelete = -1;
-	LoadTanks(renderer);
+	mTankIndexToDelete				 = -1;
+	LoadTanks(renderer, tankDataPath);
 	mAccumulatedTimeUntilBonusPoints = 0.0f;
 }
 
@@ -81,16 +81,16 @@ void TankManager::UpdateTanks(float deltaTime, SDL_Event e)
 
 		mTanks[i]->Update(deltaTime, e);
 
-		//Wrap all tanks around the screen.
-		if(mTanks[i]->GetPosition().x + mTanks[i]->GetAdjustedBoundingBox().width < 0.0f)
-			mTanks[i]->SetPosition(Vector2D(kScreenWidth, mTanks[i]->GetPosition().y));
-		else if (mTanks[i]->GetPosition().x > kScreenWidth)
-			mTanks[i]->SetPosition(Vector2D(0.0f, mTanks[i]->GetPosition().y));
+		//Check if tank has gone beyond the limits of the map - If so BOOM time!
+		if(mTanks[i]->GetCentralPosition().x < kTileDimensions)
+			mTanks[i]->TakeDamage(GAMEOBJECT_OBSTACLE_BORDER);
+		else if (mTanks[i]->GetCentralPosition().x > kScreenWidth-kTileDimensions)
+			mTanks[i]->TakeDamage(GAMEOBJECT_OBSTACLE_BORDER);
 		
-		if(mTanks[i]->GetPosition().y + mTanks[i]->GetAdjustedBoundingBox().height < 0.0f)
-			mTanks[i]->SetPosition(Vector2D(mTanks[i]->GetPosition().x, kScreenHeight));
-		else if (mTanks[i]->GetPosition().y > kScreenHeight)
-			mTanks[i]->SetPosition(Vector2D(mTanks[i]->GetPosition().x, -mTanks[i]->GetAdjustedBoundingBox().height));
+		if(mTanks[i]->GetCentralPosition().y < kTileDimensions)
+			mTanks[i]->TakeDamage(GAMEOBJECT_OBSTACLE_BORDER);
+		else if (mTanks[i]->GetCentralPosition().y > kScreenHeight-kTileDimensions)
+			mTanks[i]->TakeDamage(GAMEOBJECT_OBSTACLE_BORDER);
 
 
 		//If the health is below zero, delete this tank.
@@ -131,13 +131,13 @@ void TankManager::RenderTanks()
 
 //--------------------------------------------------------------------------------------------------
 
-void TankManager::LoadTanks(SDL_Renderer* renderer)
+void TankManager::LoadTanks(SDL_Renderer* renderer, string tankDataPath)
 {
 	string imagePath;
 
 	//Get the whole xml document.
 	TiXmlDocument doc;
-	if(!doc.LoadFile(kTankPath))
+	if(!doc.LoadFile(tankDataPath))
 	{
 		cerr << doc.ErrorDesc() << endl;
 	}
@@ -190,11 +190,17 @@ BaseTank* TankManager::GetTankObject(SDL_Renderer* renderer, TankSetupDetails de
 		ControlledTank* newControlledTank = new ControlledTank(renderer, details);
 		newBaseTank = (BaseTank*)newControlledTank;
 	}
-	if(details.StudentName == "DumbTank")
+	else if (details.StudentName == "DumbTank")
 	{
 		DumbTank* newTank = new DumbTank(renderer, details);
 		newBaseTank = (BaseTank*)newTank;
 	}
+	else if (details.StudentName == "B013432f_Tank")
+	{
+		B013432f_Tank* newTank = new B013432f_Tank(renderer, details);
+		newBaseTank = (BaseTank*)newTank;
+	}
+
 
 	//Assert if no tank was setup.
 	assert(newBaseTank != NULL);
@@ -235,41 +241,44 @@ vector<BaseTank*>	TankManager::GetVisibleTanks(BaseTank* lookingTank)
 		//Don't test self.
 		if(mTanks[i] != lookingTank)
 		{
-			if(mTanks.size() == 2)
+			/*if(mTanks.size() == 2)
 			{
 				//If only two tanks remain then return the toher tank (not self) even though we might not be able to see it.
 				mVisibleTanks.push_back(mTanks[i]);
+				cout << "Can see you!!" << mTanks[i]->GetTankName() << endl;
 			}
-			else
+			else*/
 			{
 				//More than 2 tanks remaining, so only return those within the FoV.
 				Vector2D heading = lookingTank->GetHeading();
 				heading.Normalize();
-				Vector2D vecToTarget = lookingTank->GetCentralPosition()-mTanks[i]->GetCentralPosition();
+				Vector2D vecToTarget = mTanks[i]->GetCentralPosition() - lookingTank->GetCentralPosition();
 				double vecToTargetLength = vecToTarget.Length();
 
 				//If tank is too far away then it can't be seen.
-				if(vecToTargetLength < kFieldOfViewLength)
+				if (vecToTargetLength < kFieldOfViewLength)
 				{
 					vecToTarget.Normalize();
 					//cout << "Heading x = " << heading.x << " y = " << heading.y << endl;
 					double dotProduct = heading.Dot(vecToTarget);
 					//cout << "dot = " << dotProduct << endl;
-					if(dotProduct > kFieldOfView)
+					if (dotProduct > kFieldOfView)
 					{
 						Vector2D point1 = lookingTank->GetCentralPosition() + (vecToTarget*(vecToTargetLength*0.33f));
 						Vector2D point2 = lookingTank->GetCentralPosition() + (vecToTarget*(vecToTargetLength*0.5f));
 						Vector2D point3 = lookingTank->GetCentralPosition() + (vecToTarget*(vecToTargetLength*0.66f));
 
 						//Tank is within fov, but is there a building in the way?
-						for(unsigned int j = 0; j < ObstacleManager::Instance()->GetObstacles().size(); j++)
+						for (unsigned int j = 0; j < ObstacleManager::Instance()->GetObstacles().size(); j++)
 						{
 							GameObject* currentObstacle = ObstacleManager::Instance()->GetObstacles().at(j);
-		
+
 							//Check if we have collided with this obstacle.
-							if( !Collisions::Instance()->PointInBox(point1, currentObstacle->GetAdjustedBoundingBox()) &&
-								!Collisions::Instance()->PointInBox(point2, currentObstacle->GetAdjustedBoundingBox()) &&
-								!Collisions::Instance()->PointInBox(point3, currentObstacle->GetAdjustedBoundingBox()) )
+							vector<Vector2D> rect = currentObstacle->GetAdjustedBoundingBox();
+
+							if ((!Collisions::Instance()->TriangleCollision(rect[1], rect[2], rect[3], point1)) || (!Collisions::Instance()->TriangleCollision(rect[0], rect[1], rect[3], point1)) &&
+								(!Collisions::Instance()->TriangleCollision(rect[1], rect[2], rect[3], point2)) || (!Collisions::Instance()->TriangleCollision(rect[0], rect[1], rect[3], point2)) &&
+								(!Collisions::Instance()->TriangleCollision(rect[1], rect[2], rect[3], point3)) || (!Collisions::Instance()->TriangleCollision(rect[0], rect[1], rect[3], point3)))
 							{
 								mVisibleTanks.push_back(mTanks[i]);
 								//cout << "Can see you!!" << endl;
@@ -305,7 +314,7 @@ vector<BaseTank*>	TankManager::GetAudibleTanks(BaseTank* hearingTank)
 			if(vecToTargetLength < mTanks[i]->GetNoiseRadius()+hearingTank->GetHearingRadius())
 			{
 				mAudibleTanks.push_back(mTanks[i]);
-				cout << "Can hear you!!  " << mTanks[i]->GetTankName() << endl;
+				//cout << "Can hear you!!  " << mTanks[i]->GetTankName() << endl;
 			}
 		}
 	}

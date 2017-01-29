@@ -1,4 +1,5 @@
 #include "Projectile.h"
+#include "GameObject.h"
 #include "BaseTank.h"
 #include "Commons.h"
 #include <iostream>
@@ -12,7 +13,8 @@ Projectile::Projectile(SDL_Renderer* renderer, ProjectileSetupDetails details, B
 	mPosition.x -= mTexture->GetWidth()*0.5f;
 	mPosition.y -= mTexture->GetHeight()*0.5f;
 
-	mVisible		= true;
+	mAlive			= true;
+	mExploding		= false;
 	mDirection		= details.Direction;
 	mRotationAngle	= details.RotationAngle;
 	mFiringTank		= firer;
@@ -20,15 +22,18 @@ Projectile::Projectile(SDL_Renderer* renderer, ProjectileSetupDetails details, B
 	switch(details.GameObjectType)
 	{
 		case GAMEOBJECT_BULLET:
-			mSpeed = kBulletSpeed;
+			mCollisionRadius = kCollisionBulletRadius;
+			mSpeed			 = kBulletSpeed;
 		break;
 
 		case GAMEOBJECT_ROCKET:
-			mSpeed = kRocketSpeed;
+			mCollisionRadius = kCollisionRocketRadius;
+			mSpeed			 = kRocketSpeed;
 		break;
 
 		case GAMEOBJECT_MINE:
-			mSpeed = 0.0f;
+			mCollisionRadius = kCollisionMineRadius;
+			mSpeed			 = 0.0f;
 		break;
 	}
 }
@@ -51,17 +56,28 @@ void Projectile::Update(float deltaTime)
 
 void Projectile::Render()
 {
-	if(mVisible)
+	if(mAlive)
 	{
-		GameObject::Render();
+		mTexture->Render(mPosition, mRotationAngle);
+
+		//Draw the collision radius.
+		DrawDebugCircle(GetCentralPosition(), mCollisionRadius, 0, 0, 255);
 	}
 }
 
 //--------------------------------------------------------------------------------------------------
 
-void Projectile::RegisterHit()
+void Projectile::Explode()												
 {
-	mVisible = false;
+	mAlive = false; 
+	mExploding = true;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+bool Projectile::HasExploded()											
+{
+	return !mAlive;
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -20,7 +20,7 @@ public:
 	~WaypointManager();
 
 	static WaypointManager* Instance();
-	void					Init(SDL_Renderer* renderer);
+	void					Init(SDL_Renderer* renderer, string mapDataPath);
 	void					RenderWaypoints();
 
 	Waypoint*				GetWaypointWithID(int id);
@@ -30,12 +30,12 @@ public:
 private:
 	WaypointManager();
 
-	void LoadWaypoints(SDL_Renderer* renderer);
+	void LoadWaypoints(SDL_Renderer* renderer, string mapDataPath);
 
 	//---------------------------------------------------------------
 private:
 	static WaypointManager* mInstance;
-
+	
 	vector<Waypoint*> mWaypoints;
 };
 

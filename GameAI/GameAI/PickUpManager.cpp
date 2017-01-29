@@ -7,6 +7,7 @@
 #include "TinyXML\tinyxml.h"
 #include "Collisions.h"
 #include "ObstacleManager.h"
+#include <time.h>
 
 //Initialise the instance to null.
 PickUpManager* PickUpManager::mInstance = NULL;
@@ -15,6 +16,7 @@ PickUpManager* PickUpManager::mInstance = NULL;
 
 PickUpManager::PickUpManager()
 {
+	srand((unsigned int)time(NULL));
 	mTimeUntilNextPickupGeneration = 0.0f;
 }
 
@@ -43,10 +45,10 @@ PickUpManager* PickUpManager::Instance()
 
 //--------------------------------------------------------------------------------------------------
 
-void PickUpManager::Init(SDL_Renderer* renderer)
+void PickUpManager::Init(SDL_Renderer* renderer, string mapDataPath)
 {
 	mRenderer = renderer;
-	mInstance->LoadPickUps();
+	mInstance->LoadPickUps(mapDataPath);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -85,11 +87,11 @@ void PickUpManager::UpdatePickUps(float deltaTime)
 
 //--------------------------------------------------------------------------------------------------
 
-void PickUpManager::LoadPickUps()
+void PickUpManager::LoadPickUps(string mapDataPath)
 {
 	//Get the whole xml document.
 	TiXmlDocument doc;
-	if(!doc.LoadFile(kTilemapPath))
+	if(!doc.LoadFile(mapDataPath))
 	{
 		cerr << doc.ErrorDesc() << endl;
 	}
@@ -155,9 +157,15 @@ void PickUpManager::LoadPickUps()
 							case GAMEOBJECT_PICKUP_MINES:
 								path = kMinePickUpPath;
 							break;
+
+							case GAMEOBJECT_PICKUP_FUEL:
+								path = kFuelPickUpPath;
+							break;
 						}
 
-						mPickups.push_back(new GameObject(mRenderer, type, Vector2D(x,y), path));	
+						GameObject* newPickup = new GameObject(mRenderer, type, Vector2D(x,y), path);
+						newPickup->SetCollisionRadius(kCollisionCrateRadius);
+						mPickups.push_back(newPickup);	
 					}
 				}
 			}
@@ -179,10 +187,11 @@ void PickUpManager::CheckForCollisions(vector<BaseTank*> listOfTanks)
 
 void PickUpManager::CheckForACollision(BaseTank* tank)
 {
-	Rect2D rect = tank->GetAdjustedBoundingBox();
+	vector<Vector2D> rect = tank->GetAdjustedBoundingBox();
+
 	for(unsigned int i = 0; i < mPickups.size(); i++)
 	{
-		if(Collisions::Instance()->PointInBox(mPickups[i]->GetPosition(), rect))
+		if ((Collisions::Instance()->TriangleCollision(rect[1], rect[2], rect[3], mPickups[i]->GetPosition())) || (Collisions::Instance()->TriangleCollision(rect[0], rect[1], rect[3], mPickups[i]->GetPosition())))
 		{
 			if(tank->GetGameObjectType() == GAMEOBJECT_TANK)
 			{
@@ -212,6 +221,11 @@ void PickUpManager::CheckForACollision(BaseTank* tank)
 						tank->AddMines(3);
 						tank->AddToScore(SCORE_COLLECTEDPICKUP);
 					break;
+
+					case GAMEOBJECT_PICKUP_FUEL:
+						tank->AddFuel(30.0f);
+						tank->AddToScore(SCORE_COLLECTEDPICKUP);
+					break;
 				}
 			}
 		}
@@ -229,7 +243,7 @@ void PickUpManager::GenerateAPickUp()
 		GAMEOBJECT_TYPE type;
 
 		//Determine a random pickup.
-		int typeToGenerate = rand()%4;
+		int typeToGenerate = rand()%5;
 
 		//Get the valid path for the image.
 		switch(typeToGenerate)
@@ -253,10 +267,16 @@ void PickUpManager::GenerateAPickUp()
 				path = kMinePickUpPath;
 				type = GAMEOBJECT_PICKUP_MINES;
 			break;
+
+			case 4:
+				path = kFuelPickUpPath;
+				type = GAMEOBJECT_PICKUP_FUEL;
+			break;
 		}
 
 		//Get a random position to spawn the pickup.
 		Vector2D spawnPos = Vector2D(rand()%kScreenWidth, rand()%kScreenHeight);
+		
 		//Ensure this position is valid.
 		while(CollisionWithAnObstacle(spawnPos))
 		{
@@ -264,7 +284,9 @@ void PickUpManager::GenerateAPickUp()
 		}
 
 		//Add the pickup to our list of pickups.
-		mPickups.push_back(new GameObject(mRenderer, type, spawnPos, path));	
+		GameObject* newPickup = new GameObject(mRenderer, type, spawnPos, path);
+		newPickup->SetCollisionRadius(kCollisionCrateRadius);
+		mPickups.push_back(newPickup);	
 	}
 }
 
@@ -272,16 +294,31 @@ void PickUpManager::GenerateAPickUp()
 
 bool PickUpManager::CollisionWithAnObstacle(Vector2D positionToCheck)
 {
+	//Calculate positions around the spawn position to ensure pickups do not spawn in obstacles.
+	Vector2D modifiedPositionLeft	= positionToCheck;
+	modifiedPositionLeft.x -= kSafeCrateDistance;
+	Vector2D modifiedPositionRight	= positionToCheck;
+	modifiedPositionRight.x += kSafeCrateDistance;
+	Vector2D modifiedPositionTop	= positionToCheck;
+	modifiedPositionTop.y -= kSafeCrateDistance;
+	Vector2D modifiedPositionBottom = positionToCheck;
+	modifiedPositionBottom.y += kSafeCrateDistance;
+
 	//Loop through the obstacles in the scene checking is this position is within an obstacle.
-	for(unsigned int i = 0; i < ObstacleManager::Instance()->GetObstacles().size(); i++)
+	for( unsigned int i = 0; i < ObstacleManager::Instance()->GetObstacles().size(); i++ )
 	{
 		GameObject* currentObstacle = ObstacleManager::Instance()->GetObstacles().at(i);
+		vector<Vector2D> rect = currentObstacle->GetAdjustedBoundingBox();
 
-		if(Collisions::Instance()->PointInBox(positionToCheck, currentObstacle->GetAdjustedBoundingBox()))
+		if ((Collisions::Instance()->TriangleCollision(rect[1], rect[2], rect[3], positionToCheck)) || (Collisions::Instance()->TriangleCollision(rect[0], rect[1], rect[3], positionToCheck)))
+		{
+			//cout << "Tried pickup placement and FAILED" << endl;
 			return true;
+		}
 	}
 
 	//If we reach this point there was no collision.
+	//cout << "Tried pickup placement and PASSED" << endl;
 	return false;
 }
 

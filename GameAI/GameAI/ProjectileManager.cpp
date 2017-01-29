@@ -7,6 +7,7 @@
 #include <algorithm>
 #include "Commons.h"
 #include "ObstacleManager.h"
+#include "Mine.h"
 
 //Initialise the instance to null.
 ProjectileManager* ProjectileManager::mInstance = NULL;
@@ -54,30 +55,32 @@ ProjectileManager::~ProjectileManager()
 void ProjectileManager::UpdateProjectiles(float deltaTime)
 {
 	//Update the indestructbile mines.
-	for(unsigned int i = 0; i < mInstance->mIndestructibleMines.size(); i++)
-		mInstance->mIndestructibleMines[i]->Update(deltaTime);
+	for(unsigned int i = 0; i < mIndestructibleMines.size(); i++)
+		mIndestructibleMines[i]->Update(deltaTime);
 
 	//Update the projectiles.
-	for(unsigned int i = 0; i < mInstance->mProjectiles.size(); i++)
-		mInstance->mProjectiles[i]->Update(deltaTime);
+	for(unsigned int i = 0; i < mProjectiles.size(); i++)
+		mProjectiles[i]->Update(deltaTime);
 
 	//Check if any projectile have left the screen.
 	Rect2D screenBox(0.0f, 0.0f, kScreenWidth, kScreenHeight);
 	for(unsigned int i = 0; i < mInstance->mProjectiles.size(); i++)
 	{
-		if(!Collisions::Instance()->PointInBox(mInstance->mProjectiles[i]->GetCentralPosition(), screenBox))
+		if(!Collisions::Instance()->PointInBox(mProjectiles[i]->GetCentralPosition(), screenBox))
 		{
-			//Prepare this projectile for deletion.
-			mInstance->mProjectileIndexToDelete = i;
-			break;
+			if(mProjectileIndexToDelete == -1)
+			{
+				mProjectileIndexToDelete = i;
+				break;
+			}
 		}
 	}
 
 	//Remove one projectile a frame.
-	if(mInstance->mProjectileIndexToDelete != -1)
+	if(mProjectileIndexToDelete != -1)
 	{
-		Projectile* projectileToDelete = mInstance->mProjectiles.at(mInstance->mProjectileIndexToDelete);
-		mInstance->mProjectiles.erase(mInstance->mProjectiles.begin()+mInstance->mProjectileIndexToDelete);
+		Projectile* projectileToDelete = mInstance->mProjectiles.at(mProjectileIndexToDelete);
+		mProjectiles.erase(mProjectiles.begin()+mProjectileIndexToDelete);
 		delete projectileToDelete;
 		mProjectileIndexToDelete = -1;
 	}
@@ -88,10 +91,10 @@ void ProjectileManager::UpdateProjectiles(float deltaTime)
 void ProjectileManager::RenderProjectiles()
 {
 	for(unsigned int i = 0; i < mIndestructibleMines.size(); i++)
-		mInstance->mIndestructibleMines[i]->Render();
+		mIndestructibleMines[i]->Render();
 
 	for(unsigned int i = 0; i < mProjectiles.size(); i++)
-		mInstance->mProjectiles[i]->Render();
+		mProjectiles[i]->Render();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -121,59 +124,79 @@ void ProjectileManager::CheckForACollision(GameObject* gameObject)
 {
 	if(gameObject != NULL)
 	{
-		Rect2D rect = gameObject->GetAdjustedBoundingBox();
-		for(unsigned int i = 0; i < mInstance->mProjectiles.size(); i++)
+		vector<Vector2D> rect = gameObject->GetAdjustedBoundingBox();
+		for(unsigned int i = 0; i < mProjectiles.size(); i++)
 		{
-			if(Collisions::Instance()->PointInBox(mInstance->mProjectiles[i]->GetPosition(), rect))
+			if(mProjectiles[i]->GetAlive())
 			{
-				if(gameObject->GetGameObjectType() == GAMEOBJECT_TANK)
+				if (Collisions::Instance()->TriangleCollision(rect[1], rect[2], rect[3], mInstance->mProjectiles[i]->GetPosition()) || Collisions::Instance()->TriangleCollision(rect[0], rect[1], rect[3], mInstance->mProjectiles[i]->GetPosition()))
 				{
-					//Inform bullet that is has hit a target if it was a tank.
-					if((GameObject*)mInstance->mProjectiles[i]->GetFirer() == gameObject)
+					if (gameObject->GetGameObjectType() == GAMEOBJECT_TANK)
 					{
-						//Do nothing if this is a bullet from the firing tank.
-						return;
+						if ((GameObject*)mInstance->mProjectiles[i]->GetFirer() == gameObject)
+						{
+							//Do nothing if this is a bullet from the firing tank.
+							return;
+						}
+						else
+						{
+
+							{
+								//Damage Tank.
+								BaseTank* tank = (BaseTank*)gameObject;
+								tank->TakeDamage(mInstance->mProjectiles[i]->GetGameObjectType());
+
+								//If the hit tank has no health then it is destroyed and a bonus score is awared to the firing tank.
+								if (tank->GetHealth() <= 0)
+									mInstance->mProjectiles[i]->GetFirer()->AddToScore(SCORE_DESTROYEDTANK);
+
+								//Add score to firing tank.
+								switch (mInstance->mProjectiles[i]->GetGameObjectType())
+								{
+								case GAMEOBJECT_BULLET:
+									mInstance->mProjectiles[i]->GetFirer()->AddToScore(SCORE_BULLETHIT);
+									break;
+
+								case GAMEOBJECT_ROCKET:
+									mInstance->mProjectiles[i]->GetFirer()->AddToScore(SCORE_ROCKETHIT);
+									break;
+
+								case GAMEOBJECT_MINE:
+									mInstance->mProjectiles[i]->GetFirer()->AddToScore(SCORE_MINEHIT);
+									break;
+								}
+							}
+
+							//Prepare this projectile for deletion.
+							if (!mProjectiles[i]->IsExploding())
+								mProjectiles[i]->Explode();
+						}
 					}
 					else
 					{
-						//Damage Tank.
-						BaseTank* tank = (BaseTank*)gameObject;
-						tank->TakeDamage(mInstance->mProjectiles[i]->GetGameObjectType());
-
-						//If the hit tank has no health then it is destroyed and a bonus score is awared to the firing tank.
-						if(tank->GetHealth() <= 0)
-							mInstance->mProjectiles[i]->GetFirer()->AddToScore(SCORE_DESTROYEDTANK);
-
-						//Add score to firing tank.
-						switch(mInstance->mProjectiles[i]->GetGameObjectType())
-						{
-							case GAMEOBJECT_BULLET:
-								mInstance->mProjectiles[i]->GetFirer()->AddToScore(SCORE_BULLETHIT);
-							break;
-
-							case GAMEOBJECT_ROCKET:
-								mInstance->mProjectiles[i]->GetFirer()->AddToScore(SCORE_ROCKETHIT);
-							break;
-
-							case GAMEOBJECT_MINE:
-								mInstance->mProjectiles[i]->GetFirer()->AddToScore(SCORE_MINEHIT);
-							break;
-						}
+						//Prepare this projectile for deletion.
+						if (!mProjectiles[i]->IsExploding())
+							mProjectiles[i]->Explode();
 					}
-
-					//Remove this projectile.
-					mInstance->mProjectiles[i]->RegisterHit();
 				}
-			
-				//Prepare this bullet for deletion.
-				mInstance->mProjectileIndexToDelete = i;
+			}
+			else
+			{
+				if(mProjectiles[i]->HasExploded())
+				{
+					if(mProjectileIndexToDelete == -1)
+					{
+						mProjectileIndexToDelete = i;
+						break;
+					}
+				}
 			}
 		}
 
 		//Check against the indestructible mines.
 		for(unsigned int i = 0; i < mInstance->mIndestructibleMines.size(); i++)
 		{
-			if(Collisions::Instance()->PointInBox(mInstance->mIndestructibleMines[i]->GetPosition(), rect))
+			if(Collisions::Instance()->Circle(mInstance->mIndestructibleMines[i], gameObject))
 			{
 				if(gameObject->GetGameObjectType() == GAMEOBJECT_TANK)
 				{
@@ -211,7 +234,7 @@ void ProjectileManager::CreateProjectile(SDL_Renderer* renderer, ProjectileSetup
 		case GAMEOBJECT_MINE:
 			if(firer->GetMines() > 0)
 			{
-				mInstance->mProjectiles.push_back(new Projectile(renderer, details, firer));
+				mInstance->mProjectiles.push_back(new Mine(renderer, details, firer));
 				firer->DeductAMine();
 			}
 		break;
@@ -235,37 +258,22 @@ void ProjectileManager::SetUpIndestructibleMines()
 		GameObject* currentObstacle = ObstacleManager::Instance()->GetObstacles().at(i);
 		if(currentObstacle->GetGameObjectType() != GAMEOBJECT_OBSTACLE_BORDER)
 		{
-			Rect2D boundingBox = currentObstacle->GetAdjustedBoundingBox();
+			vector<Vector2D> boundingBox = currentObstacle->GetAdjustedBoundingBox();
 
 			//Create some offsets for spawn positions.
-			Vector2D spawnPos[] = { Vector2D(-(boundingBox.width*0.4f),-(boundingBox.height*0.4f)),
-									Vector2D(boundingBox.width*0.4f,-(boundingBox.height*0.4f)),
-									Vector2D(),
-									Vector2D(-(boundingBox.width*0.4f),boundingBox.height*0.4f),
-									Vector2D(boundingBox.width*0.4f,boundingBox.height*0.4f)
-								  };
+			Vector2D spawnPos[] = { Vector2D(boundingBox[0].x + 8, boundingBox[0].y + 8),
+									Vector2D(boundingBox[1].x - 8, boundingBox[1].y + 8),
+									currentObstacle->GetCentralPosition(),
+									Vector2D(boundingBox[2].x - 8, boundingBox[2].y - 8),
+									Vector2D(boundingBox[3].x + 8, boundingBox[3].y - 8)
+									};
 
 			//Create 5 mines upon each obstacle.
 			for(unsigned int j = 0; j < 5; j++)
 			{
-				details.StartPosition	= Vector2D( currentObstacle->GetCentralPosition().x + spawnPos[j].x,
-													currentObstacle->GetCentralPosition().y + spawnPos[j].y);
+				details.StartPosition	= Vector2D(spawnPos[j].x, spawnPos[j].y);
 
-				mInstance->mIndestructibleMines.push_back(new Projectile(mRenderer, details, NULL));
-			}
-		}
-	}
-
-	//Indestructable mines around gameboard.
-	for(unsigned int x = 0; x < kScreenWidth; x++)
-	{
-		for(unsigned int y = 0; y < kScreenHeight; y++)
-		{
-			if( (y == 0 || y == (kScreenHeight-1)/kTileDimensions) ||
-				(x == 0 || x == (kScreenWidth-1)/kTileDimensions) )
-			{
-				details.StartPosition	= Vector2D( (x * kTileDimensions)+(kTileDimensions*0.5f), (y * kTileDimensions)+(kTileDimensions*0.5f));
-				mInstance->mIndestructibleMines.push_back(new Projectile(mRenderer, details, NULL));
+				mInstance->mIndestructibleMines.push_back(new Mine(mRenderer, details, NULL));
 			}
 		}
 	}
@@ -304,11 +312,12 @@ vector<GameObject*> ProjectileManager::GetVisibleMines(BaseTank* lookingTank)
 					for(unsigned int j = 0; j < ObstacleManager::Instance()->GetObstacles().size(); j++)
 					{
 						GameObject* currentObstacle = ObstacleManager::Instance()->GetObstacles().at(j);
-		
+						vector<Vector2D> rect = currentObstacle->GetAdjustedBoundingBox();
+
 						//Check if we have collided with this obstacle.
-						if( !Collisions::Instance()->PointInBox(point1, currentObstacle->GetAdjustedBoundingBox()) &&
-							!Collisions::Instance()->PointInBox(point2, currentObstacle->GetAdjustedBoundingBox()) &&
-							!Collisions::Instance()->PointInBox(point3, currentObstacle->GetAdjustedBoundingBox()) )
+						if ((!Collisions::Instance()->TriangleCollision(rect[1], rect[2], rect[3], point1)) || (!Collisions::Instance()->TriangleCollision(rect[0], rect[1], rect[3], point1)) &&
+							(!Collisions::Instance()->TriangleCollision(rect[1], rect[2], rect[3], point2)) || (!Collisions::Instance()->TriangleCollision(rect[0], rect[1], rect[3], point2)) &&
+							(!Collisions::Instance()->TriangleCollision(rect[1], rect[2], rect[3], point3)) || (!Collisions::Instance()->TriangleCollision(rect[0], rect[1], rect[3], point3)))
 						{
 							//Add mine projectile to the list that will be returned.
 							mines.push_back(currentProjectile);

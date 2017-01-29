@@ -24,9 +24,9 @@ ObstacleManager::~ObstacleManager()
 
 //--------------------------------------------------------------------------------------------------
 
-void ObstacleManager::Init(SDL_Renderer* renderer)
+void ObstacleManager::Init(SDL_Renderer* renderer, string mapDataPath)
 {
-	LoadObstacles(renderer);
+	LoadObstacles(renderer, mapDataPath);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -57,13 +57,13 @@ void ObstacleManager::RenderObstacles()
 
 //--------------------------------------------------------------------------------------------------
 
-void ObstacleManager::LoadObstacles(SDL_Renderer* renderer)
+void ObstacleManager::LoadObstacles(SDL_Renderer* renderer, string mapDataPath)
 {
 	string imagePath;
 
 	//Get the whole xml document.
 	TiXmlDocument doc;
-	if(!doc.LoadFile(kTilemapPath))
+	if(!doc.LoadFile(mapDataPath))
 	{
 		cerr << doc.ErrorDesc() << endl;
 	}

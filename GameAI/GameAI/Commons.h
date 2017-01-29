@@ -10,9 +10,6 @@ using namespace::std;
 #define AUDIO_VISIBLE 
 #define DEBUG_LINES_VISIBLE
 
-const string kTilemapPath			= "XML Data Files/Arena.xml";
-const string kScorePath				= "Scores/Scores.txt";
-const string kTankPath				= "XML Data Files/TankData.xml";
 const string kBulletPath			= "Images/Bullet.png";
 const string kRocketPath			= "Images/Rocket.png";
 const string kMinePath				= "Images/Mine.png";
@@ -22,6 +19,7 @@ const string kHealthPickUpPath		= "Images/CrateHealth.png";
 const string kRocketPickUpPath		= "Images/CrateRockets.png";
 const string kBulletPickUpPath		= "Images/CrateBullets.png";
 const string kMinePickUpPath		= "Images/CrateMines.png";
+const string kFuelPickUpPath		= "Images/CrateFuel.png";
 const string kExplosionImagePath	= "Images/Explosion.png";
 
 enum Deceleration
@@ -43,7 +41,8 @@ enum GAMEOBJECT_TYPE
 	GAMEOBJECT_PICKUP_HEALTH,
 	GAMEOBJECT_PICKUP_BULLETS,
 	GAMEOBJECT_PICKUP_ROCKETS,
-	GAMEOBJECT_PICKUP_MINES
+	GAMEOBJECT_PICKUP_MINES,
+	GAMEOBJECT_PICKUP_FUEL
 };
 
 enum TANK_TYPE
@@ -106,6 +105,7 @@ enum STEERING_BEHAVIOUR
 	STEERING_ARRIVE,
 	STEERING_INTRPOSE,
 	STEERING_OBSTACLEAVOIDANCE,
+	STEERING_WALLAVOIDANCE,
 	STEERING_PATHFOLLOWING,
 	STEERING_WANDER,
 	STEERING_PURSUIT,
@@ -375,11 +375,11 @@ inline int Vector2D::Sign(const Vector2D& v2)const
 {
   if (y*v2.x > x*v2.y)
   { 
-    return anticlockwise;
+    return clockwise;
   }
   else 
   {
-    return clockwise;
+    return anticlockwise;
   }
 }
 
