@@ -1,9 +1,7 @@
 #ifndef B013432FTANK_H
 #define B013432FTANK_H
 
-#include "..\BaseTank.h"
-#include <SDL.h>
-#include "..\Commons.h"
+#include "B013432f_Behaviours.h"
 
 //---------------------------------------------------------------
 
@@ -32,6 +30,9 @@ private:
 	TURN_DIRECTION  mManTurnDirection;
 	bool			mManKeyDown;
 	bool			mFireKeyDown;
+
+	B013432f_Behaviours*	_tankBehaviour;
+	TankManager*			_tankManager;
 };
 
 //---------------------------------------------------------------

@@ -34,6 +34,8 @@ void B013432f_Tank::ChangeState(BASE_TANK_STATE newState)
 
 void B013432f_Tank::Update(float deltaTime, SDL_Event e)
 {
+	_tankBehaviour->FindClosest(GetPosition(), _tankManager);
+
 	switch(e.type)
 	{
 		//Deal with keyboard input.
