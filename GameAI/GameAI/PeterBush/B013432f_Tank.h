@@ -32,6 +32,7 @@ private:
 	bool			mFireKeyDown;
 
 	B013432f_Behaviours*	_tankBehaviour;
+	BaseTank*				_baseTank;
 	TankManager*			_tankManager;
 };
 

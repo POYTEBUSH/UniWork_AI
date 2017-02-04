@@ -33,8 +33,10 @@ void B013432f_Tank::ChangeState(BASE_TANK_STATE newState)
 //--------------------------------------------------------------------------------------------------
 
 void B013432f_Tank::Update(float deltaTime, SDL_Event e)
-{
-	_tankBehaviour->FindClosest(GetPosition(), _tankManager);
+{	
+	//bool canBeSeen = this->CanSee(_baseTank);
+	//_tankBehaviour->FindClosest(GetPosition(), _tankManager, canBeSeen);
+	_tankBehaviour->ChooseBehaviour(e);
 
 	switch(e.type)
 	{
