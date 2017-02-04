@@ -2,7 +2,7 @@
 
 B013432f_Behaviours::B013432f_Behaviours()
 {
-	tankBehaviour = Wander;
+	tankBehaviour = Seek;
 }
 
 B013432f_Behaviours::~B013432f_Behaviours()
@@ -12,7 +12,7 @@ B013432f_Behaviours::~B013432f_Behaviours()
 
 //Vector2D B013432f_Behaviours::FindClosest(Vector2D currentPos, TankManager* tankManager, bool Can)
 //{
-//	vector<BaseTank*> Tanks = {tankManager->GetVisibleTanks(_baseT)};
+//	
 //	Vector2D thisDistance;
 //	Vector2D closestDistance = Vector2D(0.0f, 0.0f);
 //	Vector2D currentPosition = currentPos;
@@ -28,118 +28,89 @@ B013432f_Behaviours::~B013432f_Behaviours()
 //		}
 //	}
 //}
+void B013432f_Behaviours::GetMousePos()
+{
+	POINT p;
+	if (GetCursorPos(&p))
+	{
+		cout << "X: " << p.x << " Y: " << p.y << endl;
+	}
+
+	mousePosition = Vector2D(p.x, p.y);
+}
 
 void B013432f_Behaviours::ChooseBehaviour(SDL_Event e)
 {
-	cout << "test"<< endl;
-
 	switch (e.type)
 	{
 		//Deal with keyboard input.
 	case SDL_KEYDOWN:
 		switch (e.key.keysym.sym)
 		{
-		case SDLK_1:
-			tankBehaviour = Wander;
-			break;
-		case SDLK_2:
+		case SDLK_q:
 			tankBehaviour = Seek;
 			break;
-		case SDLK_3:
+		case SDLK_w:
 			tankBehaviour = Flee;
 			break;
-		case SDLK_4:
+		case SDLK_e:
 			tankBehaviour = Arrive;
+			break;
+		case SDLK_r:
+			tankBehaviour = ObstacleAvoidance;
 			break;		
 		}
 	}
 
 	switch (tankBehaviour)
 	{
-		case Wander:
-			WanderBehaviour();
-			break;
+		//case Wander:
+		//	WanderBehaviour();
+		//	cout << "WanderBehaviour" << endl;
+		//	break;
 		case Seek:
-			SeekBehaviour();
+			_steering->SeekBehaviour(mousePosition);
+			cout << "SeekBehaviour" << endl;
 			break;
-		case Flee:
-			FleeBehaviour();
-			break;
-		case Arrive:
-			ArriveBehaviour();
-			break;
-		case Pursuit:
-			PursuitBehaviour();
-			break;
-		case Evade:
-			EvadeBehaviour();
-			break;
-		case ObstacleAvoidance:
-			ObstacleAvoidanceBehaviour();
-			break;
-		case WallAvoidance:
-			WallAvoidanceBehaviour();
-			break;
-		case Interpose:
-			InterposeBehaviour();
-			break;
-		case Hide:
-			HideBehaviour();
-			break;
-		case PathFollow:
-			PathFollowBehaviour();
-			break;
-		case OffsetPusuit:
-			OffsetPusuitBehaviour();
-			break;
+		//case Flee:
+		//	FleeBehaviour();
+		//	cout << "FleeBehaviour" << endl;
+		//	break;
+		//case Arrive:
+		//	ArriveBehaviour();
+		//	cout << "ArriveBehaviour" << endl;
+		//	break;
+		//case Pursuit:
+		//	PursuitBehaviour();
+		//	cout << "PursuitBehaviour" << endl;
+		//	break;
+		//case Evade:
+		//	EvadeBehaviour();
+		//	cout << "EvadeBehaviour" << endl;
+		//	break;
+		//case ObstacleAvoidance:
+		//	ObstacleAvoidanceBehaviour();
+		//	cout << "ObstacleAvoidanceBehaviour" << endl;
+		//	break;
+		//case WallAvoidance:
+		//	WallAvoidanceBehaviour();
+		//	cout << "WallAvoidanceBehaviour" << endl;
+		//	break;
+		//case Interpose:
+		//	InterposeBehaviour();
+		//	cout << "InterposeBehaviour" << endl;
+		//	break;
+		//case Hide:
+		//	HideBehaviour();
+		//	cout << "HideBehaviour" << endl;
+		//	break;
+		//case PathFollow:
+		//	PathFollowBehaviour();
+		//	cout << "PathFollowBehaviour" << endl;
+		//	break;
+		//case OffsetPusuit:
+		//	OffsetPusuitBehaviour();
+		//	cout << "OffsetPusuitBehaviour" << endl;
+		//	break;
 	}
-}
-
-void B013432f_Behaviours::SeekBehaviour()
-{
-	cout << "SeekBehaviour" << endl;
-}
-void B013432f_Behaviours::FleeBehaviour()
-{
-	cout << "FleeBehaviour" << endl;
-}
-void B013432f_Behaviours::ArriveBehaviour()
-{
-	cout << "ArriveBehaviour" << endl;
-}
-void B013432f_Behaviours::PursuitBehaviour()
-{
-	cout << "PursuitBehaviour" << endl;
-}
-void B013432f_Behaviours::EvadeBehaviour()
-{
-	cout << "EvadeBehaviour" << endl;
-}
-void B013432f_Behaviours::WanderBehaviour()
-{
-	cout << "WanderBehaviour" << endl;
-}
-void B013432f_Behaviours::ObstacleAvoidanceBehaviour()
-{
-	cout << "ObstacleAvoidanceBehaviour" << endl;
-}
-void B013432f_Behaviours::WallAvoidanceBehaviour()
-{
-	cout << "WallAvoidanceBehaviour" << endl;
-}
-void B013432f_Behaviours::InterposeBehaviour()
-{
-	cout << "InterposeBehaviour" << endl;
-}
-void B013432f_Behaviours::HideBehaviour()
-{
-	cout << "HideBehaviour" << endl;
-}
-void B013432f_Behaviours::PathFollowBehaviour()
-{
-	cout << "PathFollowBehaviour" << endl;
-}
-void B013432f_Behaviours::OffsetPusuitBehaviour()
-{
-	cout << "OffsetPusuitBehaviour" << endl;
 }

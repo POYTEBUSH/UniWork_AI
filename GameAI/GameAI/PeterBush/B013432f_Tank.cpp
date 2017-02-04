@@ -15,6 +15,7 @@ B013432f_Tank::B013432f_Tank(SDL_Renderer* renderer, TankSetupDetails details)
 	mManTurnDirection   = DIRECTION_UNKNOWN;
 	mManKeyDown			= false;
 	mFireKeyDown		= false;
+	_tankBehaviour->tankMaxSpeed = GetMaxSpeed();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -36,6 +37,9 @@ void B013432f_Tank::Update(float deltaTime, SDL_Event e)
 {	
 	//bool canBeSeen = this->CanSee(_baseTank);
 	//_tankBehaviour->FindClosest(GetPosition(), _tankManager, canBeSeen);
+	_tankBehaviour->tanksPosition = GetPosition();
+	_tankBehaviour->tankVelocity = GetVelocity();
+	_tankBehaviour->GetMousePos();
 	_tankBehaviour->ChooseBehaviour(e);
 
 	switch(e.type)
@@ -137,43 +141,15 @@ void B013432f_Tank::Update(float deltaTime, SDL_Event e)
 				break;
 			}
 		break;
-	}
+	}	
 	
-	//Tank movement.
-	if(mTankTurnKeyDown)
-	{
-		if(mTankTurnDirection == DIRECTION_LEFT)
-			RotateHeadingByRadian(0.05f, -1);
-		else if(mTankTurnDirection == DIRECTION_RIGHT)
-			RotateHeadingByRadian(0.05f, 1);
-	}
-	if(mTankMoveKeyDown)
-	{
-		if(mTankMoveDirection == DIRECTION_FORWARD)
-		{
-			mCurrentSpeed -= kSpeedIncrement*deltaTime;
-			if(mCurrentSpeed < -GetMaxSpeed())
-				mCurrentSpeed = -GetMaxSpeed();
-		}
-		else if(mTankMoveDirection == DIRECTION_BACKWARD)
-		{
-			mCurrentSpeed += kSpeedIncrement*deltaTime;
-			if(mCurrentSpeed > GetMaxSpeed())
-				mCurrentSpeed = GetMaxSpeed();
-		}
-	}
-
-	//Man movement.
-	if(mManKeyDown)
-	{
-		if(mManTurnDirection == DIRECTION_LEFT)
-			RotateManByRadian(-kManTurnRate, 1, deltaTime);
-		else if(mManTurnDirection == DIRECTION_RIGHT)
-			RotateManByRadian(kManTurnRate, 1, deltaTime);
-	}
-
 	//Call parent update.
 	BaseTank::Update(deltaTime, e);
+}
+
+void B013432f_Tank::UpdateMovement()
+{
+	//velocity
 }
 
 //--------------------------------------------------------------------------------------------------

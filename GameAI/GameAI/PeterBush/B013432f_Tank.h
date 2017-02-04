@@ -15,6 +15,7 @@ public:
 	void ChangeState(BASE_TANK_STATE newState);
 
 	void Update(float deltaTime, SDL_Event e);
+	void UpdateMovement();
 
 	void RotateHeadingByRadian(double radian, int sign);
 
@@ -31,7 +32,9 @@ private:
 	bool			mManKeyDown;
 	bool			mFireKeyDown;
 
-	B013432f_Behaviours*	_tankBehaviour;
+
+	B013432f_Behaviours* _tankBehaviour = new B013432f_Behaviours;
+	//B013432f_Behaviours*	_tankBehaviour;
 	BaseTank*				_baseTank;
 	TankManager*			_tankManager;
 };

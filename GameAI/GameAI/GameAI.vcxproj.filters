@@ -99,6 +99,9 @@
     <ClInclude Include="PeterBush\B013432f_Behaviours.h">
       <Filter>PeterBush</Filter>
     </ClInclude>
+    <ClInclude Include="PeterBush\B013432f_Steering.h">
+      <Filter>PeterBush</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WaypointManager.cpp">
@@ -174,6 +177,9 @@
       <Filter>PeterBush</Filter>
     </ClCompile>
     <ClCompile Include="PeterBush\B013432f_Behaviours.cpp">
+      <Filter>PeterBush</Filter>
+    </ClCompile>
+    <ClCompile Include="PeterBush\B013432f_Steering.cpp">
       <Filter>PeterBush</Filter>
     </ClCompile>
   </ItemGroup>

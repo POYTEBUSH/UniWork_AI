@@ -197,8 +197,8 @@ BaseTank* TankManager::GetTankObject(SDL_Renderer* renderer, TankSetupDetails de
 	}
 	else if (details.StudentName == "B013432f_Tank")
 	{
-		B013432f_Tank* newTank = new B013432f_Tank(renderer, details);
-		newBaseTank = (BaseTank*)newTank;
+		B013432f_Tank* newb013432fTank = new B013432f_Tank(renderer, details);
+		newBaseTank = (BaseTank*)newb013432fTank;
 	}
 
 
