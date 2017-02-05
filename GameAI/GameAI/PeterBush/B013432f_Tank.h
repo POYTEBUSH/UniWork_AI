@@ -32,7 +32,6 @@ private:
 	bool			mManKeyDown;
 	bool			mFireKeyDown;
 
-
 	B013432f_Behaviours* _tankBehaviour = new B013432f_Behaviours;
 	//B013432f_Behaviours*	_tankBehaviour;
 	BaseTank*				_baseTank;

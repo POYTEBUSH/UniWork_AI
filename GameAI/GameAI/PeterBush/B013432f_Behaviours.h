@@ -4,12 +4,12 @@
 #include <SDL.h>
 #include "..\Commons.h"
 #include "..\TankManager.h"
-#include "B013432f_Steering.h"
 
 using namespace std;
 
 enum BehaviourType
 {
+	NotSet,
 	Seek,				//Seeks to find where the target is going
 	Flee,				//Tries to run in the complete opposite way the target is going
 	Arrive,				//What to do when the tank has arrived at a point
@@ -30,17 +30,30 @@ public:
 
 	B013432f_Behaviours();
 	~B013432f_Behaviours();
-	B013432f_Steering* _steering;
 
 	Vector2D mousePosition;
 	Vector2D tanksPosition;
 	Vector2D tankVelocity;
 	double tankMaxSpeed;
+	Vector2D outputVelocity;
+	bool moving;
 
 	Vector2D FindClosest(Vector2D currentPos, TankManager* tankManager, bool canBeSeen);
 
 	void ChooseBehaviour(SDL_Event e);
 	void GetMousePos();
+
+	Vector2D SeekFleeBehaviour(Vector2D mousePosition);
+	Vector2D ArriveBehaviour();
+	Vector2D PursuitBehaviour();
+	Vector2D EvadeBehaviour();
+	Vector2D WanderBehaviour();
+	Vector2D ObstacleAvoidanceBehaviour();
+	Vector2D WallAvoidanceBehaviour();
+	Vector2D InterposeBehaviour();
+	Vector2D HideBehaviour();
+	Vector2D PathFollowBehaviour();
+	Vector2D OffsetPusuitBehaviour();
 
 private:
 	BehaviourType tankBehaviour;

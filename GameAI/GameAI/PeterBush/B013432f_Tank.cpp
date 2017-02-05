@@ -38,9 +38,16 @@ void B013432f_Tank::Update(float deltaTime, SDL_Event e)
 	//bool canBeSeen = this->CanSee(_baseTank);
 	//_tankBehaviour->FindClosest(GetPosition(), _tankManager, canBeSeen);
 	_tankBehaviour->tanksPosition = GetPosition();
-	_tankBehaviour->tankVelocity = GetVelocity();
-	_tankBehaviour->GetMousePos();
 	_tankBehaviour->ChooseBehaviour(e);
+
+	if (_tankBehaviour->moving == true)
+	{
+		_tankBehaviour->tankVelocity = GetVelocity();
+		_tankBehaviour->GetMousePos();
+		mVelocity = _tankBehaviour->outputVelocity;
+		MoveInHeadingDirection(deltaTime);
+		RotateHeadingToFacePosition(_tankBehaviour->mousePosition, deltaTime);
+	}
 
 	switch(e.type)
 	{
