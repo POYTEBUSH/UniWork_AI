@@ -2,7 +2,7 @@
 
 B013432f_Behaviours::B013432f_Behaviours()
 {
-	tankBehaviour = NotSet;
+	tankBehaviour = Idle;
 	moving = false;
 }
 
@@ -29,10 +29,11 @@ B013432f_Behaviours::~B013432f_Behaviours()
 //		}
 //	}
 //}
+
 void B013432f_Behaviours::GetMousePos()
 {
-	cout << "Current Velocity: " << tankVelocity.x << " " << tankVelocity.y << " " << endl;
-	cout << "Current Max Speed: " << tankMaxSpeed << endl;
+	//cout << "Current Velocity: " << tankVelocity.x << " " << tankVelocity.y << " " << endl;
+	//cout << "Current Max Speed: " << tankMaxSpeed << endl;
 
 	int x, y;
 	SDL_GetMouseState(&x, &y);
@@ -65,19 +66,21 @@ void B013432f_Behaviours::ChooseBehaviour(SDL_Event e)
 
 	switch (tankBehaviour)
 	{
-	case NotSet:
+	case Idle:
 		break;
 		//case Wander:
 		//	WanderBehaviour();
 		//	cout << "WanderBehaviour" << endl;
 		//	break;
 	case Seek:
-		outputVelocity = SeekFleeBehaviour(mousePosition);
+		distance = DistanceFromTargetCheck(mousePosition);
+		outputVelocity = SeekBehaviour(mousePosition);
 		moving = true;
 		cout << "SeekBehaviour" << endl;
 		break;
 	case Flee:
-		outputVelocity = (SeekFleeBehaviour(mousePosition) *-1.0f);
+		distance = DistanceFromTargetCheck(mousePosition);
+		outputVelocity = FleeBehaviour(mousePosition);
 		cout << "FleeBehaviour" << endl;
 		break;
 	case Arrive:
@@ -119,25 +122,46 @@ void B013432f_Behaviours::ChooseBehaviour(SDL_Event e)
 	}
 }
 
-Vector2D B013432f_Behaviours::SeekFleeBehaviour(Vector2D mousePosition)
+//GET DISTANCE CHECK WORKING
+//MAKE TANK ROTATE TO FOLLOW THE MOUSE AT ALL TIMES
+//MAKE IT LOOK AT THE NEAREST ENEMY IF CLOSER THAN TANK
+
+double B013432f_Behaviours::DistanceFromTargetCheck(Vector2D target)
 {
-	Vector2D desiredVelocity = Vec2DNormalize(mousePosition - tanksPosition) * tankMaxSpeed;
+	Vector2D thisToTarget = target - tanksPosition;
+	double distance = thisToTarget.Length();
+
+	return distance;
+}
+
+Vector2D B013432f_Behaviours::SeekBehaviour(Vector2D target)
+{
+	Vector2D desiredVelocity = Vec2DNormalize(target - tanksPosition) * tankMaxSpeed;
 	Vector2D final = (desiredVelocity - tankVelocity);
 	final.Truncate(tankMaxSpeed);
+
 	return final;
 }
 
-//Vector2D B013432f_Behaviours::FleeBehaviour(Vector2D mousePosition)
-//{
-//	Vector2D desiredVelocity = Vec2DNormalize(mousePosition - tanksPosition) * tankMaxSpeed;
-//	Vector2D final = (desiredVelocity - tankVelocity);
-//	return final;
-//}
+Vector2D B013432f_Behaviours::FleeBehaviour(Vector2D target)
+{
+	Vector2D desiredVelocity = Vec2DNormalize(tanksPosition - target) * tankMaxSpeed;
+	Vector2D final = (desiredVelocity - tankVelocity);
+	return final;
+}
 
-//Vector2D B013432f_Behaviours::ArriveBehaviour()
-//{
-//		
-//}
+Vector2D B013432f_Behaviours::ArriveBehaviour(Vector2D target, double distance)
+{
+	if (distance > 0)
+	{
+		const double slowDown = 0.3;
+
+		double neededSpeed = distance / (double(deceleration * slowDown);
+		cout << "Speed: " << neededSpeed;
+
+	}
+
+}
 	//Vector2D B013432f_Behaviours::PursuitBehaviour()
 	//{
 	//	

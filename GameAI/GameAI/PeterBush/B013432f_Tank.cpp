@@ -47,6 +47,7 @@ void B013432f_Tank::Update(float deltaTime, SDL_Event e)
 		mVelocity = _tankBehaviour->outputVelocity;
 		MoveInHeadingDirection(deltaTime);
 		RotateHeadingToFacePosition(_tankBehaviour->mousePosition, deltaTime);
+		cout << "Fuel: " << GetFuel() << endl;
 	}
 
 	switch(e.type)
@@ -161,7 +162,7 @@ void B013432f_Tank::UpdateMovement()
 
 //--------------------------------------------------------------------------------------------------
 
-void B013432f_Tank::MoveInHeadingDirection(float deltaTime)
+void B013432f_Tank::MoveInHeadingDirection(float deltaTime) // Use this, pass the values from the seek method etc. into this!
 {
 	//Get the force that propels in current heading.
 	Vector2D force = (mHeading*mCurrentSpeed)-mVelocity;
