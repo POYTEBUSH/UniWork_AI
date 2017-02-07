@@ -35,122 +35,28 @@ void B013432f_Tank::ChangeState(BASE_TANK_STATE newState)
 
 void B013432f_Tank::Update(float deltaTime, SDL_Event e)
 {	
-	//bool canBeSeen = this->CanSee(_baseTank);
-	//_tankBehaviour->FindClosest(GetPosition(), _tankManager, canBeSeen);
-	_tankBehaviour->tanksPosition = GetPosition();
-	_tankBehaviour->ChooseBehaviour(e);
+	//Vector2D closestTank = _tankBehaviour->FindClosest(GetPosition(), _tankManager);
+	//cout << "Closest Tank " << closestTank.Length() << endl;
 
+	_tankBehaviour->tanksPosition = GetCentralPosition();
+	_tankBehaviour->ChooseBehaviour(e);
+	_tankBehaviour->tankMaxSpeed = GetMaxSpeed();
+	
 	if (_tankBehaviour->moving == true)
 	{
 		_tankBehaviour->tankVelocity = GetVelocity();
 		_tankBehaviour->GetMousePos();
-		mVelocity = _tankBehaviour->outputVelocity;
 		MoveInHeadingDirection(deltaTime);
-		RotateHeadingToFacePosition(_tankBehaviour->mousePosition, deltaTime);
-		cout << "Fuel: " << GetFuel() << endl;
+		//cout << "Fuel: " << GetFuel() << endl;
+
+		Vector2D aheadDistance = mVelocity;
+		if (aheadDistance.Length() == 0.0f)
+			aheadDistance = mHeading;
+
+		Vector2D ahead = GetCentralPosition() + aheadDistance;
+		RotateHeadingToFacePosition(ahead, deltaTime);
 	}
 
-	switch(e.type)
-	{
-		//Deal with keyboard input.
-		case SDL_KEYDOWN:
-			switch(e.key.keysym.sym)
-			{
-				//Tank speed keys.
-				case SDLK_UP:
-					mTankMoveDirection	= DIRECTION_FORWARD;
-					mTankMoveKeyDown	= true;
-				break;
-
-				case SDLK_DOWN:
-					mTankMoveDirection	= DIRECTION_BACKWARD;
-					mTankMoveKeyDown	= true;
-				break;
-
-				//Tank directional keys.
-				case SDLK_LEFT:
-					if(!mTankTurnKeyDown)
-					{
-						mTankTurnKeyDown	= true;
-						mTankTurnDirection	= DIRECTION_LEFT;
-					}
-				break;
-
-				case SDLK_RIGHT:
-					if(!mTankTurnKeyDown)
-					{
-						mTankTurnKeyDown		= true;
-						mTankTurnDirection	= DIRECTION_RIGHT;
-					}
-				break;
-
-				//Man directional keys
-				case SDLK_a:
-					if(!mManKeyDown)
-					{
-						mManKeyDown		  = true;
-						mManTurnDirection = DIRECTION_LEFT;
-					}
-				break;
-
-				case SDLK_d:
-					if(!mManKeyDown)
-					{
-						mManKeyDown		  = true;
-						mManTurnDirection = DIRECTION_RIGHT;
-					}
-				break;
-
-				//Fire input.
-				case SDLK_1:
-					ChangeState(TANKSTATE_MANFIRE);
-				break;
-
-				case SDLK_2:
-					if(mCurrentState != TANKSTATE_CANNONFIRE)
-						ChangeState(TANKSTATE_CANNONFIRE);
-				break;
-			}
-		break;
-
-		case SDL_KEYUP:
-			switch(e.key.keysym.sym)
-			{
-				//Tank directional input.
-				case SDLK_LEFT:
-				case SDLK_RIGHT:
-					mTankTurnKeyDown		= false;
-					mTankTurnDirection	= DIRECTION_UNKNOWN;
-				break;
-
-				case SDLK_UP:
-				case SDLK_DOWN:
-					//mTankMoveKeyDown = false;
-					//mTankMoveDirection = DIRECTION_NONE;
-					//mCurrentSpeed = 0.0f;
-					//mVelocity.Zero();
-				break;
-
-				//Man directional input.
-				case SDLK_a:
-				case SDLK_d:
-					mManKeyDown			= false;
-					mManTurnDirection	= DIRECTION_UNKNOWN;
-				break;
-
-				//Rocket input.
-				case SDLK_1:
-					ChangeState(TANKSTATE_IDLE);
-				break;
-
-				//Drop Mine input.
-				case SDLK_3:
-					ChangeState(TANKSTATE_DROPMINE);
-				break;
-			}
-		break;
-	}	
-	
 	//Call parent update.
 	BaseTank::Update(deltaTime, e);
 }
@@ -165,7 +71,8 @@ void B013432f_Tank::UpdateMovement()
 void B013432f_Tank::MoveInHeadingDirection(float deltaTime) // Use this, pass the values from the seek method etc. into this!
 {
 	//Get the force that propels in current heading.
-	Vector2D force = (mHeading*mCurrentSpeed)-mVelocity;
+	_tankBehaviour->outputVelocity.Truncate(GetMaxSpeed());
+	Vector2D force = _tankBehaviour->outputVelocity;
 
 	//Acceleration = Force/Mass
 	Vector2D acceleration = force/GetMass();

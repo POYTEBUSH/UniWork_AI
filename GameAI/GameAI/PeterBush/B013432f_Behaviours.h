@@ -40,7 +40,7 @@ public:
 	double distance;
 	double deceleration = 2.0;
 
-	Vector2D FindClosest(Vector2D currentPos, TankManager* tankManager, bool canBeSeen);
+	Vector2D FindClosest(Vector2D currentPos, TankManager* tankManager);
 
 	void ChooseBehaviour(SDL_Event e);
 	void GetMousePos();
