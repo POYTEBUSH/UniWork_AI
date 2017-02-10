@@ -35,12 +35,12 @@ void B013432f_Tank::ChangeState(BASE_TANK_STATE newState)
 
 void B013432f_Tank::Update(float deltaTime, SDL_Event e)
 {	
-	//Vector2D closestTank = _tankBehaviour->FindClosest(GetPosition(), _tankManager);
-	//cout << "Closest Tank " << closestTank.Length() << endl;
+	vector <BaseTank*> Tanks = mTanksICanSee;
 
 	_tankBehaviour->tanksPosition = GetCentralPosition();
 	_tankBehaviour->ChooseBehaviour(e);
 	_tankBehaviour->tankMaxSpeed = GetMaxSpeed();
+	_tankBehaviour->FindClosest(_tankManager, Tanks);
 	
 	if (_tankBehaviour->moving == true)
 	{

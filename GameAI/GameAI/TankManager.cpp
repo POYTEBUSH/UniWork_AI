@@ -195,6 +195,11 @@ BaseTank* TankManager::GetTankObject(SDL_Renderer* renderer, TankSetupDetails de
 		DumbTank* newTank = new DumbTank(renderer, details);
 		newBaseTank = (BaseTank*)newTank;
 	}
+	else if (details.StudentName == "DumbTank2")
+	{
+		DumbTank* newTank2 = new DumbTank(renderer, details);
+		newBaseTank = (BaseTank*)newTank2;
+	}
 	else if (details.StudentName == "B013432f_Tank")
 	{
 		B013432f_Tank* newb013432fTank = new B013432f_Tank(renderer, details);

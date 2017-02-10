@@ -40,16 +40,16 @@ public:
 	double distance;
 	double deceleration = 2.0;
 
-	Vector2D FindClosest(Vector2D currentPos, TankManager* tankManager);
+	void FindClosest(TankManager* tankManager, vector <BaseTank*>);
 
 	void ChooseBehaviour(SDL_Event e);
 	void GetMousePos();
 
-	Vector2D SeekBehaviour(Vector2D target);
-	Vector2D FleeBehaviour(Vector2D target);
-	Vector2D ArriveBehaviour(Vector2D target, double distance);
-	double DistanceFromTargetCheck(Vector2D target);
-	Vector2D PursuitBehaviour();
+	Vector2D SeekBehaviour(Vector2D target); //Iplemented
+	Vector2D FleeBehaviour(Vector2D target); //Iplemented
+	Vector2D ArriveBehaviour(Vector2D target, double distance); //Iplemented
+	double DistanceFromTargetCheck(Vector2D target); //Iplemented
+	Vector2D PursuitBehaviour(BaseTank* closestTank, double distanceValue); //Iplemented
 	Vector2D EvadeBehaviour();
 	Vector2D WanderBehaviour();
 	Vector2D ObstacleAvoidanceBehaviour();
@@ -61,5 +61,6 @@ public:
 
 private:
 	BehaviourType tankBehaviour;
+	BaseTank* _closestTank;
 };
 
