@@ -1,4 +1,4 @@
-﻿Build started 2/10/2017 3:46:48 PM.
+﻿Build started 2/11/2017 2:01:39 PM.
      1>Project "C:\Users\Poyte\Documents\Work Repos\UniWork_AI\GameAI\GameAI\GameAI.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Users\Poyte\Documents\Work Repos\UniWork_AI\GameAI\GameAI\\SDL\mixer_include" /I"C:\Users\Poyte\Documents\Work Repos\UniWork_AI\GameAI\GameAI\\SDL\include" /I"C:\Users\Poyte\Documents\Work Repos\UniWork_AI\GameAI\GameAI\\SDL\image_include" /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt PeterBush\B013432f_Behaviours.cpp
@@ -39,4 +39,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:03.90
+Time Elapsed 00:00:07.74

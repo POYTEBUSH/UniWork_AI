@@ -17,24 +17,23 @@ B013432f_Behaviours::~B013432f_Behaviours()
 //IF THE TANK FACES YOU FLEE
 //OBSTICLE AVOIDANCE
 
-void B013432f_Behaviours::FindClosest(TankManager* tankManager, vector<BaseTank*> Tanks)
+void B013432f_Behaviours::TargetClosest(TankManager* tankManager, vector<BaseTank*> Tanks)
 {
 	Vector2D closestDistance = Vector2D(0.0f, 0.0f);
 
 	for (int i = 0; i < Tanks.size(); i++)
 	{
-		Vector2D tanksDistanceV = (Tanks[i]->GetCentralPosition() - tanksPosition);
+		targetPursuit = Tanks[i]->GetCentralPosition() - Vector2D(10.0f, 10.0f);
+		cout << "FOUND TANK";
+		tankBehaviour = Pursuit;
+		/*Vector2D tanksDistanceV = (Tanks[i]->GetCentralPosition() - tanksPosition);
 		double tanksDistance = tanksDistanceV.Length();
 		double currentClosestDist = closestDistance.Length();
-
-		cout << i << endl;
 
 		if (i = 0)
 		{
 			currentClosestDist = tanksDistance;
 			closestDistance = tanksDistanceV;
-			_closestTank = Tanks[i];
-
 		}
 
 		if (tanksDistance < currentClosestDist)
@@ -42,8 +41,7 @@ void B013432f_Behaviours::FindClosest(TankManager* tankManager, vector<BaseTank*
 			currentClosestDist = tanksDistance;
 			closestDistance = tanksDistanceV;
 			cout << "Closest Tank is Now: " << Tanks[i]->GetTankName() << " And is " << currentClosestDist << endl;
-			_closestTank = Tanks[i];
-		}
+		}*/
 	}
 }
 
@@ -60,7 +58,7 @@ void B013432f_Behaviours::GetMousePos()
 
 void B013432f_Behaviours::ChooseBehaviour(SDL_Event e)
 {	
-	Vector2D target = mousePosition;
+	target = mousePosition;
 	distance = DistanceFromTargetCheck(target);
 	//<< "Distance " << distance << endl;
 	//cout << "TARGET AT: " << target.x << " " << target.y << endl;
@@ -73,17 +71,21 @@ void B013432f_Behaviours::ChooseBehaviour(SDL_Event e)
 		{
 		case SDLK_q:
 			tankBehaviour = Seek;
+			cout << "Key Q Pressed" << endl;
 			moving = true;
 			break;
 		case SDLK_w:
 			tankBehaviour = Flee;
+			cout << "Key W Pressed" << endl;
 			moving = true;
 			break;
 		case SDLK_e:
 			tankBehaviour = Arrive;
+			cout << "Key E Pressed" << endl;
 			break;
 		case SDLK_r:
 			tankBehaviour = Pursuit;
+			cout << "Key R Pressed" << endl;
 			break;
 		}
 	}
@@ -115,10 +117,10 @@ void B013432f_Behaviours::ChooseBehaviour(SDL_Event e)
 			outputVelocity = ArriveBehaviour(target, distance);
 		}
 		break;
-		case Pursuit:
+	case Pursuit:
 		if (moving == true)
 		{
-			outputVelocity = PursuitBehaviour(_closestTank, distance);
+			outputVelocity = PursuitBehaviour(targetPursuit);
 		}
 		break;
 		//case Evade:
@@ -199,19 +201,13 @@ Vector2D B013432f_Behaviours::ArriveBehaviour(Vector2D targetInput, double dista
 		return (desiredVelocity - tankVelocity);
 	}
 }
-Vector2D B013432f_Behaviours::PursuitBehaviour(BaseTank* closestTank, double distanceValue)
+Vector2D B013432f_Behaviours::PursuitBehaviour(Vector2D targetPursuit)
 {
-	Vector2D targetInput = closestTank->GetHeading();
+	Vector2D targetInput = targetPursuit;
 	Vector2D toTarget = targetInput - tanksPosition;
+	double dist = toTarget.Length();
 
-	if (distanceValue > 100.0)
-	{
-		return SeekBehaviour(targetInput);
-	}
-	else
-	{
-		return ArriveBehaviour(targetInput, distanceValue);
-	}
+	return ArriveBehaviour(targetInput, dist);
 }
 	//Vector2D B013432f_Behaviours::EvadeBehaviour()
 	//{
