@@ -40,6 +40,7 @@ void B013432f_Tank::Update(float deltaTime, SDL_Event e)
 	_tankBehaviour->tanksPosition = GetCentralPosition();
 	_tankBehaviour->ChooseBehaviour(e);
 	_tankBehaviour->tankMaxSpeed = GetMaxSpeed();
+	_tankBehaviour->tankHeading = GetHeading();
 	_tankBehaviour->TargetClosest(_tankManager, Tanks);
 	
 	if (_tankBehaviour->moving == true)

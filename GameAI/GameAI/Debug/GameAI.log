@@ -1,9 +1,9 @@
-﻿Build started 2/11/2017 2:01:39 PM.
+﻿Build started 2/12/2017 7:01:56 PM.
      1>Project "C:\Users\Poyte\Documents\Work Repos\UniWork_AI\GameAI\GameAI\GameAI.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Users\Poyte\Documents\Work Repos\UniWork_AI\GameAI\GameAI\\SDL\mixer_include" /I"C:\Users\Poyte\Documents\Work Repos\UniWork_AI\GameAI\GameAI\\SDL\include" /I"C:\Users\Poyte\Documents\Work Repos\UniWork_AI\GameAI\GameAI\\SDL\image_include" /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt PeterBush\B013432f_Behaviours.cpp
          B013432f_Behaviours.cpp
-     1>c:\users\poyte\documents\work repos\uniwork_ai\gameai\gameai\peterbush\b013432f_behaviours.cpp(24): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\poyte\documents\work repos\uniwork_ai\gameai\gameai\peterbush\b013432f_behaviours.cpp(23): warning C4018: '<' : signed/unsigned mismatch
        Link:
          C:\Program Files\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Poyte\Documents\Work Repos\UniWork_AI\GameAI\Debug\GameAI.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Users\Poyte\Documents\Work Repos\UniWork_AI\GameAI\GameAI\\SDL" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Poyte\Documents\Work Repos\UniWork_AI\GameAI\Debug\GameAI.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Poyte\Documents\Work Repos\UniWork_AI\GameAI\Debug\GameAI.lib" /MACHINE:X86 Debug\BaseTank.obj
          Debug\Collisions.obj
@@ -39,4 +39,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:07.74
+Time Elapsed 00:00:02.71

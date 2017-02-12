@@ -34,9 +34,11 @@ public:
 	Vector2D mousePosition;
 	Vector2D tanksPosition;
 	Vector2D tankVelocity;
+	Vector2D tankHeading;
 	double tankMaxSpeed;
 	Vector2D outputVelocity;
 	bool moving;
+	bool pursuit;
 	double distance;
 	double deceleration = 2.0;
 
@@ -45,12 +47,12 @@ public:
 	void ChooseBehaviour(SDL_Event e);
 	void GetMousePos();
 
+	double DistanceFromTargetCheck(Vector2D target); //Iplemented
 	Vector2D SeekBehaviour(Vector2D target); //Iplemented
 	Vector2D FleeBehaviour(Vector2D target); //Iplemented
 	Vector2D ArriveBehaviour(Vector2D target, double distance); //Iplemented
-	double DistanceFromTargetCheck(Vector2D target); //Iplemented
-	Vector2D PursuitBehaviour(Vector2D targetPursuit); //Iplemented
-	Vector2D EvadeBehaviour();
+	Vector2D PursuitBehaviour(BaseTank* evader); //Implemented
+	Vector2D EvadeBehaviour(BaseTank* evader);
 	Vector2D WanderBehaviour();
 	Vector2D ObstacleAvoidanceBehaviour();
 	Vector2D WallAvoidanceBehaviour();
