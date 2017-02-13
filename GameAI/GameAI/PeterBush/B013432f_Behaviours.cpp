@@ -12,10 +12,6 @@ B013432f_Behaviours::~B013432f_Behaviours()
 
 }
 
-//GET THE CLOSEST TANK TO THE PLAYER AND FOLLOW IT WHEN CLOSE, SIMILAR TO THE ARRIVE
-//IF THE TANK FACES YOU FLEE
-//OBSTICLE AVOIDANCE
-
 void B013432f_Behaviours::TargetClosest(TankManager* tankManager, vector<BaseTank*> Tanks)
 {
 	Vector2D closestDistance = Vector2D(0.0f, 0.0f);
@@ -25,7 +21,7 @@ void B013432f_Behaviours::TargetClosest(TankManager* tankManager, vector<BaseTan
 		targetPursuit = Tanks[i]->GetCentralPosition();
 		cout << "Spotted Tank " << Tanks[i]->GetTankName();
 		_closestTank = Tanks[i];
-		if (pursuit = true)
+		if (pursuit == true)
 			tankBehaviour = Pursuit;
 		else
 			tankBehaviour = Evade;
@@ -49,8 +45,7 @@ void B013432f_Behaviours::ChooseBehaviour(SDL_Event e)
 {	
 	target = mousePosition;
 	distance = DistanceFromTargetCheck(target);
-	//<< "Distance " << distance << endl;
-	//cout << "TARGET AT: " << target.x << " " << target.y << endl;
+	ObstacleAvoidanceBehaviour();
 
 	switch (e.type)
 	{
@@ -75,15 +70,14 @@ void B013432f_Behaviours::ChooseBehaviour(SDL_Event e)
 		case SDLK_r:
 			if (pursuit == false)
 			{
-				pursuit = false;
+				pursuit = true;
 				cout << "Pursuit Set" << endl;
 			}
 			else
 			{
-				pursuit = true;
+				pursuit = false;
 				cout << "Evade Set" << endl;
-			}
-			
+			}			
 			break;
 		}
 	}
@@ -100,37 +94,33 @@ void B013432f_Behaviours::ChooseBehaviour(SDL_Event e)
 	case Seek:
 		if (moving == true)
 		{
-			outputVelocity = SeekBehaviour(target);
+			outputVelocity = SeekBehaviour(target) + (ObstacleAvoidanceBehaviour() * 2);
 		}
 		break;
 	case Flee:
 		if (moving == true)
 		{
-			outputVelocity = FleeBehaviour(target);
+			outputVelocity = FleeBehaviour(target) + ObstacleAvoidanceBehaviour() * 1.5;
 		}
 		break;
 	case Arrive:
 		if (moving == true)
 		{
-			outputVelocity = ArriveBehaviour(target, distance);
+			outputVelocity = ArriveBehaviour(target, distance) + ObstacleAvoidanceBehaviour() * 1.5;
 		}
 		break;
 	case Pursuit:
 		if (moving == true)
 		{
-			outputVelocity = PursuitBehaviour(_closestTank);
+			outputVelocity = PursuitBehaviour(_closestTank) + ObstacleAvoidanceBehaviour() * 1.5;
 		}
 		break;
 	case Evade:
 		if (moving == true)
 		{
-			outputVelocity = EvadeBehaviour(_closestTank);
+			outputVelocity = EvadeBehaviour(_closestTank) + ObstacleAvoidanceBehaviour() * 1.5;
 		}
 		break;
-		//case ObstacleAvoidance:
-		//	ObstacleAvoidanceBehaviour();
-		//	cout << "ObstacleAvoidanceBehaviour" << endl;
-		//	break;
 		//case WallAvoidance:
 		//	WallAvoidanceBehaviour();
 		//	cout << "WallAvoidanceBehaviour" << endl;
@@ -208,11 +198,11 @@ Vector2D B013432f_Behaviours::PursuitBehaviour(BaseTank* evader)
 	double relativeHeading = tankHeading.Dot(evader->GetHeading());
 
 	if ((toEvader.Dot(tankHeading) > 0) && (relativeHeading < -0.95))
-		return SeekBehaviour(evader->GetCentralPosition());
+		return (SeekBehaviour(evader->GetCentralPosition()) * 0.8);
 
 	double lookAheadTime = toEvader.Length() / (tankMaxSpeed + evader->GetCurrentSpeed());
 
-	return SeekBehaviour(evader->GetCentralPosition() + evader->GetVelocity() * lookAheadTime);
+	return (SeekBehaviour(evader->GetCentralPosition() + evader->GetVelocity() * lookAheadTime)* 0.8);
 }
 
 Vector2D B013432f_Behaviours::EvadeBehaviour(BaseTank* pursuer)
@@ -222,14 +212,43 @@ Vector2D B013432f_Behaviours::EvadeBehaviour(BaseTank* pursuer)
 
 	return FleeBehaviour(pursuer->GetCentralPosition() + pursuer->GetVelocity() * lookAheadTime);
 }
-	//Vector2D B013432f_Behaviours::WanderBehaviour()
-	//{
-	//	
-	//}
-	//Vector2D B013432f_Behaviours::ObstacleAvoidanceBehaviour()
-	//{
-	//	
-	//}
+
+Vector2D B013432f_Behaviours::ObstacleAvoidanceBehaviour()
+{
+	vector<GameObject*> objects = ObstacleManager::Instance()->GetObstacles();
+	for (int i = 0; i < objects.size(); i++)
+	{
+
+		Rect2D rect = Rect2D(objects[i]->GetPosition().x, objects[i]->GetPosition().y,
+			(objects[i]->GetCentralPosition().x - objects[i]->GetPosition().x) * 2,
+			(objects[i]->GetCentralPosition().y - objects[i]->GetPosition().y) * 2);
+
+		distance = Vec2DDistance(objects[i]->GetCentralPosition(), tanksPosition);
+		double secondDistance = Vec2DDistance(objects[i]->GetCentralPosition(), objects[i]->GetPosition());
+
+		if (i > 3)
+		{
+			if (distance < secondDistance + 10)
+			{
+				avoidTarget = objects[i]->GetCentralPosition();
+				return FleeBehaviour(avoidTarget);
+			}
+		}
+		else
+		{
+			if (Collisions::Instance()->PointInBox(tankFrontPoint, rect) || Collisions::Instance()->PointInBox(tankBackPoint, rect))
+			{
+				avoidTarget = objects[i]->GetCentralPosition();
+				return FleeBehaviour(avoidTarget);
+			}
+		}
+	}
+	return Vector2D(0, 0);
+}
+//Vector2D B013432f_Behaviours::WanderBehaviour()
+//{
+//	
+//}
 	//Vector2D B013432f_Behaviours::WallAvoidanceBehaviour()
 	//{
 	//	

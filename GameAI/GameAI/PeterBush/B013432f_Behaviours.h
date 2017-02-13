@@ -4,6 +4,8 @@
 #include <SDL.h>
 #include "..\Commons.h"
 #include "..\TankManager.h"
+#include "..\ObstacleManager.h"
+#include "..\Collisions.h"
 
 using namespace std;
 
@@ -30,17 +32,26 @@ public:
 
 	B013432f_Behaviours();
 	~B013432f_Behaviours();
-
+	
 	Vector2D mousePosition;
 	Vector2D tanksPosition;
 	Vector2D tankVelocity;
 	Vector2D tankHeading;
+	Vector2D tankFrontPoint;
+	Vector2D tankBackPoint;
+	double tankCurrentSpeed;
 	double tankMaxSpeed;
 	Vector2D outputVelocity;
 	bool moving;
 	bool pursuit;
 	double distance;
 	double deceleration = 2.0;
+
+	//used in obstacle avoidance
+	Vector2D minDetectionBoxLength = Vector2D(5.0, 5.0);
+	Vector2D detectionBoxLength;
+	//used in wall avoidance
+	double wallDetectionFeelerLength = 40.0;
 
 	void TargetClosest(TankManager* tankManager, vector <BaseTank*>);
 
@@ -65,7 +76,10 @@ private:
 	BehaviourType tankBehaviour;
 	BaseTank* _closestTank;
 
+	int speed;
+
 	Vector2D target;
 	Vector2D targetPursuit;
+	Vector2D avoidTarget;
 };
 

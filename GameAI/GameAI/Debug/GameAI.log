@@ -1,42 +1,4 @@
-﻿Build started 2/12/2017 7:01:56 PM.
-     1>Project "C:\Users\Poyte\Documents\Work Repos\UniWork_AI\GameAI\GameAI\GameAI.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         C:\Program Files\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Users\Poyte\Documents\Work Repos\UniWork_AI\GameAI\GameAI\\SDL\mixer_include" /I"C:\Users\Poyte\Documents\Work Repos\UniWork_AI\GameAI\GameAI\\SDL\include" /I"C:\Users\Poyte\Documents\Work Repos\UniWork_AI\GameAI\GameAI\\SDL\image_include" /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt PeterBush\B013432f_Behaviours.cpp
-         B013432f_Behaviours.cpp
-     1>c:\users\poyte\documents\work repos\uniwork_ai\gameai\gameai\peterbush\b013432f_behaviours.cpp(23): warning C4018: '<' : signed/unsigned mismatch
-       Link:
-         C:\Program Files\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Poyte\Documents\Work Repos\UniWork_AI\GameAI\Debug\GameAI.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Users\Poyte\Documents\Work Repos\UniWork_AI\GameAI\GameAI\\SDL" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Poyte\Documents\Work Repos\UniWork_AI\GameAI\Debug\GameAI.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Poyte\Documents\Work Repos\UniWork_AI\GameAI\Debug\GameAI.lib" /MACHINE:X86 Debug\BaseTank.obj
-         Debug\Collisions.obj
-         Debug\ControlledTank.obj
-         Debug\DumbTank.obj
-         Debug\GameObject.obj
-         Debug\GameScreen.obj
-         Debug\GameScreenLevel1.obj
-         Debug\GameScreenManager.obj
-         Debug\LevelMap.obj
-         Debug\Mine.obj
-         Debug\ObstacleManager.obj
-         Debug\B013432f_Behaviours.obj
-         Debug\B013432f_Tank.obj
-         Debug\PickUpManager.obj
-         Debug\Projectile.obj
-         Debug\ProjectileManager.obj
-         Debug\Source.obj
-         Debug\TankManager.obj
-         Debug\Texture2D.obj
-         Debug\tinystr.obj
-         Debug\tinyxml.obj
-         Debug\tinyxmlerror.obj
-         Debug\tinyxmlparser.obj
-         Debug\Waypoint.obj
-         Debug\WaypointManager.obj
-         SDL\SDL2.lib
-         SDL\SDL2main.lib
-         SDL\SDL2_image.lib
-         SDL\SDL2_mixer.lib
-         GameAI.vcxproj -> C:\Users\Poyte\Documents\Work Repos\UniWork_AI\GameAI\Debug\GameAI.exe
-     1>Done Building Project "C:\Users\Poyte\Documents\Work Repos\UniWork_AI\GameAI\GameAI\GameAI.vcxproj" (Build target(s)).
-
-Build succeeded.
-
-Time Elapsed 00:00:02.71
+﻿  B013432f_Behaviours.cpp
+c:\users\b013432f\documents\uniwork_ai\gameai\gameai\peterbush\b013432f_behaviours.cpp(19): warning C4018: '<': signed/unsigned mismatch
+c:\users\b013432f\documents\uniwork_ai\gameai\gameai\peterbush\b013432f_behaviours.cpp(219): warning C4018: '<': signed/unsigned mismatch
+  GameAI.vcxproj -> C:\Users\b013432f\Documents\UniWork_AI\GameAI\Debug\GameAI.exe

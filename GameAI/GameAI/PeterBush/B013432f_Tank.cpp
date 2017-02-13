@@ -42,6 +42,9 @@ void B013432f_Tank::Update(float deltaTime, SDL_Event e)
 	_tankBehaviour->tankMaxSpeed = GetMaxSpeed();
 	_tankBehaviour->tankHeading = GetHeading();
 	_tankBehaviour->TargetClosest(_tankManager, Tanks);
+	_tankBehaviour->tankCurrentSpeed = GetCurrentSpeed();
+	_tankBehaviour->tankFrontPoint = GetPointAtFrontOfTank();
+	_tankBehaviour->tankBackPoint = GetPointAtRearOfTank();
 	
 	if (_tankBehaviour->moving == true)
 	{
@@ -72,7 +75,6 @@ void B013432f_Tank::UpdateMovement()
 void B013432f_Tank::MoveInHeadingDirection(float deltaTime) // Use this, pass the values from the seek method etc. into this!
 {
 	//Get the force that propels in current heading.
-	_tankBehaviour->outputVelocity.Truncate(GetMaxSpeed());
 	Vector2D force = _tankBehaviour->outputVelocity;
 
 	//Acceleration = Force/Mass
