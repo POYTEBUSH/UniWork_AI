@@ -44,6 +44,7 @@ public:
 	Vector2D outputVelocity;
 	bool moving;
 	bool pursuit;
+	bool targetBool;
 	double distance;
 	double deceleration = 2.0;
 

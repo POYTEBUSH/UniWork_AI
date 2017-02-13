@@ -5,6 +5,7 @@ B013432f_Behaviours::B013432f_Behaviours()
 	tankBehaviour = Idle;
 	moving = false;
 	pursuit = true;
+	targetBool = false;
 }
 
 B013432f_Behaviours::~B013432f_Behaviours()
@@ -21,13 +22,13 @@ void B013432f_Behaviours::TargetClosest(TankManager* tankManager, vector<BaseTan
 		targetPursuit = Tanks[i]->GetCentralPosition();
 		cout << "Spotted Tank " << Tanks[i]->GetTankName();
 		_closestTank = Tanks[i];
-		if (pursuit == true)
+		if (pursuit == true && targetBool ==true)
 			tankBehaviour = Pursuit;
-		else
+		else if (pursuit == false && targetBool == true)
 			tankBehaviour = Evade;
 	}
-	if (Tanks.size() == 0)
-		tankBehaviour = Arrive;
+	//if (Tanks.size() == 0)
+	//	tankBehaviour = Seek;
 }
 
 void B013432f_Behaviours::GetMousePos()
@@ -45,7 +46,7 @@ void B013432f_Behaviours::ChooseBehaviour(SDL_Event e)
 {	
 	target = mousePosition;
 	distance = DistanceFromTargetCheck(target);
-	ObstacleAvoidanceBehaviour();
+	//ObstacleAvoidanceBehaviour();
 
 	switch (e.type)
 	{
@@ -68,16 +69,28 @@ void B013432f_Behaviours::ChooseBehaviour(SDL_Event e)
 			cout << "Key E Pressed" << endl;
 			break;
 		case SDLK_r:
-			if (pursuit == false)
+			if (pursuit == false && targetBool == true)
 			{
 				pursuit = true;
 				cout << "Pursuit Set" << endl;
 			}
-			else
+			else if (pursuit == true && targetBool == true)
 			{
 				pursuit = false;
 				cout << "Evade Set" << endl;
 			}			
+			break;
+		case SDLK_t:
+			if (targetBool == false)
+			{
+				targetBool = true;
+				cout << "Now Targeting" << endl;
+			}
+			else
+			{
+				targetBool = false;
+				cout << "No Longer Targeting" << endl;
+			}
 			break;
 		}
 	}
@@ -106,7 +119,8 @@ void B013432f_Behaviours::ChooseBehaviour(SDL_Event e)
 	case Arrive:
 		if (moving == true)
 		{
-			outputVelocity = ArriveBehaviour(target, distance) + ObstacleAvoidanceBehaviour() * 1.5;
+			cout << "Arrive" << endl;
+			outputVelocity = ArriveBehaviour(target, distance) /*+ ObstacleAvoidanceBehaviour() * 1.5*/;
 		}
 		break;
 	case Pursuit:
@@ -198,11 +212,11 @@ Vector2D B013432f_Behaviours::PursuitBehaviour(BaseTank* evader)
 	double relativeHeading = tankHeading.Dot(evader->GetHeading());
 
 	if ((toEvader.Dot(tankHeading) > 0) && (relativeHeading < -0.95))
-		return (SeekBehaviour(evader->GetCentralPosition()) * 0.8);
+		return ((SeekBehaviour(evader->GetCentralPosition()))* 0.8);
 
 	double lookAheadTime = toEvader.Length() / (tankMaxSpeed + evader->GetCurrentSpeed());
 
-	return (SeekBehaviour(evader->GetCentralPosition() + evader->GetVelocity() * lookAheadTime)* 0.8);
+	return ((SeekBehaviour(evader->GetCentralPosition() + evader->GetVelocity() * lookAheadTime))* 0.8);
 }
 
 Vector2D B013432f_Behaviours::EvadeBehaviour(BaseTank* pursuer)
