@@ -16,7 +16,7 @@ B013432f_Tank::B013432f_Tank(SDL_Renderer* renderer, TankSetupDetails details)
 	mManKeyDown			= false;
 	mFireKeyDown		= false;
 	_tankBehaviour->tankMaxSpeed = GetMaxSpeed();
-	mFeelerRadius		= 15.0;
+	mFeelerRadius		= 10.0;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -39,10 +39,32 @@ void B013432f_Tank::CalcFeelers()
 	Vector2D frontFeeler(GetCentralPosition() + GetVelocity());
 	frontFeeler.Normalize();
 
-	cout << frontFeeler.x << " " << frontFeeler.y << endl;
+	//Get the dot product of heading by RIGHT vector
+	Vector2D normalisedHeading = Vec2DNormalize(mHeading);
 
-	feelers.push_back(frontFeeler);
-}
+	//Create point rotated to the left of heading.
+	Vector2D leftPoint;
+	leftPoint.x = (normalisedHeading.x * cos(kFieldOfView)) - (normalisedHeading.y * sin(kFieldOfView));
+	leftPoint.y = (normalisedHeading.x * sin(kFieldOfView)) + (normalisedHeading.y * cos(kFieldOfView));
+
+	//Create point rotated to the right of heading.
+	Vector2D rightPoint;
+	rightPoint.x = (normalisedHeading.x * cos(-kFieldOfView)) - (normalisedHeading.y * sin(-kFieldOfView));
+	rightPoint.y = (normalisedHeading.x * sin(-kFieldOfView)) + (normalisedHeading.y * cos(-kFieldOfView));
+
+	//Move the left point out from the centre of the tank to the distance set by kFieldOfViewLength.
+	Vector2D leftFeeler;
+	leftFeeler.x = GetCentralPosition().x + (leftPoint.x*kFieldOfViewLength);
+	leftFeeler.y = GetCentralPosition().y + (leftPoint.y*kFieldOfViewLength);
+
+	//Move the right point out from the centre of the tank to the distance set by kFieldOfViewLength.
+	Vector2D rightFeeler;
+	rightFeeler = GetCentralPosition() + GetVelocity() + (rightPoint*50);
+
+	feelers[0] = GetCentralPosition() + frontFeeler;
+	feelers[1] = leftFeeler;
+	feelers[2] = rightFeeler;
+} 
 
 void B013432f_Tank::Update(float deltaTime, SDL_Event e)
 {	
@@ -140,8 +162,12 @@ void B013432f_Tank::Render()
 
 	for (int i = 0; i < feelers.size(); i++)
 	{
-		DrawDebugCircle((GetCentralPosition() + feelers[i] + mVelocity), mFeelerRadius, 255, 255, 60);
+		DrawDebugCircle(feelers[i] + mVelocity, mFeelerRadius, 255, 255, 50);
 	}
+
+	//DrawDebugCircle(feelers[0] + mVelocity, mFeelerRadius, 255, 255, 50);
+	//DrawDebugCircle(GetHeading() + feelers[1], mFeelerRadius, 255, 255, 50);
+	//DrawDebugCircle(GetHeading() + feelers[2], mFeelerRadius, 255, 255, 50);
 }
 
 //--------------------------------------------------------------------------------------------------

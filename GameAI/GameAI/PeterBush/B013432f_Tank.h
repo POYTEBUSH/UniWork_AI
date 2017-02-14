@@ -34,7 +34,7 @@ private:
 	bool			mManKeyDown;
 	bool			mFireKeyDown;
 	double			mFeelerRadius;
-	vector<Vector2D> feelers;
+	vector<Vector2D> feelers {Vector2D(0,0),Vector2D(1,1),Vector2D(0,0)};
 
 	B013432f_Behaviours* _tankBehaviour = new B013432f_Behaviours;
 	//B013432f_Behaviours*	_tankBehaviour;
