@@ -33,12 +33,9 @@ void B013432f_Behaviours::TargetClosest(TankManager* tankManager, vector<BaseTan
 
 void B013432f_Behaviours::GetMousePos()
 {
-	//cout << "Current Velocity: " << tankVelocity.x << " " << tankVelocity.y << " " << endl;
-	//cout << "Current Max Speed: " << tankMaxSpeed << endl;
-
 	int x, y;
 	SDL_GetMouseState(&x, &y);
-	//cout << x << y << endl;
+
 	mousePosition = Vector2D(x, y);
 }
 
@@ -98,7 +95,7 @@ void B013432f_Behaviours::ChooseBehaviour(SDL_Event e)
 	switch (tankBehaviour)
 	{
 	case Idle:
-		cout << "Please select a behaviour" << endl;
+		//cout << "Please select a behaviour" << endl;
 		break;
 		//case Wander:
 		//	WanderBehaviour();
@@ -119,7 +116,7 @@ void B013432f_Behaviours::ChooseBehaviour(SDL_Event e)
 	case Arrive:
 		if (moving == true)
 		{
-			cout << "Arrive" << endl;
+			//cout << "Arrive" << endl;
 			outputVelocity = ArriveBehaviour(target, distance) /*+ ObstacleAvoidanceBehaviour() * 1.5*/;
 		}
 		break;
@@ -173,7 +170,7 @@ Vector2D B013432f_Behaviours::SeekBehaviour(Vector2D target)
 	Vector2D desiredVelocity = Vec2DNormalize(target - tanksPosition) * tankMaxSpeed;
 	desiredVelocity.Truncate(tankMaxSpeed);
 
-	cout << "Seek Speed: " << desiredVelocity.Length() << endl;
+	//cout << "Seek Speed: " << desiredVelocity.Length() << endl;
 
 	Vector2D final = (desiredVelocity - tankVelocity);
 	return final;

@@ -16,6 +16,8 @@ public:
 
 	void Update(float deltaTime, SDL_Event e);
 	void UpdateMovement();
+	void Render();
+	void CalcFeelers();
 
 	void RotateHeadingByRadian(double radian, int sign);
 
@@ -31,6 +33,8 @@ private:
 	TURN_DIRECTION  mManTurnDirection;
 	bool			mManKeyDown;
 	bool			mFireKeyDown;
+	double			mFeelerRadius;
+	vector<Vector2D> feelers;
 
 	B013432f_Behaviours* _tankBehaviour = new B013432f_Behaviours;
 	//B013432f_Behaviours*	_tankBehaviour;
