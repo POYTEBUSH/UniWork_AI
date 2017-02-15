@@ -820,6 +820,7 @@ void BaseTank::DrawFoV()
 	DrawDebugLine(mAdjustedBoundingBox[1], mAdjustedBoundingBox[2], 225, 225, 225);
 	DrawDebugLine(mAdjustedBoundingBox[2], mAdjustedBoundingBox[3], 225, 225, 225);
 	DrawDebugLine(mAdjustedBoundingBox[3], mAdjustedBoundingBox[0], 225, 225, 225);
+
 #endif
 }
 

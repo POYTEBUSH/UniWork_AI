@@ -36,30 +36,33 @@ void B013432f_Tank::ChangeState(BASE_TANK_STATE newState)
 
 void B013432f_Tank::CalcFeelers()
 {
-	Vector2D frontFeeler(GetCentralPosition() + GetVelocity());
+	Vector2D centralPos = GetCentralPosition();
+	Vector2D velocity = GetVelocity();
+
+	Vector2D frontFeeler(centralPos + velocity);
 	frontFeeler.Normalize();
 
-	//Get the dot product of heading by RIGHT vector
-	Vector2D normalisedHeading = Vec2DNormalize(mHeading);
+	Vector2D heading = Vec2DNormalize(mVelocity);
 
 	//Create point rotated to the left of heading.
 	Vector2D leftPoint;
-	leftPoint.x = (normalisedHeading.x * cos(kFieldOfView)) - (normalisedHeading.y * sin(kFieldOfView));
-	leftPoint.y = (normalisedHeading.x * sin(kFieldOfView)) + (normalisedHeading.y * cos(kFieldOfView));
+	leftPoint.x = (heading.x * cos(kFieldOfView)) - (heading.y * sin(kFieldOfView));
+	leftPoint.y = (heading.x * sin(kFieldOfView)) + (heading.y * cos(kFieldOfView));
 
 	//Create point rotated to the right of heading.
 	Vector2D rightPoint;
-	rightPoint.x = (normalisedHeading.x * cos(-kFieldOfView)) - (normalisedHeading.y * sin(-kFieldOfView));
-	rightPoint.y = (normalisedHeading.x * sin(-kFieldOfView)) + (normalisedHeading.y * cos(-kFieldOfView));
+	rightPoint.x = (heading.x * cos(-kFieldOfView)) - (heading.y * sin(-kFieldOfView));
+	rightPoint.y = (heading.x * sin(-kFieldOfView)) + (heading.y * cos(-kFieldOfView));
 
 	//Move the left point out from the centre of the tank to the distance set by kFieldOfViewLength.
 	Vector2D leftFeeler;
-	leftFeeler.x = GetCentralPosition().x + (leftPoint.x*kFieldOfViewLength);
-	leftFeeler.y = GetCentralPosition().y + (leftPoint.y*kFieldOfViewLength);
+	leftFeeler.x = centralPos.x + (leftPoint.x* 50);
+	leftFeeler.y = centralPos.y + (leftPoint.y* 50);
 
 	//Move the right point out from the centre of the tank to the distance set by kFieldOfViewLength.
 	Vector2D rightFeeler;
-	rightFeeler = GetCentralPosition() + GetVelocity() + (rightPoint*50);
+	rightFeeler.x = centralPos.x + (rightPoint.x* 50);
+	rightFeeler.y = centralPos.y + (rightPoint.y* 50);
 
 	feelers[0] = GetCentralPosition() + frontFeeler;
 	feelers[1] = leftFeeler;
@@ -78,21 +81,30 @@ void B013432f_Tank::Update(float deltaTime, SDL_Event e)
 	_tankBehaviour->tankCurrentSpeed = GetCurrentSpeed();
 	_tankBehaviour->tankFrontPoint = GetPointAtFrontOfTank();
 	_tankBehaviour->tankBackPoint = GetPointAtRearOfTank();
+
 	CalcFeelers();
+	_tankBehaviour->feelers = feelers;
+
 	cout.clear();
 	
 	if (_tankBehaviour->moving == true)
 	{
 		_tankBehaviour->tankVelocity = GetVelocity();
 		_tankBehaviour->GetMousePos();
-		MoveInHeadingDirection(deltaTime);
 
 		Vector2D aheadDistance = mVelocity;
 		if (aheadDistance.Length() == 0.0f)
 			aheadDistance = mHeading;
+					
+		Vector2D force = _currentVelocity;
+		Vector2D acceleration = force / GetMass();
+		mVelocity += acceleration * deltaTime;
+		mVelocity.Truncate(GetMaxSpeed());
 
 		Vector2D ahead = GetCentralPosition() + aheadDistance;
 		RotateHeadingToFacePosition(ahead, deltaTime);
+
+		_currentVelocity = _tankBehaviour->outputVelocity;
 	}
 
 	//Call parent update.
@@ -109,7 +121,7 @@ void B013432f_Tank::UpdateMovement()
 void B013432f_Tank::MoveInHeadingDirection(float deltaTime) // Use this, pass the values from the seek method etc. into this!
 {
 	//Get the force that propels in current heading.
-	Vector2D force = _tankBehaviour->outputVelocity;
+	Vector2D force = _currentVelocity;
 
 	//Acceleration = Force/Mass
 	Vector2D acceleration = force/GetMass();
@@ -159,15 +171,16 @@ void B013432f_Tank::RotateHeadingByRadian(double radian, int sign)
 void B013432f_Tank::Render()
 {
 	BaseTank::Render();
+	DrawDebugLine(GetCentralPosition(), GetCentralPosition() + mHeading*kFieldOfViewLength, 255, 0, 255);
 
 	for (int i = 0; i < feelers.size(); i++)
 	{
-		DrawDebugCircle(feelers[i] + mVelocity, mFeelerRadius, 255, 255, 50);
+		if(i == 0)
+			DrawDebugCircle(feelers[i] + mVelocity, mFeelerRadius, 255, 255, 50);
+		else
+			DrawDebugCircle(feelers[i] + mHeading * 5, mFeelerRadius, 255, 255, 50);/*
+		cout << feelers[i].x << feelers[i].y << endl;*/
 	}
-
-	//DrawDebugCircle(feelers[0] + mVelocity, mFeelerRadius, 255, 255, 50);
-	//DrawDebugCircle(GetHeading() + feelers[1], mFeelerRadius, 255, 255, 50);
-	//DrawDebugCircle(GetHeading() + feelers[2], mFeelerRadius, 255, 255, 50);
 }
 
 //--------------------------------------------------------------------------------------------------

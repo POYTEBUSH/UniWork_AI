@@ -1,4 +1,5 @@
-﻿  B013432f_Tank.cpp
-c:\users\b013432f\documents\uniwork_ai\gameai\gameai\peterbush\b013432f_tank.cpp(163): warning C4018: '<': signed/unsigned mismatch
-  GameAI.vcxproj -> C:\Users\b013432f\Documents\UniWork_AI\GameAI\Debug\GameAI.exe
-  GameAI.vcxproj -> C:\Users\b013432f\Documents\UniWork_AI\GameAI\Debug\GameAI.pdb (Full PDB)
+﻿  B013432f_Behaviours.cpp
+c:\users\b013432f\documents\uniwork_aimain\gameai\gameai\peterbush\b013432f_behaviours.cpp(20): warning C4018: '<': signed/unsigned mismatch
+c:\users\b013432f\documents\uniwork_aimain\gameai\gameai\peterbush\b013432f_behaviours.cpp(230): warning C4018: '<': signed/unsigned mismatch
+c:\users\b013432f\documents\uniwork_aimain\gameai\gameai\peterbush\b013432f_behaviours.cpp(240): warning C4018: '<': signed/unsigned mismatch
+  GameAI.vcxproj -> C:\Users\b013432f\Documents\UniWork_AIMain\GameAI\Debug\GameAI.exe

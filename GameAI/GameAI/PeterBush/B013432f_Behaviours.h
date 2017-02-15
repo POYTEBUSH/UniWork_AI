@@ -51,6 +51,7 @@ public:
 	//used in obstacle avoidance
 	Vector2D minDetectionBoxLength = Vector2D(5.0, 5.0);
 	Vector2D detectionBoxLength;
+	vector<Vector2D> feelers{ Vector2D(0,0),Vector2D(1,1),Vector2D(0,0) };
 	//used in wall avoidance
 	double wallDetectionFeelerLength = 40.0;
 
@@ -66,7 +67,7 @@ public:
 	Vector2D PursuitBehaviour(BaseTank* evader); //Implemented
 	Vector2D EvadeBehaviour(BaseTank* evader);
 	Vector2D WanderBehaviour();
-	Vector2D ObstacleAvoidanceBehaviour();
+	Vector2D ObstacleAvoidanceBehaviour(vector<Vector2D> feelers);
 	Vector2D WallAvoidanceBehaviour();
 	Vector2D InterposeBehaviour();
 	Vector2D HideBehaviour();
@@ -76,7 +77,8 @@ public:
 private:
 	BehaviourType tankBehaviour;
 	BaseTank* _closestTank;
-
+	BaseTank* _baseTank;
+	
 	int speed;
 
 	Vector2D target;
