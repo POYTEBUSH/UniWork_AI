@@ -56,17 +56,17 @@ void B013432f_Tank::CalcFeelers()
 
 	//Move the left point out from the centre of the tank to the distance set by kFieldOfViewLength.
 	Vector2D leftFeeler;
-	leftFeeler.x = centralPos.x + (leftPoint.x* 50);
-	leftFeeler.y = centralPos.y + (leftPoint.y* 50);
+	leftFeeler.x = centralPos.x + (leftPoint.x* 25);
+	leftFeeler.y = centralPos.y + (leftPoint.y* 25);
 
 	//Move the right point out from the centre of the tank to the distance set by kFieldOfViewLength.
 	Vector2D rightFeeler;
-	rightFeeler.x = centralPos.x + (rightPoint.x* 50);
-	rightFeeler.y = centralPos.y + (rightPoint.y* 50);
+	rightFeeler.x = centralPos.x + (rightPoint.x* 25);
+	rightFeeler.y = centralPos.y + (rightPoint.y* 25);
 
-	feelers[0] = GetCentralPosition() + frontFeeler;
-	feelers[1] = leftFeeler;
-	feelers[2] = rightFeeler;
+	feelers[0] = GetCentralPosition() + frontFeeler + mVelocity;
+	feelers[1] = leftFeeler + mHeading * 5;
+	feelers[2] = rightFeeler + mHeading * 5;
 } 
 
 void B013432f_Tank::Update(float deltaTime, SDL_Event e)
@@ -176,9 +176,9 @@ void B013432f_Tank::Render()
 	for (int i = 0; i < feelers.size(); i++)
 	{
 		if(i == 0)
-			DrawDebugCircle(feelers[i] + mVelocity, mFeelerRadius, 255, 255, 50);
+			DrawDebugCircle(feelers[i], mFeelerRadius, 255, 255, 50);
 		else
-			DrawDebugCircle(feelers[i] + mHeading * 5, mFeelerRadius, 255, 255, 50);/*
+			DrawDebugCircle(feelers[i], mFeelerRadius, 255, 255, 50);/*
 		cout << feelers[i].x << feelers[i].y << endl;*/
 	}
 }

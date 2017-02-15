@@ -104,32 +104,32 @@ void B013432f_Behaviours::ChooseBehaviour(SDL_Event e)
 	case Seek:
 		if (moving == true)
 		{
-			outputVelocity = SeekBehaviour(target) + ObstacleAvoidanceBehaviour(feelers) * 2;
+			outputVelocity = SeekBehaviour(target) + ObstacleAvoidanceBehaviour(feelers) * 1.5;
 		}
 		break;
 	case Flee:
 		if (moving == true)
 		{
-			outputVelocity = FleeBehaviour(target);
+			outputVelocity = FleeBehaviour(target) + ObstacleAvoidanceBehaviour(feelers) * 2;
 		}
 		break;
 	case Arrive:
 		if (moving == true)
 		{
 			//cout << "Arrive" << endl;
-			outputVelocity = ArriveBehaviour(target, distance);
+			outputVelocity = ArriveBehaviour(target, distance) + ObstacleAvoidanceBehaviour(feelers) * 2;
 		}
 		break;
 	case Pursuit:
 		if (moving == true)
 		{
-			outputVelocity = PursuitBehaviour(_closestTank);
+			outputVelocity = PursuitBehaviour(_closestTank) + ObstacleAvoidanceBehaviour(feelers) * 2;
 		}
 		break;
 	case Evade:
 		if (moving == true)
 		{
-			outputVelocity = EvadeBehaviour(_closestTank);
+			outputVelocity = EvadeBehaviour(_closestTank) + ObstacleAvoidanceBehaviour(feelers) * 2;
 		}
 		break;
 		//case WallAvoidance:
@@ -234,15 +234,25 @@ Vector2D B013432f_Behaviours::ObstacleAvoidanceBehaviour(vector<Vector2D> feeler
 			(objects[i]->GetCentralPosition().x - objects[i]->GetPosition().x) * 2,
 			(objects[i]->GetCentralPosition().y - objects[i]->GetPosition().y) * 2);
 
-			cout << objects.size() << endl;
+			//cout << rect.x << " " << rect.y << " " << rect.width << " " << rect.height << endl;
 
 		
 		for (int j = 0; j < feelers.size(); j++)
 		{
-
-			if (((feelers[j].x == rect.x)|| (feelers[j].x == rect.x + rect.height)) || ((feelers[j].y == rect.x + rect.width) || (feelers[j].y == rect.x + rect.height + rect.width)))
+			if ((feelers[0].x >= rect.x && feelers[0].x <= rect.x + rect.width) && (feelers[0].y >= rect.y && feelers[0].y <= rect.y + rect.height))
 			{
-				cout << "colliding!" << endl;
+				cout << "colliding with object: " <<  objects[i] << endl;				
+				return FleeBehaviour(target);
+			}
+			if ((feelers[1].x >= rect.x && feelers[1].x <= rect.x + rect.width) && (feelers[1].y >= rect.y && feelers[1].y <= rect.y + rect.height))
+			{
+				cout << "colliding with object: " << objects[i] << endl;
+				return FleeBehaviour(target.Perp() * 90);
+			}
+			if ((feelers[2].x >= rect.x && feelers[2].x <= rect.x + rect.width) && (feelers[2].y >= rect.y && feelers[2].y <= rect.y + rect.height))
+			{
+				cout << "colliding with object: " << objects[i] << endl;
+				return FleeBehaviour(target.Perp() * -90);
 			}
 		}		
 	}
