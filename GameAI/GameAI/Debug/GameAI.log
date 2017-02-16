@@ -1,7 +1,2 @@
-﻿  B013432f_Behaviours.cpp
-d:\documents\work repos\uniwork_ai\gameai\gameai\peterbush\b013432f_behaviours.cpp(20): warning C4018: '<': signed/unsigned mismatch
-d:\documents\work repos\uniwork_ai\gameai\gameai\peterbush\b013432f_behaviours.cpp(230): warning C4018: '<': signed/unsigned mismatch
-d:\documents\work repos\uniwork_ai\gameai\gameai\peterbush\b013432f_behaviours.cpp(240): warning C4018: '<': signed/unsigned mismatch
-cl : Command line warning D9028: minimal rebuild failure, reverting to normal build
-  GameAI.vcxproj -> D:\Documents\Work Repos\UniWork_AI\GameAI\Debug\GameAI.exe
-  GameAI.vcxproj -> D:\Documents\Work Repos\UniWork_AI\GameAI\Debug\GameAI.pdb (Full PDB)
+﻿  GameAI.vcxproj -> C:\Users\b013432f\Documents\UniWork_AI\GameAI\Debug\GameAI.exe
+  GameAI.vcxproj -> C:\Users\b013432f\Documents\UniWork_AI\GameAI\Debug\GameAI.pdb (Full PDB)

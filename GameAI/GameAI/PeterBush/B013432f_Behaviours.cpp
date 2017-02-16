@@ -235,25 +235,59 @@ Vector2D B013432f_Behaviours::ObstacleAvoidanceBehaviour(vector<Vector2D> feeler
 			(objects[i]->GetCentralPosition().y - objects[i]->GetPosition().y) * 2);
 
 			//cout << rect.x << " " << rect.y << " " << rect.width << " " << rect.height << endl;
+		Vector2D distance = objects[i]->GetCentralPosition() + tanksPosition;
 
-		
 		for (int j = 0; j < feelers.size(); j++)
 		{
-			if ((feelers[0].x >= rect.x && feelers[0].x <= rect.x + rect.width) && (feelers[0].y >= rect.y && feelers[0].y <= rect.y + rect.height))
+			if (tankHeading.x >= 0)
 			{
-				cout << "colliding with object: " <<  objects[i] << endl;				
-				return FleeBehaviour(target);
+				if ((feelers[0].x >= rect.x && feelers[0].x <= rect.x + rect.width) && (feelers[0].y >= rect.y && feelers[0].y <= rect.y + rect.height))
+				{
+					cout << "colliding with object: " << objects[i] << endl;
+					return FleeBehaviour(distance.Perp() * 2);
+				}
+
+				if ((feelers[1].x >= rect.x && feelers[1].x <= rect.x + rect.width) && (feelers[1].y >= rect.y && feelers[1].y <= rect.y + rect.height))
+				{
+					cout << "colliding with object: " << objects[i] << endl;
+					return FleeBehaviour(distance.Perp() * 2);
+				}
+				if ((feelers[2].x >= rect.x && feelers[2].x <= rect.x + rect.width) && (feelers[2].y >= rect.y && feelers[2].y <= rect.y + rect.height))
+				{
+					cout << "colliding with object: " << objects[i] << endl;
+					return FleeBehaviour(distance.Perp() * 2);
+				}
 			}
-			if ((feelers[1].x >= rect.x && feelers[1].x <= rect.x + rect.width) && (feelers[1].y >= rect.y && feelers[1].y <= rect.y + rect.height))
+			else
+			{
+				if ((feelers[0].x >= rect.x && feelers[0].x <= rect.x + rect.width) && (feelers[0].y >= rect.y && feelers[0].y <= rect.y + rect.height))
+				{
+					cout << "colliding with object: " << objects[i] << endl;
+					return FleeBehaviour(distance.Perp() * -2);
+				}
+
+				if ((feelers[1].x >= rect.x && feelers[1].x <= rect.x + rect.width) && (feelers[1].y >= rect.y && feelers[1].y <= rect.y + rect.height))
+				{
+					cout << "colliding with object: " << objects[i] << endl;
+					return FleeBehaviour(distance.Perp() * -2);
+				}
+				if ((feelers[2].x >= rect.x && feelers[2].x <= rect.x + rect.width) && (feelers[2].y >= rect.y && feelers[2].y <= rect.y + rect.height))
+				{
+					cout << "colliding with object: " << objects[i] << endl;
+					return FleeBehaviour(distance.Perp() * -2);
+				}
+			}			
+			
+			/*if ((feelers[1].x >= rect.x && feelers[1].x <= rect.x + rect.width) && (feelers[1].y >= rect.y && feelers[1].y <= rect.y + rect.height))
 			{
 				cout << "colliding with object: " << objects[i] << endl;
-				return FleeBehaviour(target.Perp() * 90);
+				return FleeBehaviour(target.Perp() * 120);
 			}
 			if ((feelers[2].x >= rect.x && feelers[2].x <= rect.x + rect.width) && (feelers[2].y >= rect.y && feelers[2].y <= rect.y + rect.height))
 			{
 				cout << "colliding with object: " << objects[i] << endl;
-				return FleeBehaviour(target.Perp() * -90);
-			}
+				return FleeBehaviour(target.Perp() * -120);
+			}*/
 		}		
 	}
 	return Vector2D(0, 0);

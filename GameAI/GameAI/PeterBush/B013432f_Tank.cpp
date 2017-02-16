@@ -67,6 +67,8 @@ void B013432f_Tank::CalcFeelers()
 	feelers[0] = GetCentralPosition() + frontFeeler + mVelocity;
 	feelers[1] = leftFeeler + mHeading * 5;
 	feelers[2] = rightFeeler + mHeading * 5;
+	feelers[3] = leftFeeler - mHeading * 45;
+	feelers[4] = rightFeeler - mHeading * 45;
 } 
 
 void B013432f_Tank::Update(float deltaTime, SDL_Event e)
@@ -175,11 +177,7 @@ void B013432f_Tank::Render()
 
 	for (int i = 0; i < feelers.size(); i++)
 	{
-		if(i == 0)
-			DrawDebugCircle(feelers[i], mFeelerRadius, 255, 255, 50);
-		else
-			DrawDebugCircle(feelers[i], mFeelerRadius, 255, 255, 50);/*
-		cout << feelers[i].x << feelers[i].y << endl;*/
+		DrawDebugCircle(feelers[i], mFeelerRadius, 255, 255, 50); 
 	}
 }
 
