@@ -32,6 +32,8 @@ public:
 
 	B013432f_Behaviours();
 	~B013432f_Behaviours();
+
+	#pragma region Tank Variables
 	
 	Vector2D mousePosition;
 	Vector2D tanksPosition;
@@ -48,12 +50,18 @@ public:
 	double distance;
 	double deceleration = 2.0;
 
+	#pragma endregion
+
+	#pragma region Tank Locators
 	//used in obstacle avoidance
 	Vector2D minDetectionBoxLength = Vector2D(5.0, 5.0);
 	Vector2D detectionBoxLength;
 	vector<Vector2D> feelers{ Vector2D(0,0),Vector2D(1,1),Vector2D(0,0) };
 	//used in wall avoidance
 	double wallDetectionFeelerLength = 40.0;
+	#pragma endregion
+
+	#pragma region Behaviour Methods
 
 	void TargetClosest(TankManager* tankManager, vector <BaseTank*>);
 
@@ -73,6 +81,7 @@ public:
 	Vector2D HideBehaviour();
 	Vector2D PathFollowBehaviour();
 	Vector2D OffsetPusuitBehaviour();
+#pragma endregion
 
 private:
 	BehaviourType tankBehaviour;
@@ -85,4 +94,3 @@ private:
 	Vector2D targetPursuit;
 	Vector2D avoidTarget;
 };
-
