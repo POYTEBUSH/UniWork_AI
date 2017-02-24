@@ -19,6 +19,8 @@ public:
 	void Render();
 	void CalcFeelers();
 
+	//TankState GetState()const { return _tankState; };
+
 	void RotateHeadingByRadian(double radian, int sign);
 
 	//---------------------------------------------------------------
@@ -41,6 +43,8 @@ private:
 	//B013432f_Behaviours*	_tankBehaviour;
 	BaseTank*				_baseTank;
 	TankManager*			_tankManager;
+
+	//TankState				_tankState;
 
 	Vector2D				_currentVelocity;
 };

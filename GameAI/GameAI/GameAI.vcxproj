@@ -81,6 +81,8 @@
     <ClInclude Include="Mine.h" />
     <ClInclude Include="ObstacleManager.h" />
     <ClInclude Include="PeterBush\B013432f_Behaviours.h" />
+    <ClInclude Include="PeterBush\B013432f_Commons.h" />
+    <ClInclude Include="PeterBush\B013432f_FuSMManager.h" />
     <ClInclude Include="PeterBush\B013432f_Tank.h" />
     <ClInclude Include="PickUpManager.h" />
     <ClInclude Include="Projectile.h" />
@@ -105,6 +107,7 @@
     <ClCompile Include="Mine.cpp" />
     <ClCompile Include="ObstacleManager.cpp" />
     <ClCompile Include="PeterBush\B013432f_Behaviours.cpp" />
+    <ClCompile Include="PeterBush\B013432f_FuSMManager.cpp" />
     <ClCompile Include="PeterBush\B013432f_Tank.cpp" />
     <ClCompile Include="PickUpManager.cpp" />
     <ClCompile Include="Projectile.cpp" />
@@ -136,7 +139,9 @@
     </Xml>
   </ItemGroup>
   <ItemGroup>
-    <None Include="XML Data Files\LevelData.xml" />
+    <None Include="XML Data Files\LevelData.xml">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

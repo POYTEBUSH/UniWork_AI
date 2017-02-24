@@ -11,7 +11,6 @@ using namespace std;
 
 enum BehaviourType
 {
-	Idle,
 	Seek,				//Seeks to find where the target is going
 	Flee,				//Tries to run in the complete opposite way the target is going
 	Arrive,				//What to do when the tank has arrived at a point

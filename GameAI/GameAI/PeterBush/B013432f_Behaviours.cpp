@@ -2,7 +2,6 @@
 
 B013432f_Behaviours::B013432f_Behaviours()
 {
-	tankBehaviour = Idle;
 	moving = false;
 	pursuit = true;
 	targetBool = false;
@@ -94,13 +93,6 @@ void B013432f_Behaviours::ChooseBehaviour(SDL_Event e)
 
 	switch (tankBehaviour)
 	{
-	case Idle:
-		//cout << "Please select a behaviour" << endl;
-		break;
-		//case Wander:
-		//	WanderBehaviour();
-		//	cout << "WanderBehaviour" << endl;
-		//	break;
 	case Seek:
 		if (moving == true)
 		{

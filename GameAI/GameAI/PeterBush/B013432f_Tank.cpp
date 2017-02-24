@@ -3,6 +3,8 @@
 #include "..\Commons.h"
 #include "..\C2DMatrix.h"
 
+#include "B013432f_Commons.h"
+
 //--------------------------------------------------------------------------------------------------
 
 B013432f_Tank::B013432f_Tank(SDL_Renderer* renderer, TankSetupDetails details)
@@ -17,6 +19,7 @@ B013432f_Tank::B013432f_Tank(SDL_Renderer* renderer, TankSetupDetails details)
 	mFireKeyDown		= false;
 	_tankBehaviour->tankMaxSpeed = GetMaxSpeed();
 	mFeelerRadius		= 10.0;
+	//_tankState			= Idle;
 }
 
 //--------------------------------------------------------------------------------------------------
