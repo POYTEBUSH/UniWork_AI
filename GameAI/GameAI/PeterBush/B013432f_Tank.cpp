@@ -26,6 +26,8 @@ B013432f_Tank::B013432f_Tank(SDL_Renderer* renderer, TankSetupDetails details)
 
 B013432f_Tank::~B013432f_Tank()
 {
+	delete mPathFinder;
+	mPathFinder = nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -86,6 +88,10 @@ void B013432f_Tank::Update(float deltaTime, SDL_Event e)
 	_tankBehaviour->tankCurrentSpeed = GetCurrentSpeed();
 	_tankBehaviour->tankFrontPoint = GetPointAtFrontOfTank();
 	_tankBehaviour->tankBackPoint = GetPointAtRearOfTank();
+
+	_tankBehaviour->targetNow = mPathFinder->mMapwaypoints[0]->GetPosition();
+
+	mPathFinder->OutputPositions();
 
 	CalcFeelers();
 	_tankBehaviour->feelers = feelers;

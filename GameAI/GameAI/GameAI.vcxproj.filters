@@ -105,6 +105,9 @@
     <ClInclude Include="PeterBush\B013432f_Commons.h">
       <Filter>PeterBush</Filter>
     </ClInclude>
+    <ClInclude Include="PeterBush\B013432f_PathFinding.h">
+      <Filter>PeterBush</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WaypointManager.cpp">
@@ -183,6 +186,9 @@
       <Filter>PeterBush</Filter>
     </ClCompile>
     <ClCompile Include="PeterBush\B013432f_FuSMManager.cpp">
+      <Filter>PeterBush</Filter>
+    </ClCompile>
+    <ClCompile Include="PeterBush\B013432f_PathFinding.cpp">
       <Filter>PeterBush</Filter>
     </ClCompile>
   </ItemGroup>

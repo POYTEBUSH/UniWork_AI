@@ -40,7 +40,7 @@ void B013432f_Behaviours::GetMousePos()
 
 void B013432f_Behaviours::ChooseBehaviour(SDL_Event e)
 {	
-	target = mousePosition;
+	target = targetNow;
 	distance = DistanceFromTargetCheck(target);
 	ObstacleAvoidanceBehaviour(feelers);
 
@@ -109,7 +109,7 @@ void B013432f_Behaviours::ChooseBehaviour(SDL_Event e)
 		if (moving == true)
 		{
 			//cout << "Arrive" << endl;
-			outputVelocity = ArriveBehaviour(target, distance) + ObstacleAvoidanceBehaviour(feelers) * 2;
+			outputVelocity = ArriveBehaviour(target, distance) /*+ ObstacleAvoidanceBehaviour(feelers) * 2*/;
 		}
 		break;
 	case Pursuit:
@@ -241,8 +241,6 @@ Vector2D B013432f_Behaviours::ObstacleAvoidanceBehaviour(vector<Vector2D> feeler
 			headingy = "Negative Y ";
 		else
 			headingy = "Positive Y ";
-
-		cout << headingx << headingy << endl;
 
 		for (int j = 0; j < feelers.size(); j++)
 		{

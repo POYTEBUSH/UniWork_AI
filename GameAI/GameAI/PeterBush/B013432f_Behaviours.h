@@ -48,6 +48,7 @@ public:
 	bool targetBool;
 	double distance;
 	double deceleration = 2.0;
+	Vector2D targetNow;
 
 	#pragma endregion
 

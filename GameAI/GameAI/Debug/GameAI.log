@@ -1,3 +1,6 @@
-﻿  B013432f_FuSMManager.cpp
+﻿  B013432f_Behaviours.cpp
+c:\users\b013432f\documents\uniwork_ai\gameai\gameai\peterbush\b013432f_behaviours.cpp(19): warning C4018: '<': signed/unsigned mismatch
+c:\users\b013432f\documents\uniwork_ai\gameai\gameai\peterbush\b013432f_behaviours.cpp(222): warning C4018: '<': signed/unsigned mismatch
+c:\users\b013432f\documents\uniwork_ai\gameai\gameai\peterbush\b013432f_behaviours.cpp(245): warning C4018: '<': signed/unsigned mismatch
   GameAI.vcxproj -> C:\Users\b013432f\Documents\UniWork_AI\GameAI\Debug\GameAI.exe
   GameAI.vcxproj -> C:\Users\b013432f\Documents\UniWork_AI\GameAI\Debug\GameAI.pdb (Full PDB)
