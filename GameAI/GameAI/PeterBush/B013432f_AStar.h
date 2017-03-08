@@ -37,13 +37,21 @@ public:
 	B013432f_AStar();
 	~B013432f_AStar();
 
-	vector<Vector2D> GetPathBetweenPoint(Vector2D startPos, Vector2D endPos);
-	vector<Vector2D> GetPathBetweenWaypoints(Waypoint* startPoint, Waypoint* endPoint);
+	vector<Vector2D>	GetPathBetweenPoint(Vector2D startPos, Vector2D endPos);
 
 private:
+	WaypointManager*	mWaypointManager;
+
 	vector<EdgeCost*>	mEdgeCostList;
 	vector<AStarNode*>	mOpenNodes;
 	vector<AStarNode*>	mClosedNodes;
 
+	void				SetEdgeCost();
+
+	Waypoint*			GetNearestWaypoint(Vector2D tankPos);
+	double				GetCostBetweenWaypoints(Waypoint* from, Waypoint* to);
+	vector<Vector2D>	ConstructedPath(AStarNode* targetNode, Vector2D postion);
+	bool				IsInList(vector<AStarNode*> listToCheck, Waypoint* waypointToCheck);
+	double				GetHeuristicCost(Vector2D startPos, Vector2D endPos);
 };
 
