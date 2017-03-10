@@ -137,9 +137,22 @@ vector<Vector2D> B013432f_AStar::GetPathBetweenPoint(Vector2D tankPos, Vector2D 
 		for each (auto waypointsID in connectedIDs)
 		{
 			Waypoint*	targetWaypoint = mWaypointManager->Instance()->GetWaypointWithID(waypointsID);
-			double		cost = targetWaypoint->GetPosition().Distance(currentWaypoint->GetPosition());
+			auto g = currentNode->cost + GetCostBetweenWaypoints(currentNode->thisWaypoint, targetWaypoint);
+			auto h = GetHeuristicCost(targetWaypoint->GetPosition(), endPos);
+			auto f = g + h;
 
-			mOpenNodes.push_back(new);
+			mOpenNodes.push_back(new AStarNode(targetWaypoint, currentNode, f));
 		}
+
+		vector<AStarNode*>::iterator iter = mOpenNodes.begin();
+		while (iter != mOpenNodes.end())
+		{
+			if (*iter == currentNode)
+				iter = mOpenNodes.erase(iter);
+			else
+				++iter;
+			currentNode = nullptr;
+		}
+		return path;
 	}
 }
