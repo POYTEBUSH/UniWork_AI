@@ -2,7 +2,6 @@
 #define B013432FTANK_H
 
 #include "B013432f_Behaviours.h"
-#include "B013432f_PathFinding.h"
 
 //---------------------------------------------------------------
 
@@ -44,7 +43,6 @@ private:
 	//B013432f_Behaviours*	_tankBehaviour;
 	BaseTank*				_baseTank;
 	TankManager*			_tankManager;
-	b013432f_PathFinding*	mPathFinder = new b013432f_PathFinding();
 
 	//TankState				_tankState;
 

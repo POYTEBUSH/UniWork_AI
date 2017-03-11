@@ -83,7 +83,7 @@ vector<Vector2D> B013432f_AStar::ConstructedPath(AStarNode* targetNode, Vector2D
 	vector<Vector2D> path;
 	vector<Vector2D> pathInReverse;
 
-	pathInReverse.push_back = targetNode->thisWaypoint->GetPosition();
+	pathInReverse.push_back(targetNode->thisWaypoint->GetPosition());
 
 	AStarNode* currentNode = targetNode;
 
@@ -110,25 +110,26 @@ vector<Vector2D> B013432f_AStar::GetPathBetweenPoint(Vector2D tankPos, Vector2D 
 	Waypoint* nearestToTank = GetNearestWaypoint(tankPos);
 	Waypoint* nearestToEnd = GetNearestWaypoint(endPos);
 
-	if ((nearestToTank || nearestToEnd == NULL) || (nearestToTank == nearestToEnd))
+	if ((nearestToTank == NULL || nearestToEnd == NULL) || (nearestToTank == nearestToEnd))
 	{
 		path.push_back(endPos);
 		return path;
 	}
-	mOpenNodes.push_back(new AStarNode(nearestToTank, NULL, 0.0f));
+	mOpenNodes.push_back(new AStarNode(nearestToTank, nullptr, 0.0f));
 
-	AStarNode* currentNode;
+	AStarNode* currentNode = nullptr;
+
 	while (mOpenNodes.size() != 0)
 	{
 		for each (auto nodes in mOpenNodes)
 		{
-			if (currentNode == NULL || nodes->cost <= currentNode->cost)
+			if (currentNode == nullptr || nodes->cost <= currentNode->cost)
 				currentNode = nodes;
 		}
 
 		if (currentNode->thisWaypoint == nearestToEnd)
 		{
-			ConstructedPath(currentNode, endPos);
+			path = ConstructedPath(currentNode, endPos);
 			return path;
 		}
 
@@ -136,13 +137,16 @@ vector<Vector2D> B013432f_AStar::GetPathBetweenPoint(Vector2D tankPos, Vector2D 
 
 		for each (auto waypointsID in connectedIDs)
 		{
+			cout << waypointsID << endl;
 			Waypoint*	targetWaypoint = mWaypointManager->Instance()->GetWaypointWithID(waypointsID);
-			auto g = currentNode->cost + GetCostBetweenWaypoints(currentNode->thisWaypoint, targetWaypoint);
-			auto h = GetHeuristicCost(targetWaypoint->GetPosition(), endPos);
-			auto f = g + h;
+			double g = currentNode->cost + GetCostBetweenWaypoints(currentNode->thisWaypoint, targetWaypoint);
+			double h = GetHeuristicCost(targetWaypoint->GetPosition(), endPos);
+			double f = g + h;
 
 			mOpenNodes.push_back(new AStarNode(targetWaypoint, currentNode, f));
 		}
+
+		mClosedNodes.push_back(currentNode);
 
 		vector<AStarNode*>::iterator iter = mOpenNodes.begin();
 		while (iter != mOpenNodes.end())

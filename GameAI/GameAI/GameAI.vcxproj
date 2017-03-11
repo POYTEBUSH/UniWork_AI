@@ -84,7 +84,6 @@
     <ClInclude Include="PeterBush\B013432f_Behaviours.h" />
     <ClInclude Include="PeterBush\B013432f_Commons.h" />
     <ClInclude Include="PeterBush\B013432f_FuSMManager.h" />
-    <ClInclude Include="PeterBush\B013432f_PathFinding.h" />
     <ClInclude Include="PeterBush\B013432f_Tank.h" />
     <ClInclude Include="PickUpManager.h" />
     <ClInclude Include="Projectile.h" />
@@ -111,7 +110,6 @@
     <ClCompile Include="PeterBush\B013432f_AStar.cpp" />
     <ClCompile Include="PeterBush\B013432f_Behaviours.cpp" />
     <ClCompile Include="PeterBush\B013432f_FuSMManager.cpp" />
-    <ClCompile Include="PeterBush\B013432f_PathFinding.cpp" />
     <ClCompile Include="PeterBush\B013432f_Tank.cpp" />
     <ClCompile Include="PickUpManager.cpp" />
     <ClCompile Include="Projectile.cpp" />

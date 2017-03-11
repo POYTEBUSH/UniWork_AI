@@ -6,6 +6,7 @@
 #include "..\TankManager.h"
 #include "..\ObstacleManager.h"
 #include "..\Collisions.h"
+#include "B013432f_AStar.h"		
 
 using namespace std;
 
@@ -22,7 +23,8 @@ enum BehaviourType
 	Interpose,			//Attempts to find the distance that two or more targets are heading towards
 	Hide,				//Tries to put an object between itself and the target
 	PathFollow,			//Follows a set path
-	OffsetPusuit		//Tries to chase the target at an offset position
+	OffsetPusuit,		//Tries to chase the target at an offset position
+	AStar
 };
 
 class B013432f_Behaviours
@@ -44,6 +46,7 @@ public:
 	double tankMaxSpeed;
 	Vector2D outputVelocity;
 	bool moving;
+	bool pathing;
 	bool pursuit;
 	bool targetBool;
 	double distance;
@@ -81,12 +84,15 @@ public:
 	Vector2D HideBehaviour();
 	Vector2D PathFollowBehaviour();
 	Vector2D OffsetPusuitBehaviour();
+	Vector2D AStarBehaviour();
+
 #pragma endregion
 
 private:
 	BehaviourType tankBehaviour;
 	BaseTank* _closestTank;
 	BaseTank* _baseTank;
+	B013432f_AStar*	_AStarManager = new B013432f_AStar();
 	
 	int speed;
 

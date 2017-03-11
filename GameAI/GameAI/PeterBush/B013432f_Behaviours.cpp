@@ -5,6 +5,7 @@ B013432f_Behaviours::B013432f_Behaviours()
 	moving = false;
 	pursuit = true;
 	targetBool = false;
+	pathing = false;
 }
 
 B013432f_Behaviours::~B013432f_Behaviours()
@@ -19,15 +20,13 @@ void B013432f_Behaviours::TargetClosest(TankManager* tankManager, vector<BaseTan
 	for (int i = 0; i < Tanks.size(); i++)
 	{
 		targetPursuit = Tanks[i]->GetCentralPosition();
-		//cout << "Spotted Tank " << Tanks[i]->GetTankName();
+
 		_closestTank = Tanks[i];
 		if (pursuit == true && targetBool ==true)
 			tankBehaviour = Pursuit;
 		else if (pursuit == false && targetBool == true)
 			tankBehaviour = Evade;
 	}
-	//if (Tanks.size() == 0)
-	//	tankBehaviour = Seek;
 }
 
 void B013432f_Behaviours::GetMousePos()
@@ -40,7 +39,7 @@ void B013432f_Behaviours::GetMousePos()
 
 void B013432f_Behaviours::ChooseBehaviour(SDL_Event e)
 {	
-	target = targetNow;
+	target = mousePosition;
 	distance = DistanceFromTargetCheck(target);
 	ObstacleAvoidanceBehaviour(feelers);
 
@@ -88,6 +87,19 @@ void B013432f_Behaviours::ChooseBehaviour(SDL_Event e)
 				cout << "No Longer Targeting" << endl;
 			}
 			break;
+		case SDLK_y:
+			if (pathing == false)
+			{
+				tankBehaviour = AStar;
+				cout << "A Star Search Started" << endl;
+				moving = true;
+			}
+
+			break;
+		case SDL_MOUSEBUTTONDOWN:
+			GetMousePos();
+			cout << target.x << " " << target.y << endl;
+			break;
 		}
 	}
 
@@ -109,7 +121,7 @@ void B013432f_Behaviours::ChooseBehaviour(SDL_Event e)
 		if (moving == true)
 		{
 			//cout << "Arrive" << endl;
-			outputVelocity = ArriveBehaviour(target, distance) /*+ ObstacleAvoidanceBehaviour(feelers) * 2*/;
+			outputVelocity = ArriveBehaviour(target, distance);
 		}
 		break;
 	case Pursuit:
@@ -123,6 +135,9 @@ void B013432f_Behaviours::ChooseBehaviour(SDL_Event e)
 		{
 			outputVelocity = EvadeBehaviour(_closestTank) + ObstacleAvoidanceBehaviour(feelers) * 2;
 		}
+		break;
+	case AStar:
+		outputVelocity = AStarBehaviour();
 		break;
 		//case WallAvoidance:
 		//	WallAvoidanceBehaviour();
@@ -145,6 +160,25 @@ void B013432f_Behaviours::ChooseBehaviour(SDL_Event e)
 		//	cout << "OffsetPusuitBehaviour" << endl;
 		//	break;
 	}
+}
+
+Vector2D B013432f_Behaviours::AStarBehaviour()
+{
+	vector<Vector2D> path = _AStarManager->GetPathBetweenPoint(tanksPosition, target);
+
+	cout << path.size() << endl;
+
+	if (path.size() != 0)
+	{
+		pathing = true;
+		for (int i = 0; i < path.size(); i++)
+		{
+			if (tanksPosition != path[i])
+				return ArriveBehaviour(path[i], tanksPosition.Distance(path[i]));
+		}
+	}
+	pathing = false;
+	return ArriveBehaviour(target, tanksPosition.Distance(target));	
 }
 
 double B013432f_Behaviours::DistanceFromTargetCheck(Vector2D target)
