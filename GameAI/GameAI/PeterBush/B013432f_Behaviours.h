@@ -69,7 +69,7 @@ public:
 	void TargetClosest(TankManager* tankManager, vector <BaseTank*>);
 
 	void ChooseBehaviour(SDL_Event e);
-	void GetMousePos();
+	Vector2D GetMousePos();
 
 	double DistanceFromTargetCheck(Vector2D target); //Iplemented
 	Vector2D SeekBehaviour(Vector2D target); //Iplemented
@@ -93,6 +93,7 @@ private:
 	BaseTank* _closestTank;
 	BaseTank* _baseTank;
 	B013432f_AStar*	_AStarManager = new B013432f_AStar();
+	vector<Vector2D> path;
 	
 	int speed;
 

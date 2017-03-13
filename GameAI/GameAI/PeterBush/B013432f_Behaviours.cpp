@@ -29,23 +29,31 @@ void B013432f_Behaviours::TargetClosest(TankManager* tankManager, vector<BaseTan
 	}
 }
 
-void B013432f_Behaviours::GetMousePos()
+Vector2D B013432f_Behaviours::GetMousePos()
 {
 	int x, y;
 	SDL_GetMouseState(&x, &y);
 
-	mousePosition = Vector2D(x, y);
+	return Vector2D(x, y);
 }
 
 void B013432f_Behaviours::ChooseBehaviour(SDL_Event e)
-{	
-	target = mousePosition;
+{
 	distance = DistanceFromTargetCheck(target);
 	ObstacleAvoidanceBehaviour(feelers);
 
 	switch (e.type)
 	{
-		//Deal with keyboard input.
+
+	case SDL_MOUSEBUTTONDOWN:
+		switch(e.button.button)
+		{
+		case SDL_BUTTON_LEFT:
+			target = GetMousePos();
+			path = _AStarManager->GetPathBetweenPoint(tanksPosition, target);
+			cout << "Target Set: " << target.x << " " << target.y << endl;
+		break;			
+		}
 	case SDL_KEYDOWN:
 		switch (e.key.keysym.sym)
 		{
@@ -94,11 +102,6 @@ void B013432f_Behaviours::ChooseBehaviour(SDL_Event e)
 				cout << "A Star Search Started" << endl;
 				moving = true;
 			}
-
-			break;
-		case SDL_MOUSEBUTTONDOWN:
-			GetMousePos();
-			cout << target.x << " " << target.y << endl;
 			break;
 		}
 	}
@@ -164,12 +167,9 @@ void B013432f_Behaviours::ChooseBehaviour(SDL_Event e)
 
 Vector2D B013432f_Behaviours::AStarBehaviour()
 {
-	vector<Vector2D> path = _AStarManager->GetPathBetweenPoint(tanksPosition, target);
-
-	cout << path.size() << endl;
-
 	if (path.size() != 0)
 	{
+		cout << "Path Length = " << path.size() << endl;
 		pathing = true;
 		for (int i = 0; i < path.size(); i++)
 		{
@@ -177,8 +177,9 @@ Vector2D B013432f_Behaviours::AStarBehaviour()
 				return ArriveBehaviour(path[i], tanksPosition.Distance(path[i]));
 		}
 	}
+	cout << "Path Not Found" << endl;
 	pathing = false;
-	return ArriveBehaviour(target, tanksPosition.Distance(target));	
+	return ArriveBehaviour(tanksPosition, tanksPosition.Distance(target));
 }
 
 double B013432f_Behaviours::DistanceFromTargetCheck(Vector2D target)
