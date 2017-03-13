@@ -2,6 +2,7 @@
 
 B013432f_AStar::B013432f_AStar()
 {
+	mWaypointManager = WaypointManager::Instance();
 	SetEdgeCost();
 }
 
@@ -119,50 +120,49 @@ vector<Vector2D> B013432f_AStar::GetPathBetweenPoint(Vector2D tankPos, Vector2D 
 	mOpenNodes.push_back(new AStarNode(nearestToTank, nullptr, 0.0f));
 	AStarNode* currentNode = nullptr;
 
-	while (mOpenNodes.size() != 0)
+	while (!mOpenNodes.empty())
 	{
 		for (auto i = 0; i < mOpenNodes.size(); i++)
 		{
 			if (currentNode == nullptr || mOpenNodes[i]->cost < currentNode->cost)
 				currentNode = mOpenNodes[i];
+		}
 
-			if (currentNode->thisWaypoint == nearestToEnd)
-			{
-				cout << "Path Finished" << endl;
-				path = ConstructedPath(currentNode, endPos);
-				return path;
-			}
-
-			vector<int> connectedIDs = currentNode->thisWaypoint->GetConnectedWaypointIDs();
-
-			for each (auto waypointsID in connectedIDs)
-			{
-				if (IsInList(mOpenNodes, mWaypointManager->Instance()->GetWaypointWithID(waypointsID)) == false && IsInList(mClosedNodes, mWaypointManager->Instance()->GetWaypointWithID(waypointsID)) == false)
-				{
-					cout << waypointsID << endl;
-					Waypoint*	targetWaypoint = mWaypointManager->Instance()->GetWaypointWithID(waypointsID);
-					double g = currentNode->cost + GetCostBetweenWaypoints(currentNode->thisWaypoint, targetWaypoint);
-					double h = GetHeuristicCost(targetWaypoint->GetPosition(), endPos);
-					double f = g + h;
-
-					mOpenNodes.push_back(new AStarNode(targetWaypoint, currentNode, f));
-				}
-			}
-
-			mClosedNodes.push_back(currentNode);
-
-			vector<AStarNode*>::iterator iter = mOpenNodes.begin();
-			while (iter != mOpenNodes.end())
-			{
-				if (*iter == currentNode)
-					iter = mOpenNodes.erase(iter);
-				else
-					++iter;
-			}
-
-			currentNode = NULL;
+		if (currentNode->thisWaypoint == nearestToEnd)
+		{
+			cout << "Path Finished" << endl;
+			path = ConstructedPath(currentNode, endPos);
 			return path;
-		}	
-		return path;
+		}
+
+		vector<int> connectedIDs = currentNode->thisWaypoint->GetConnectedWaypointIDs();
+		Waypoint*	targetWaypoint;
+
+		for each (auto waypointsID in connectedIDs)
+		{
+			targetWaypoint = mWaypointManager->Instance()->GetWaypointWithID(waypointsID);
+
+			if (!IsInList(mOpenNodes, mWaypointManager->Instance()->GetWaypointWithID(waypointsID)) || !IsInList(mClosedNodes, mWaypointManager->Instance()->GetWaypointWithID(waypointsID)))
+			{
+				double g = currentNode->cost + GetCostBetweenWaypoints(currentNode->thisWaypoint, targetWaypoint);
+				double h = GetHeuristicCost(targetWaypoint->GetPosition(), endPos);
+				double f = g + h;
+				mOpenNodes.push_back(new AStarNode(targetWaypoint, currentNode, f));
+			}
+		}
+
+		mClosedNodes.push_back(currentNode);
+
+		vector<AStarNode*>::iterator iter = mOpenNodes.begin();
+		while (iter != mOpenNodes.end())
+		{
+			if (*iter == currentNode)
+				iter = mOpenNodes.erase(iter);
+			else
+				++iter;
+		}
+
+		currentNode = NULL;
 	}
+	return path;
 }

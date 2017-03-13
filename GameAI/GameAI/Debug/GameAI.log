@@ -1,7 +1,7 @@
-﻿  B013432f_AStar.cpp
-d:\documents\work repos\uniwork_ai\gameai\gameai\peterbush\b013432f_astar.cpp(52): warning C4018: '<': signed/unsigned mismatch
-d:\documents\work repos\uniwork_ai\gameai\gameai\peterbush\b013432f_astar.cpp(55): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-d:\documents\work repos\uniwork_ai\gameai\gameai\peterbush\b013432f_astar.cpp(123): warning C4018: '<': signed/unsigned mismatch
-d:\documents\work repos\uniwork_ai\gameai\gameai\peterbush\b013432f_astar.cpp(166): warning C4715: 'B013432f_AStar::GetPathBetweenPoint': not all control paths return a value
-  GameAI.vcxproj -> D:\Documents\Work Repos\UniWork_AI\GameAI\Debug\GameAI.exe
-  GameAI.vcxproj -> D:\Documents\Work Repos\UniWork_AI\GameAI\Debug\GameAI.pdb (Full PDB)
+﻿  B013432f_Behaviours.cpp
+c:\users\b013432f\documents\uniwork_ai\gameai\gameai\peterbush\b013432f_behaviours.cpp(20): warning C4018: '<': signed/unsigned mismatch
+c:\users\b013432f\documents\uniwork_ai\gameai\gameai\peterbush\b013432f_behaviours.cpp(154): warning C4018: '<': signed/unsigned mismatch
+c:\users\b013432f\documents\uniwork_ai\gameai\gameai\peterbush\b013432f_behaviours.cpp(237): warning C4018: '<': signed/unsigned mismatch
+c:\users\b013432f\documents\uniwork_ai\gameai\gameai\peterbush\b013432f_behaviours.cpp(260): warning C4018: '<': signed/unsigned mismatch
+  GameAI.vcxproj -> C:\Users\b013432f\Documents\UniWork_AI\GameAI\Debug\GameAI.exe
+  GameAI.vcxproj -> C:\Users\b013432f\Documents\UniWork_AI\GameAI\Debug\GameAI.pdb (Full PDB)

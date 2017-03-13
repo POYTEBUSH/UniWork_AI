@@ -111,7 +111,7 @@ void B013432f_Behaviours::ChooseBehaviour(SDL_Event e)
 	case Seek:
 		if (moving == true)
 		{
-			outputVelocity = SeekBehaviour(target) + ObstacleAvoidanceBehaviour(feelers) * 1.5;
+			outputVelocity = SeekBehaviour(target)/* + ObstacleAvoidanceBehaviour(feelers) * 1.5*/;
 		}
 		break;
 	case Flee:
@@ -142,39 +142,25 @@ void B013432f_Behaviours::ChooseBehaviour(SDL_Event e)
 	case AStar:
 		outputVelocity = AStarBehaviour();
 		break;
-		//case WallAvoidance:
-		//	WallAvoidanceBehaviour();
-		//	cout << "WallAvoidanceBehaviour" << endl;
-		//	break;
-		//case Interpose:
-		//	InterposeBehaviour();
-		//	cout << "InterposeBehaviour" << endl;
-		//	break;
-		//case Hide:
-		//	HideBehaviour();
-		//	cout << "HideBehaviour" << endl;
-		//	break;
-		//case PathFollow:
-		//	PathFollowBehaviour();
-		//	cout << "PathFollowBehaviour" << endl;
-		//	break;
-		//case OffsetPusuit:
-		//	OffsetPusuitBehaviour();
-		//	cout << "OffsetPusuitBehaviour" << endl;
-		//	break;
 	}
 }
 
 Vector2D B013432f_Behaviours::AStarBehaviour()
 {
-	if (path.size() != 0)
+	if (!path.empty())
 	{
-		cout << "Path Length = " << path.size() << endl;
 		pathing = true;
+
 		for (int i = 0; i < path.size(); i++)
 		{
-			if (tanksPosition != path[i])
-				return ArriveBehaviour(path[i], tanksPosition.Distance(path[i]));
+			Vector2D toTarget = path[i] - tanksPosition;
+			double dist = toTarget.Length();
+			cout << dist << endl;			
+
+			if (dist > 25)
+			{
+				return SeekBehaviour(path[i]);
+			}
 		}
 	}
 	cout << "Path Not Found" << endl;
@@ -186,9 +172,6 @@ double B013432f_Behaviours::DistanceFromTargetCheck(Vector2D target)
 {
 	Vector2D thisToTarget = target - tanksPosition;
 	double distance = thisToTarget.Length();
-
-	//cout << distance << endl;
-
 	return distance;
 }
 
@@ -196,9 +179,6 @@ Vector2D B013432f_Behaviours::SeekBehaviour(Vector2D target)
 {
 	Vector2D desiredVelocity = Vec2DNormalize(target - tanksPosition) * tankMaxSpeed;
 	desiredVelocity.Truncate(tankMaxSpeed);
-
-	//cout << "Seek Speed: " << desiredVelocity.Length() << endl;
-
 	Vector2D final = (desiredVelocity - tankVelocity);
 	return final;
 }
