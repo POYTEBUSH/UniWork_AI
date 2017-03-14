@@ -130,7 +130,7 @@ vector<Vector2D> B013432f_AStar::GetPathBetweenPoint(Vector2D tankPos, Vector2D 
 
 		if (currentNode->thisWaypoint == nearestToEnd)
 		{
-			cout << "Path Finished" << endl;
+			cout << "=====~~ Path Finished ~~=====" << endl;
 			path = ConstructedPath(currentNode, endPos);
 			return path;
 		}

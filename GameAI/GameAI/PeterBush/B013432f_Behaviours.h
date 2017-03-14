@@ -5,8 +5,12 @@
 #include "..\Commons.h"
 #include "..\TankManager.h"
 #include "..\ObstacleManager.h"
+#include "..\PickUpManager.h"
 #include "..\Collisions.h"
 #include "B013432f_AStar.h"		
+#include <stdio.h>      /* printf, NULL */
+#include <stdlib.h>     /* srand, rand */
+#include <time.h>       /* time */
 
 using namespace std;
 
@@ -31,7 +35,7 @@ class B013432f_Behaviours
 {
 public:
 
-	B013432f_Behaviours();
+	B013432f_Behaviours(BaseTank* thisTank);
 	~B013432f_Behaviours();
 
 	#pragma region Tank Variables
@@ -87,6 +91,9 @@ public:
 	Vector2D PathFollowBehaviour();
 	Vector2D OffsetPusuitBehaviour();
 	Vector2D AStarBehaviour();
+
+	Vector2D DetectPickup();
+	vector<Vector2D> GetPath() const {return path;};
 
 	#pragma endregion
 

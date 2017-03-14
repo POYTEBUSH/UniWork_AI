@@ -1,11 +1,14 @@
 #include "B013432f_Behaviours.h"
 
-B013432f_Behaviours::B013432f_Behaviours()
+B013432f_Behaviours::B013432f_Behaviours(BaseTank* thisTank)
 {
 	moving = false;
 	pursuit = true;
 	targetBool = false;
 	pathing = false;
+	_baseTank = thisTank;
+
+	srand(time(NULL));
 }
 
 B013432f_Behaviours::~B013432f_Behaviours()
@@ -111,7 +114,7 @@ void B013432f_Behaviours::ChooseBehaviour(SDL_Event e)
 	case Seek:
 		if (moving == true)
 		{
-			outputVelocity = SeekBehaviour(target)/* + ObstacleAvoidanceBehaviour(feelers) * 1.5*/;
+			outputVelocity = SeekBehaviour(target) + ObstacleAvoidanceBehaviour(feelers) * 1.5;
 		}
 		break;
 	case Flee:
@@ -123,8 +126,7 @@ void B013432f_Behaviours::ChooseBehaviour(SDL_Event e)
 	case Arrive:
 		if (moving == true)
 		{
-			//cout << "Arrive" << endl;
-			outputVelocity = ArriveBehaviour(target, distance);
+			outputVelocity = ArriveBehaviour(target, distance) + ObstacleAvoidanceBehaviour(feelers) * 1.5;
 		}
 		break;
 	case Pursuit:
@@ -147,25 +149,53 @@ void B013432f_Behaviours::ChooseBehaviour(SDL_Event e)
 
 Vector2D B013432f_Behaviours::AStarBehaviour()
 {
-	if (!path.empty())
+	while (path.size() > 1)
 	{
 		pathing = true;
 
-		for (int i = 0; i < path.size(); i++)
-		{
-			Vector2D toTarget = path[i] - tanksPosition;
-			double dist = toTarget.Length();
-			cout << dist << endl;			
+		Vector2D toTarget = path[0] - tanksPosition;
+		
+		double dist = tanksPosition.Distance(path[0]);
 
-			if (dist > 25)
-			{
-				return SeekBehaviour(path[i]);
-			}
+		DetectPickup();
+
+		if (DetectPickup() != Vector2D(0, 0))
+		{
+			cout << "Spotted Pickup At: " << DetectPickup().x << " " << DetectPickup().y << endl;
+			return DetectPickup();
 		}
+
+		if (dist <= 25 && path.size() > 0 && dist < tanksPosition.Distance(path[1]))
+		{
+			path.erase(path.begin());
+			cout << "Moving To: " << path[0].x << " " << path[0].y <<  " | Distance To Next Node: " << tanksPosition.Distance(path[0]) << "m | Fuel Left: " << _baseTank->GetFuel() << endl;
+		}
+
+		if (path.size() <= 1)
+		{
+			return ArriveBehaviour(target, tanksPosition.Distance(target));
+		}
+		return SeekBehaviour(path[0]);
 	}
-	cout << "Path Not Found" << endl;
+	path = _AStarManager->GetPathBetweenPoint(tanksPosition, Vector2D(rand()%1280, rand() % 900));
+
 	pathing = false;
-	return ArriveBehaviour(tanksPosition, tanksPosition.Distance(target));
+	return ArriveBehaviour(target, tanksPosition.Distance(target));
+}
+
+Vector2D B013432f_Behaviours::DetectPickup()
+{
+	vector<GameObject*> objects = PickUpManager::Instance()->GetAllPickUps();
+
+	for each (auto pickup in objects)
+	{
+		Vector2D pickupPos = pickup->GetCentralPosition();
+		double dist = tanksPosition.Distance(pickupPos);
+
+		if (dist < 30)
+			return pickupPos;
+	}
+	return Vector2D(0,0);
 }
 
 double B013432f_Behaviours::DistanceFromTargetCheck(Vector2D target)
@@ -240,8 +270,6 @@ Vector2D B013432f_Behaviours::ObstacleAvoidanceBehaviour(vector<Vector2D> feeler
 		Rect2D rect = Rect2D(objects[i]->GetPosition().x, objects[i]->GetPosition().y,
 			(objects[i]->GetCentralPosition().x - objects[i]->GetPosition().x) * 2,
 			(objects[i]->GetCentralPosition().y - objects[i]->GetPosition().y) * 2);
-
-			//cout << rect.x << " " << rect.y << " " << rect.width << " " << rect.height << endl;
 		Vector2D distance = objects[i]->GetCentralPosition() + tanksPosition;
 
 		string headingx;
@@ -263,28 +291,23 @@ Vector2D B013432f_Behaviours::ObstacleAvoidanceBehaviour(vector<Vector2D> feeler
 			{
 				if ((feelers[0].x >= rect.x && feelers[0].x <= rect.x + rect.width) && (feelers[0].y >= rect.y && feelers[0].y <= rect.y + rect.height))
 				{
-					cout << "colliding with object: " << objects[i] << endl;
 					return FleeBehaviour(distance.Perp() * -90);
 				}
 
 				if ((feelers[1].x >= rect.x && feelers[1].x <= rect.x + rect.width) && (feelers[1].y >= rect.y && feelers[1].y <= rect.y + rect.height))
 				{
-					cout << "colliding with object: " << objects[i] << endl;
 					return FleeBehaviour(distance.Perp() * -2);
 				}
 				if ((feelers[2].x >= rect.x && feelers[2].x <= rect.x + rect.width) && (feelers[2].y >= rect.y && feelers[2].y <= rect.y + rect.height))
 				{
-					cout << "colliding with object: " << objects[i] << endl;
 					return FleeBehaviour(distance.Perp() * -2);
 				}
 				if ((feelers[3].x >= rect.x && feelers[3].x <= rect.x + rect.width) && (feelers[3].y >= rect.y && feelers[3].y <= rect.y + rect.height))
 				{
-					cout << "colliding with object: " << objects[i] << endl;
 					return FleeBehaviour(distance.Perp() * 2);
 				}
 				if ((feelers[4].x >= rect.x && feelers[4].x <= rect.x + rect.width) && (feelers[4].y >= rect.y && feelers[4].y <= rect.y + rect.height))
 				{
-					cout << "colliding with object: " << objects[i] << endl;
 					return FleeBehaviour(distance.Perp() * 2);
 				}
 			}
@@ -292,67 +315,27 @@ Vector2D B013432f_Behaviours::ObstacleAvoidanceBehaviour(vector<Vector2D> feeler
 			{
 				if ((feelers[0].x >= rect.x && feelers[0].x <= rect.x + rect.width) && (feelers[0].y >= rect.y && feelers[0].y <= rect.y + rect.height))
 				{
-					cout << "colliding with object: " << objects[i] << endl;
 					return FleeBehaviour(distance.Perp() * 90);
 				}
 
 				if ((feelers[1].x >= rect.x && feelers[1].x <= rect.x + rect.width) && (feelers[1].y >= rect.y && feelers[1].y <= rect.y + rect.height))
 				{
-					cout << "colliding with object: " << objects[i] << endl;
 					return FleeBehaviour(distance.Perp() * 2);
 				}
 				if ((feelers[2].x >= rect.x && feelers[2].x <= rect.x + rect.width) && (feelers[2].y >= rect.y && feelers[2].y <= rect.y + rect.height))
 				{
-					cout << "colliding with object: " << objects[i] << endl;
 					return FleeBehaviour(distance.Perp() * 2);
 				}
 				if ((feelers[3].x >= rect.x && feelers[3].x <= rect.x + rect.width) && (feelers[3].y >= rect.y && feelers[3].y <= rect.y + rect.height))
 				{
-					cout << "colliding with object: " << objects[i] << endl;
 					return FleeBehaviour(distance.Perp() * 2);
 				}
 				if ((feelers[4].x >= rect.x && feelers[4].x <= rect.x + rect.width) && (feelers[4].y >= rect.y && feelers[4].y <= rect.y + rect.height))
 				{
-					cout << "colliding with object: " << objects[i] << endl;
 					return FleeBehaviour(distance.Perp() * 2);
 				}
-			}			
-			
-			/*if ((feelers[1].x >= rect.x && feelers[1].x <= rect.x + rect.width) && (feelers[1].y >= rect.y && feelers[1].y <= rect.y + rect.height))
-			{
-				cout << "colliding with object: " << objects[i] << endl;
-				return FleeBehaviour(target.Perp() * 120);
 			}
-			if ((feelers[2].x >= rect.x && feelers[2].x <= rect.x + rect.width) && (feelers[2].y >= rect.y && feelers[2].y <= rect.y + rect.height))
-			{
-				cout << "colliding with object: " << objects[i] << endl;
-				return FleeBehaviour(target.Perp() * -120);
-			}*/
 		}		
 	}
 	return Vector2D(0, 0);
 }
-//Vector2D B013432f_Behaviours::WanderBehaviour()
-//{
-//	
-//}
-	//Vector2D B013432f_Behaviours::WallAvoidanceBehaviour()
-	//{
-	//	
-	//}
-	//Vector2D B013432f_Behaviours::InterposeBehaviour()
-	//{
-	//	
-	//}
-	//Vector2D B013432f_Behaviours::HideBehaviour()
-	//{
-	//	
-	//}
-	//Vector2D B013432f_Behaviours::PathFollowBehaviour()
-	//{
-	//	
-	//}
-	//Vector2D B013432f_Behaviours::OffsetPusuitBehaviour()
-	//{
-	//	
-	//}

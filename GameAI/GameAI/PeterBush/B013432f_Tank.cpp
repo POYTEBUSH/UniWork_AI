@@ -78,6 +78,7 @@ void B013432f_Tank::CalcFeelers()
 void B013432f_Tank::Update(float deltaTime, SDL_Event e)
 {	
 	vector <BaseTank*> Tanks = mTanksICanSee;
+	mPath = _tankBehaviour->GetPath();
 
 	_tankBehaviour->tanksPosition = GetCentralPosition();
 	_tankBehaviour->ChooseBehaviour(e);
@@ -177,6 +178,24 @@ void B013432f_Tank::Render()
 {
 	BaseTank::Render();
 	DrawDebugLine(GetCentralPosition(), GetCentralPosition() + mHeading*kFieldOfViewLength, 255, 0, 255);
+
+	if (!mPath.empty())
+	{
+		for (int i = 0; i < mPath.size() - 1; i++)
+		{
+			DrawDebugCircle(mPath[i], 10, 255, 0, 25);
+			DrawDebugCircle(mPath[0], 9, 255, 0, 25);
+			DrawDebugCircle(mPath[0], 8, 255, 0, 25);
+			DrawDebugCircle(mPath[0], 7, 255, 0, 25);
+			DrawDebugCircle(mPath[0], 6, 255, 0, 25);
+			DrawDebugCircle(mPath[0], 5, 255, 0, 25);
+			DrawDebugCircle(mPath[0], 4, 255, 0, 25);
+			DrawDebugCircle(mPath[0], 3, 255, 0, 25);
+			DrawDebugCircle(mPath[0], 2, 255, 0, 25);
+			DrawDebugCircle(mPath[0], 1, 255, 0, 25);
+			DrawDebugLine(mPath[i], mPath[i + 1], 255, 0, 25);
+		}
+	}
 
 	for (int i = 0; i < feelers.size(); i++)
 	{

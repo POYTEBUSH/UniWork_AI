@@ -37,10 +37,11 @@ private:
 	bool			mFireKeyDown;
 	double			mFeelerRadius;
 	vector<Vector2D> feelers {Vector2D(0,0),Vector2D(1,1),Vector2D(0,0), Vector2D(0,0), Vector2D(0,0)};
+	vector<Vector2D> mPath;
 
-	B013432f_Behaviours* _tankBehaviour = new B013432f_Behaviours;
 
-	//B013432f_Behaviours*	_tankBehaviour;
+	B013432f_Behaviours* _tankBehaviour = new B013432f_Behaviours(this);
+
 	BaseTank*				_baseTank;
 	TankManager*			_tankManager;
 

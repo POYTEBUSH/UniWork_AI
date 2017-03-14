@@ -1,7 +1,7 @@
 ﻿  B013432f_Behaviours.cpp
-c:\users\b013432f\documents\uniwork_ai\gameai\gameai\peterbush\b013432f_behaviours.cpp(20): warning C4018: '<': signed/unsigned mismatch
-c:\users\b013432f\documents\uniwork_ai\gameai\gameai\peterbush\b013432f_behaviours.cpp(154): warning C4018: '<': signed/unsigned mismatch
-c:\users\b013432f\documents\uniwork_ai\gameai\gameai\peterbush\b013432f_behaviours.cpp(237): warning C4018: '<': signed/unsigned mismatch
-c:\users\b013432f\documents\uniwork_ai\gameai\gameai\peterbush\b013432f_behaviours.cpp(260): warning C4018: '<': signed/unsigned mismatch
+c:\users\b013432f\documents\uniwork_ai\gameai\gameai\peterbush\b013432f_behaviours.cpp(11): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\b013432f\documents\uniwork_ai\gameai\gameai\peterbush\b013432f_behaviours.cpp(23): warning C4018: '<': signed/unsigned mismatch
+c:\users\b013432f\documents\uniwork_ai\gameai\gameai\peterbush\b013432f_behaviours.cpp(267): warning C4018: '<': signed/unsigned mismatch
+c:\users\b013432f\documents\uniwork_ai\gameai\gameai\peterbush\b013432f_behaviours.cpp(288): warning C4018: '<': signed/unsigned mismatch
   GameAI.vcxproj -> C:\Users\b013432f\Documents\UniWork_AI\GameAI\Debug\GameAI.exe
   GameAI.vcxproj -> C:\Users\b013432f\Documents\UniWork_AI\GameAI\Debug\GameAI.pdb (Full PDB)
