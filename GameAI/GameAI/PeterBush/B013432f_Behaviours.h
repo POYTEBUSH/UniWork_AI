@@ -92,7 +92,10 @@ public:
 	Vector2D OffsetPusuitBehaviour();
 	Vector2D AStarBehaviour();
 
+	void SetClosestTank(Vector2D value) { mClosestTank = value; };
+
 	Vector2D DetectPickup();
+	Vector2D TargetPickup();
 	vector<Vector2D> GetPath() const {return path;};
 
 	#pragma endregion
@@ -103,9 +106,10 @@ private:
 	BaseTank* _baseTank;
 	B013432f_AStar*	_AStarManager = new B013432f_AStar();
 	vector<Vector2D> path;
-	
 	int speed;
+	bool mTargetPickup;
 
+	Vector2D mClosestTank;
 	Vector2D target;
 	Vector2D targetPursuit;
 	Vector2D avoidTarget;

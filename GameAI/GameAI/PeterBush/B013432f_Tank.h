@@ -37,6 +37,8 @@ private:
 	bool			mFireKeyDown;
 	double			mFeelerRadius;
 	vector<Vector2D> feelers {Vector2D(0,0),Vector2D(1,1),Vector2D(0,0), Vector2D(0,0), Vector2D(0,0)};
+	Vector2D FindClosestTank(TankManager* tankManager, vector <BaseTank*>);
+
 	vector<Vector2D> mPath;
 
 

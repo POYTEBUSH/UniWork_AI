@@ -7,6 +7,7 @@ B013432f_Behaviours::B013432f_Behaviours(BaseTank* thisTank)
 	targetBool = false;
 	pathing = false;
 	_baseTank = thisTank;
+	mTargetPickup = false;
 
 	srand(time(NULL));
 }
@@ -52,10 +53,17 @@ void B013432f_Behaviours::ChooseBehaviour(SDL_Event e)
 		switch(e.button.button)
 		{
 		case SDL_BUTTON_LEFT:
+			mTargetPickup = false;
 			target = GetMousePos();
 			path = _AStarManager->GetPathBetweenPoint(tanksPosition, target);
 			cout << "Target Set: " << target.x << " " << target.y << endl;
-		break;			
+		break;	
+		case SDL_BUTTON_RIGHT:
+			mTargetPickup = true;
+			target = TargetPickup();
+			path = _AStarManager->GetPathBetweenPoint(tanksPosition, target);
+			cout << "Target Set: " << target.x << " " << target.y << endl;
+		break;
 		}
 	case SDL_KEYDOWN:
 		switch (e.key.keysym.sym)
@@ -149,6 +157,8 @@ void B013432f_Behaviours::ChooseBehaviour(SDL_Event e)
 
 Vector2D B013432f_Behaviours::AStarBehaviour()
 {
+	double distToEnd = tanksPosition.Distance(target);
+
 	while (path.size() > 1)
 	{
 		pathing = true;
@@ -157,7 +167,11 @@ Vector2D B013432f_Behaviours::AStarBehaviour()
 		
 		double dist = tanksPosition.Distance(path[0]);
 
-		DetectPickup();
+		if (tanksPosition.Distance(mClosestTank) < 200)
+		{
+			cout << "Spotted Tank At: " << mClosestTank.x << " " << mClosestTank.y << endl;
+			path = _AStarManager->GetPathBetweenPoint(tanksPosition, Vector2D(rand() % 1280, rand() % 900));
+		}			
 
 		if (DetectPickup() != Vector2D(0, 0))
 		{
@@ -171,13 +185,31 @@ Vector2D B013432f_Behaviours::AStarBehaviour()
 			cout << "Moving To: " << path[0].x << " " << path[0].y <<  " | Distance To Next Node: " << tanksPosition.Distance(path[0]) << "m | Fuel Left: " << _baseTank->GetFuel() << endl;
 		}
 
+		if (distToEnd < dist)
+		{
+			cout << "Moving To Target As Shorter Distance" << endl;
+			target = Vector2D(rand() % 1280, rand() % 900);
+			path = _AStarManager->GetPathBetweenPoint(tanksPosition, target);
+			return ArriveBehaviour(target, tanksPosition.Distance(target));
+		}
+
 		if (path.size() <= 1)
 		{
 			return ArriveBehaviour(target, tanksPosition.Distance(target));
 		}
 		return SeekBehaviour(path[0]);
 	}
-	path = _AStarManager->GetPathBetweenPoint(tanksPosition, Vector2D(rand()%1280, rand() % 900));
+	if (!mTargetPickup || (distToEnd <= 100.0 && path.size() <= 1))
+	{
+		if (distToEnd <= 10.0)
+		{
+			distToEnd = MaxDouble;
+			target = Vector2D(rand() % 1280, rand() % 900);
+			path = _AStarManager->GetPathBetweenPoint(tanksPosition, target);
+		}
+	}
+
+
 
 	pathing = false;
 	return ArriveBehaviour(target, tanksPosition.Distance(target));
@@ -196,6 +228,26 @@ Vector2D B013432f_Behaviours::DetectPickup()
 			return pickupPos;
 	}
 	return Vector2D(0,0);
+}
+
+Vector2D B013432f_Behaviours::TargetPickup()
+{
+	vector<GameObject*> objects = PickUpManager::Instance()->GetAllPickUps();
+	Vector2D pickupPos;
+	double dist = MaxDouble;
+
+	for each (auto pickup in objects)
+	{
+		
+		double distToPickup = tanksPosition.Distance(pickupPos);
+
+		if (distToPickup < dist)
+		{
+			dist = distToPickup;
+			pickupPos = pickup->GetCentralPosition();
+		}
+	}
+	return pickupPos;
 }
 
 double B013432f_Behaviours::DistanceFromTargetCheck(Vector2D target)

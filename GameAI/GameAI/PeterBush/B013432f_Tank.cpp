@@ -73,13 +73,33 @@ void B013432f_Tank::CalcFeelers()
 	feelers[2] = rightFeeler + mHeading * 5;
 	feelers[3] = leftFeeler - mHeading * 45;
 	feelers[4] = rightFeeler - mHeading * 45;
-} 
+}
+
+Vector2D B013432f_Tank::FindClosestTank(TankManager* tankManager, vector<BaseTank*> Tanks)
+{
+	double closestDistance = MaxDouble;
+	Vector2D targetLocation = Vector2D(0.0, 0.0);
+
+	for (int i = 0; i < Tanks.size(); i++)
+	{
+		double distanceToTank = GetCentralPosition().Distance(Tanks[i]->GetCentralPosition());
+
+		if (distanceToTank < closestDistance)
+		{
+			closestDistance = distanceToTank;
+			targetLocation = Tanks[i]->GetCentralPosition();
+		}
+	}
+	return targetLocation;
+}
+
 
 void B013432f_Tank::Update(float deltaTime, SDL_Event e)
 {	
 	vector <BaseTank*> Tanks = mTanksICanSee;
 	mPath = _tankBehaviour->GetPath();
 
+	_tankBehaviour->SetClosestTank(FindClosestTank(_tankManager, Tanks));
 	_tankBehaviour->tanksPosition = GetCentralPosition();
 	_tankBehaviour->ChooseBehaviour(e);
 	_tankBehaviour->tankMaxSpeed = GetMaxSpeed();
