@@ -167,36 +167,45 @@ Vector2D B013432f_Behaviours::AStarBehaviour()
 		
 		double dist = tanksPosition.Distance(path[0]);
 
-		if (tanksPosition.Distance(mClosestTank) < 200)
+		if (tanksPosition.Distance(mClosestTank) < 300)
 		{
+			_baseTank->ChangeState(TANKSTATE_MANFIRE);
+		}
+
+		if (tanksPosition.Distance(mClosestTank) <= 200)
+		{
+			_baseTank->ChangeState(TANKSTATE_CANNONFIRE);
 			cout << "Spotted Tank At: " << mClosestTank.x << " " << mClosestTank.y << endl;
-			path = _AStarManager->GetPathBetweenPoint(tanksPosition, Vector2D(rand() % 1280, rand() % 900));
-		}			
+			path = _AStarManager->GetPathBetweenPoint(tanksPosition, Vector2D(rand() % (925-35 + 1) + 35, rand() % (605 - 35 + 1) + 35));
+		}
 
 		if (DetectPickup() != Vector2D(0, 0))
 		{
 			cout << "Spotted Pickup At: " << DetectPickup().x << " " << DetectPickup().y << endl;
-			return DetectPickup();
+			return SeekBehaviour(DetectPickup());
 		}
 
-		if (dist <= 25 && path.size() > 0 && dist < tanksPosition.Distance(path[1]))
+		if (dist <= 25 && path.size() > 0)
 		{
+			_baseTank->ChangeState(TANKSTATE_DROPMINE);
 			path.erase(path.begin());
 			cout << "Moving To: " << path[0].x << " " << path[0].y <<  " | Distance To Next Node: " << tanksPosition.Distance(path[0]) << "m | Fuel Left: " << _baseTank->GetFuel() << endl;
 		}
 
-		if (distToEnd < dist)
-		{
-			cout << "Moving To Target As Shorter Distance" << endl;
-			target = Vector2D(rand() % 1280, rand() % 900);
-			path = _AStarManager->GetPathBetweenPoint(tanksPosition, target);
-			return ArriveBehaviour(target, tanksPosition.Distance(target));
-		}
+		//if (distToEnd < dist && dist <= 100)
+		//{
+		//	cout << "Moving To Target As Shorter Distance" << endl;
+		//	target = Vector2D(rand() % 1280, rand() % 900);
+		//	path = _AStarManager->GetPathBetweenPoint(tanksPosition, target);
+		//	return ArriveBehaviour(target, tanksPosition.Distance(target));
+		//}
 
 		if (path.size() <= 1)
 		{
 			return ArriveBehaviour(target, tanksPosition.Distance(target));
 		}
+
+		_baseTank->ChangeState(TANKSTATE_IDLE);
 		return SeekBehaviour(path[0]);
 	}
 	if (!mTargetPickup || (distToEnd <= 100.0 && path.size() <= 1))

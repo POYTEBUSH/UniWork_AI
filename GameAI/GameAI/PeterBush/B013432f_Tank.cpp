@@ -75,6 +75,8 @@ void B013432f_Tank::CalcFeelers()
 	feelers[4] = rightFeeler - mHeading * 45;
 }
 
+
+
 Vector2D B013432f_Tank::FindClosestTank(TankManager* tankManager, vector<BaseTank*> Tanks)
 {
 	double closestDistance = MaxDouble;
@@ -93,6 +95,25 @@ Vector2D B013432f_Tank::FindClosestTank(TankManager* tankManager, vector<BaseTan
 	return targetLocation;
 }
 
+bool B013432f_Tank::RotateManToFacePosition(Vector2D target, float deltaTime)
+{
+	Vector2D toTarget = Vec2DNormalize(GetCentralPosition() - target);
+
+	//Determine the angle between the heading vector and the target.
+	double angle = acos(GetHeading().Dot(toTarget));
+
+	//Ensure angle does not become NaN and cause the tank to disappear.
+	if (angle != angle)
+		angle = 0.0f;
+
+	//Return true if the player is facing the target.
+	if (angle < 0.00001)
+		return true;
+
+	RotateManByRadian(angle, GetHeading().Sign(toTarget), deltaTime);
+
+	return true;
+}
 
 void B013432f_Tank::Update(float deltaTime, SDL_Event e)
 {	
@@ -128,6 +149,7 @@ void B013432f_Tank::Update(float deltaTime, SDL_Event e)
 		mVelocity.Truncate(GetMaxSpeed());
 
 		Vector2D ahead = GetCentralPosition() + aheadDistance;
+		RotateManToFacePosition(ahead, deltaTime);
 		RotateHeadingToFacePosition(ahead, deltaTime);
 
 		_currentVelocity = _tankBehaviour->outputVelocity;
@@ -198,6 +220,11 @@ void B013432f_Tank::Render()
 {
 	BaseTank::Render();
 	DrawDebugLine(GetCentralPosition(), GetCentralPosition() + mHeading*kFieldOfViewLength, 255, 0, 255);
+
+	DrawDebugCircle(Vector2D(35, 35), 5, 0, 255, 25);
+	DrawDebugCircle(Vector2D(35, 605), 5, 0, 255, 25);
+	DrawDebugCircle(Vector2D(925, 35), 5, 0, 255, 25);
+	DrawDebugCircle(Vector2D(925, 605), 5, 0, 255, 25);
 
 	if (!mPath.empty())
 	{

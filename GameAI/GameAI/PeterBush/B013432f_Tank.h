@@ -19,6 +19,8 @@ public:
 	void Render();
 	void CalcFeelers();
 
+	bool RotateManToFacePosition(Vector2D target, float deltaTime);
+
 	//TankState GetState()const { return _tankState; };
 
 	void RotateHeadingByRadian(double radian, int sign);
@@ -38,6 +40,8 @@ private:
 	double			mFeelerRadius;
 	vector<Vector2D> feelers {Vector2D(0,0),Vector2D(1,1),Vector2D(0,0), Vector2D(0,0), Vector2D(0,0)};
 	Vector2D FindClosestTank(TankManager* tankManager, vector <BaseTank*>);
+
+
 
 	vector<Vector2D> mPath;
 

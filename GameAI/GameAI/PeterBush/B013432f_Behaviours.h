@@ -11,6 +11,7 @@
 #include <stdio.h>      /* printf, NULL */
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
+#include "../C2DMatrix.h"
 
 using namespace std;
 
@@ -92,6 +93,8 @@ public:
 	Vector2D OffsetPusuitBehaviour();
 	Vector2D AStarBehaviour();
 
+	void RotateManByRadian(double radian, int sign, float deltaTime);
+	bool RotateManToFacePosition(Vector2D target, float deltaTime);
 	void SetClosestTank(Vector2D value) { mClosestTank = value; };
 
 	Vector2D DetectPickup();
