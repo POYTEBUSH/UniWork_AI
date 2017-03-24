@@ -169,6 +169,12 @@ Vector2D B013432f_Behaviours::AStarBehaviour()
 		Vector2D toTarget = path[0] - tanksPosition;		
 		double dist = tanksPosition.Distance(path[0]);
 
+		if (tanksPosition.Distance(mClosestTank) <= 50)
+		{
+			SeekBehaviour(mClosestTank);
+			return ArriveBehaviour(tanksPosition, 0.0);
+		}
+
 		if (dist <= 20 && path.size() > 0)
 		{
 			_baseTank->ChangeState(TANKSTATE_DROPMINE);
@@ -190,9 +196,11 @@ Vector2D B013432f_Behaviours::AStarBehaviour()
 
 	pathing = false;
 	if (pickupLocation == Vector2D(0, 0))
-		path = _AStarManager->GetPathBetweenPoint(tanksPosition, Vector2D(rand() % (925 - 35 + 1) + 35, rand() % (605 - 35 + 1) + 35));
-	else
+		path = _AStarManager->GetPathBetweenPoint(tanksPosition, _AStarManager->GetNearestWaypoint(Vector2D(rand() % (925 - 35 + 1) + 35, rand() % (605 - 35 + 1) + 35))->GetPosition());
+	else if (pickupLocation.x >= 35 && pickupLocation.x <= 925 && pickupLocation.y >= 35 && pickupLocation.y <= 605)
 		return SeekBehaviour(pickupLocation);
+	else
+		return ArriveBehaviour(tanksPosition, 0.0);
 }
 
 Vector2D B013432f_Behaviours::DetectPickup()
@@ -216,17 +224,21 @@ Vector2D B013432f_Behaviours::TargetPickup()
 	Vector2D pickupPos;
 	double dist = MaxDouble;
 
-	for each (auto pickup in objects)
-	{		
-		double distToPickup = tanksPosition.Distance(pickupPos);
-
-		if (distToPickup < dist && pickup->GetCentralPosition() != Vector2D(0,0))
+	if (!objects.empty())
+	{
+		for each (auto pickup in objects)
 		{
-			dist = distToPickup;
-			pickupPos = pickup->GetCentralPosition();
+			double distToPickup = tanksPosition.Distance(pickupPos);
+
+			if (distToPickup < dist && pickup->GetCentralPosition() != Vector2D(0, 0))
+			{
+				dist = distToPickup;
+				pickupPos = pickup->GetCentralPosition();
+			}
 		}
+		return pickupPos;
 	}
-	return pickupPos;
+	return Vector2D(0, 0);
 }
 
 double B013432f_Behaviours::DistanceFromTargetCheck(Vector2D target)
