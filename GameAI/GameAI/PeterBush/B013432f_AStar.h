@@ -5,13 +5,13 @@
 
 class B013432f_AStar
 {
-	struct EdgeCost
+	struct B013432FEdgeCost
 	{
 		Waypoint* waypointFROM;
 		Waypoint* waypointTO;
 		double cost;
 
-		EdgeCost(Waypoint* from, Waypoint* to, double newCost)
+		B013432FEdgeCost(Waypoint* from, Waypoint* to, double newCost)
 		{
 			waypointFROM	= from;
 			waypointTO		= to;
@@ -19,13 +19,13 @@ class B013432f_AStar
 		}
 	};
 
-	struct AStarNode
+	struct B013432FAStarNode
 	{
 		Waypoint* thisWaypoint;
-		AStarNode* parentWaypoint;
+		B013432FAStarNode* parentWaypoint;
 		double cost;
 
-		AStarNode(Waypoint* currentWaypoint, AStarNode* parentalWaypoint, double newCost)
+		B013432FAStarNode(Waypoint* currentWaypoint, B013432FAStarNode* parentalWaypoint, double newCost)
 		{
 			thisWaypoint	= currentWaypoint;
 			parentWaypoint	= parentalWaypoint;
@@ -38,20 +38,20 @@ public:
 	~B013432f_AStar();
 
 	vector<Vector2D>	GetPathBetweenPoint(Vector2D startPos, Vector2D endPos);
+	Waypoint*			GetNearestWaypoint(Vector2D tankPos);
 
 private:
 	WaypointManager*	mWaypointManager;
 
-	vector<EdgeCost*>	mEdgeCostList;
-	vector<AStarNode*>	mOpenNodes;
-	vector<AStarNode*>	mClosedNodes;
+	vector<B013432FEdgeCost*>	mEdgeCostList;
+	vector<B013432FAStarNode*>	mOpenNodes;
+	vector<B013432FAStarNode*>	mClosedNodes;
 
 	void				SetEdgeCost();
-
-	Waypoint*			GetNearestWaypoint(Vector2D tankPos);
+	
 	double				GetCostBetweenWaypoints(Waypoint* from, Waypoint* to);
-	vector<Vector2D>	ConstructedPath(AStarNode* targetNode, Vector2D postion);
-	bool				IsInList(vector<AStarNode*> listToCheck, Waypoint* waypointToCheck);
+	vector<Vector2D>	ConstructedPath(B013432FAStarNode* targetNode, Vector2D postion);
+	bool				IsInList(vector<B013432FAStarNode*> listToCheck, Waypoint* waypointToCheck);
 	double				GetHeuristicCost(Vector2D startPos, Vector2D endPos);
 };
 

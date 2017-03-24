@@ -28,12 +28,12 @@ void B013432f_AStar::SetEdgeCost()
 			Waypoint*	targetWaypoint = mWaypointManager->Instance()->GetWaypointWithID(waypointsID);
 			double		cost = targetWaypoint->GetPosition().Distance(currentWaypoint->GetPosition());
 
-			mEdgeCostList.push_back(new EdgeCost(currentWaypoint, targetWaypoint, cost));
+			mEdgeCostList.push_back(new B013432FEdgeCost(currentWaypoint, targetWaypoint, cost));
 		}
 	}
 }
 
-bool B013432f_AStar::IsInList(vector<AStarNode*> listToCheck, Waypoint* waypointToCheck) 
+bool B013432f_AStar::IsInList(vector<B013432FAStarNode*> listToCheck, Waypoint* waypointToCheck) 
 {
 	for each (auto nodes in listToCheck)
 	{
@@ -79,14 +79,14 @@ double B013432f_AStar::GetCostBetweenWaypoints(Waypoint* from, Waypoint* to)
 	return MaxDouble;
 }
 
-vector<Vector2D> B013432f_AStar::ConstructedPath(AStarNode* targetNode, Vector2D endPos)
+vector<Vector2D> B013432f_AStar::ConstructedPath(B013432FAStarNode* targetNode, Vector2D endPos)
 {
 	vector<Vector2D> path;
 	vector<Vector2D> pathInReverse;
 
 	pathInReverse.push_back(endPos);
 
-	AStarNode* currentNode = targetNode;
+	B013432FAStarNode* currentNode = targetNode;
 
 	while (currentNode != NULL)
 	{
@@ -117,8 +117,8 @@ vector<Vector2D> B013432f_AStar::GetPathBetweenPoint(Vector2D tankPos, Vector2D 
 		return path;
 	}
 
-	mOpenNodes.push_back(new AStarNode(nearestToTank, nullptr, 0.0f));
-	AStarNode* currentNode = nullptr;
+	mOpenNodes.push_back(new B013432FAStarNode(nearestToTank, nullptr, 0.0f));
+	B013432FAStarNode* currentNode = nullptr;
 
 	while (!mOpenNodes.empty())
 	{
@@ -147,13 +147,13 @@ vector<Vector2D> B013432f_AStar::GetPathBetweenPoint(Vector2D tankPos, Vector2D 
 				double g = currentNode->cost + GetCostBetweenWaypoints(currentNode->thisWaypoint, targetWaypoint);
 				double h = GetHeuristicCost(targetWaypoint->GetPosition(), endPos);
 				double f = g + h;
-				mOpenNodes.push_back(new AStarNode(targetWaypoint, currentNode, f));
+				mOpenNodes.push_back(new B013432FAStarNode(targetWaypoint, currentNode, f));
 			}
 		}
 
 		mClosedNodes.push_back(currentNode);
 
-		vector<AStarNode*>::iterator iter = mOpenNodes.begin();
+		vector<B013432FAStarNode*>::iterator iter = mOpenNodes.begin();
 		while (iter != mOpenNodes.end())
 		{
 			if (*iter == currentNode)
