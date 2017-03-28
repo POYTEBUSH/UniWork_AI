@@ -7,7 +7,7 @@
 #include "..\ObstacleManager.h"
 #include "..\PickUpManager.h"
 #include "..\Collisions.h"
-#include "B013432f_AStar.h"		
+#include "B013432f_AStar.h"	
 #include <stdio.h>      /* printf, NULL */
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */

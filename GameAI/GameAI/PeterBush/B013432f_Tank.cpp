@@ -220,6 +220,12 @@ void B013432f_Tank::Render()
 {
 	BaseTank::Render();
 	DrawDebugLine(GetCentralPosition(), GetCentralPosition() + mHeading*kFieldOfViewLength, 255, 0, 255);
+	vector<Vector2D> wall = mCollisionManager->GetWalls();
+
+	//for (int i = 0; i < wall.size() - 2; i++)
+	//{
+	//	DrawDebugLine(wall[i], wall[i + 1], 255, 0, 255);
+	//}
 
 	DrawDebugCircle(Vector2D(35, 35), 5, 0, 255, 25);
 	DrawDebugCircle(Vector2D(35, 605), 5, 0, 255, 25);
