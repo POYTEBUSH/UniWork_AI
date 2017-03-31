@@ -96,6 +96,7 @@ public:
 	void RotateManByRadian(double radian, int sign, float deltaTime);
 	bool RotateManToFacePosition(Vector2D target, float deltaTime);
 	void SetClosestTank(Vector2D value) { mClosestTank = value; };
+	void SetObstacles(vector<Rect2D> obstacles) { mObstacles = obstacles; };
 
 	Vector2D DetectPickup();
 	Vector2D TargetPickup();
@@ -108,6 +109,7 @@ private:
 	BaseTank* _closestTank;
 	BaseTank* _baseTank;
 	B013432f_AStar*	_AStarManager = new B013432f_AStar();
+	vector<Rect2D> mObstacles;
 	vector<Vector2D> path;
 	int speed;
 	bool mTargetPickup;

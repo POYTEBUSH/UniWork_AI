@@ -120,6 +120,7 @@ void B013432f_Tank::Update(float deltaTime, SDL_Event e)
 	vector <BaseTank*> Tanks = mTanksICanSee;
 	mPath = _tankBehaviour->GetPath();
 
+	_tankBehaviour->SetObstacles(mCollisionManager->GetWalls());
 	_tankBehaviour->SetClosestTank(FindClosestTank(_tankManager, Tanks));
 	_tankBehaviour->tanksPosition = GetCentralPosition();
 	_tankBehaviour->ChooseBehaviour(e);
@@ -225,30 +226,10 @@ void B013432f_Tank::Render()
 
 	for (int i = 0; i < wall.size(); i++)
 	{
-		cout << "Drawing a wall at: X: " << wall[i].x << " Y: " << wall[i].y << "Width: " << wall[i].width << " Height : " << wall[i].height << endl;
 		DrawDebugLine(Vector2D(wall[i].x, wall[i].y), Vector2D(wall[i].x, wall[i].height), 255, 255, 25); // Draw the left side of the box
-		DrawDebugLine(Vector2D(wall[i].x +1, wall[i].y), Vector2D(wall[i].x + 1, wall[i].height), 255, 255, 25); // Draw the left side of the box
-		DrawDebugLine(Vector2D(wall[i].x +2, wall[i].y), Vector2D(wall[i].x + 2, wall[i].height), 255, 255, 25); // Draw the left side of the box
-		DrawDebugLine(Vector2D(wall[i].x +3, wall[i].y), Vector2D(wall[i].x + 3, wall[i].height), 255, 255, 25); // Draw the left side of the box
-		DrawDebugLine(Vector2D(wall[i].x +4, wall[i].y), Vector2D(wall[i].x + 4, wall[i].height), 255, 255, 25); // Draw the left side of the box
-
 		DrawDebugLine(Vector2D(wall[i].x + wall[i].width, wall[i].y), Vector2D(wall[i].x + wall[i].width, wall[i].height), 255, 255, 25); // Draw the right side of the box
-		DrawDebugLine(Vector2D(wall[i].x + wall[i].width -1, wall[i].y), Vector2D(wall[i].x + wall[i].width -1, wall[i].height), 255, 255, 25); // Draw the right side of the box
-		DrawDebugLine(Vector2D(wall[i].x + wall[i].width - 2, wall[i].y), Vector2D(wall[i].x + wall[i].width - 2, wall[i].height), 255, 255, 25); // Draw the right side of the box
-		DrawDebugLine(Vector2D(wall[i].x + wall[i].width - 3, wall[i].y), Vector2D(wall[i].x + wall[i].width - 3, wall[i].height), 255, 255, 25); // Draw the right side of the box
-		DrawDebugLine(Vector2D(wall[i].x + wall[i].width - 4, wall[i].y), Vector2D(wall[i].x + wall[i].width - 4, wall[i].height), 255, 255, 25); // Draw the right side of the box
-
 		DrawDebugLine(Vector2D(wall[i].x, wall[i].y), Vector2D(wall[i].x + wall[i].width, wall[i].y), 255, 255, 25); // Draw the Top side of the box
-		DrawDebugLine(Vector2D(wall[i].x, wall[i].y +1), Vector2D(wall[i].x + wall[i].width, wall[i].y +1), 255, 255, 25); // Draw the Top side of the box
-		DrawDebugLine(Vector2D(wall[i].x, wall[i].y +2), Vector2D(wall[i].x + wall[i].width, wall[i].y +2), 255, 255, 25); // Draw the Top side of the box
-		DrawDebugLine(Vector2D(wall[i].x, wall[i].y +3), Vector2D(wall[i].x + wall[i].width, wall[i].y +3), 255, 255, 25); // Draw the Top side of the box
-		DrawDebugLine(Vector2D(wall[i].x, wall[i].y +4), Vector2D(wall[i].x + wall[i].width, wall[i].y +4), 255, 255, 25); // Draw the Top side of the box
-
 		DrawDebugLine(Vector2D(wall[i].x, wall[i].y + wall[i].height), Vector2D(wall[i].x + wall[i].width, wall[i].y + wall[i].height), 255, 255, 25); // Draw the Bottom side of the box
-		DrawDebugLine(Vector2D(wall[i].x, wall[i].y + wall[i].height -1), Vector2D(wall[i].x + wall[i].width, wall[i].y + wall[i].height -1), 255, 255, 25); // Draw the Bottom side of the box
-		DrawDebugLine(Vector2D(wall[i].x, wall[i].y + wall[i].height -2), Vector2D(wall[i].x + wall[i].width, wall[i].y + wall[i].height -2), 255, 255, 25); // Draw the Bottom side of the box
-		DrawDebugLine(Vector2D(wall[i].x, wall[i].y + wall[i].height -3), Vector2D(wall[i].x + wall[i].width, wall[i].y + wall[i].height -3), 255, 255, 25); // Draw the Bottom side of the box
-		DrawDebugLine(Vector2D(wall[i].x, wall[i].y + wall[i].height -4), Vector2D(wall[i].x + wall[i].width, wall[i].y + wall[i].height -4), 255, 255, 25); // Draw the Bottom side of the box
 	}
 
 	DrawDebugCircle(Vector2D(35, 35), 5, 0, 255, 25);

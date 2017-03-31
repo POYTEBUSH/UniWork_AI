@@ -1,7 +1,7 @@
-﻿  B013432f_Tank.cpp
-d:\documents\work repos\uniwork_ai\gameai\gameai\peterbush\b013432f_tank.cpp(85): warning C4018: '<': signed/unsigned mismatch
-d:\documents\work repos\uniwork_ai\gameai\gameai\peterbush\b013432f_tank.cpp(226): warning C4018: '<': signed/unsigned mismatch
-d:\documents\work repos\uniwork_ai\gameai\gameai\peterbush\b013432f_tank.cpp(262): warning C4018: '<': signed/unsigned mismatch
-d:\documents\work repos\uniwork_ai\gameai\gameai\peterbush\b013432f_tank.cpp(278): warning C4018: '<': signed/unsigned mismatch
-  GameAI.vcxproj -> D:\Documents\Work Repos\UniWork_AI\GameAI\Debug\GameAI.exe
-  GameAI.vcxproj -> D:\Documents\Work Repos\UniWork_AI\GameAI\Debug\GameAI.pdb (Full PDB)
+﻿  B013432f_Behaviours.cpp
+c:\users\b013432f\documents\uniwork_ai\gameai\gameai\peterbush\b013432f_behaviours.cpp(11): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\b013432f\documents\uniwork_ai\gameai\gameai\peterbush\b013432f_behaviours.cpp(23): warning C4018: '<': signed/unsigned mismatch
+c:\users\b013432f\documents\uniwork_ai\gameai\gameai\peterbush\b013432f_behaviours.cpp(311): warning C4018: '<': signed/unsigned mismatch
+c:\users\b013432f\documents\uniwork_ai\gameai\gameai\peterbush\b013432f_behaviours.cpp(204): warning C4715: 'B013432f_Behaviours::AStarBehaviour': not all control paths return a value
+  GameAI.vcxproj -> C:\Users\b013432f\Documents\UniWork_AI\GameAI\Debug\GameAI.exe
+  GameAI.vcxproj -> C:\Users\b013432f\Documents\UniWork_AI\GameAI\Debug\GameAI.pdb (Full PDB)
