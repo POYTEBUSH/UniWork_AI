@@ -222,39 +222,6 @@ void B013432f_Tank::Render()
 	BaseTank::Render();
 	DrawDebugLine(GetCentralPosition(), GetCentralPosition() + mHeading*kFieldOfViewLength, 255, 0, 255);
 
-	vector<Rect2D> wall = mCollisionManager->GetWalls();
-
-	for (int i = 0; i < wall.size(); i++)
-	{
-		DrawDebugLine(Vector2D(wall[i].x, wall[i].y), Vector2D(wall[i].x, wall[i].height), 255, 255, 25); // Draw the left side of the box
-		DrawDebugLine(Vector2D(wall[i].x + wall[i].width, wall[i].y), Vector2D(wall[i].x + wall[i].width, wall[i].height), 255, 255, 25); // Draw the right side of the box
-		DrawDebugLine(Vector2D(wall[i].x, wall[i].y), Vector2D(wall[i].x + wall[i].width, wall[i].y), 255, 255, 25); // Draw the Top side of the box
-		DrawDebugLine(Vector2D(wall[i].x, wall[i].y + wall[i].height), Vector2D(wall[i].x + wall[i].width, wall[i].y + wall[i].height), 255, 255, 25); // Draw the Bottom side of the box
-	}
-
-	DrawDebugCircle(Vector2D(35, 35), 5, 0, 255, 25);
-	DrawDebugCircle(Vector2D(35, 605), 5, 0, 255, 25);
-	DrawDebugCircle(Vector2D(925, 35), 5, 0, 255, 25);
-	DrawDebugCircle(Vector2D(925, 605), 5, 0, 255, 25);
-	DrawDebugCircle(Vector2D(30, 200), 2, 0, 255, 25);
-
-	if (!mPath.empty())
-	{
-		for (int i = 0; i < mPath.size() - 1; i++)
-		{
-			DrawDebugCircle(mPath[i], 10, 255, 0, 25);
-			DrawDebugCircle(mPath[0], 9, 255, 0, 25);
-			DrawDebugCircle(mPath[0], 8, 255, 0, 25);
-			DrawDebugCircle(mPath[0], 7, 255, 0, 25);
-			DrawDebugCircle(mPath[0], 6, 255, 0, 25);
-			DrawDebugCircle(mPath[0], 5, 255, 0, 25);
-			DrawDebugCircle(mPath[0], 4, 255, 0, 25);
-			DrawDebugCircle(mPath[0], 3, 255, 0, 25);
-			DrawDebugCircle(mPath[0], 2, 255, 0, 25);
-			DrawDebugCircle(mPath[0], 1, 255, 0, 25);
-			DrawDebugLine(mPath[i], mPath[i + 1], 255, 0, 25);
-		}
-	}
 
 	for (int i = 0; i < feelers.size(); i++)
 	{

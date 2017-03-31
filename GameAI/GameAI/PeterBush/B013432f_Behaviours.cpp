@@ -124,7 +124,7 @@ void B013432f_Behaviours::ChooseBehaviour(SDL_Event e)
 	case Seek:
 		if (moving == true)
 		{
-			outputVelocity = SeekBehaviour(target) + ObstacleAvoidanceBehaviour(feelers) * 1.5;
+			outputVelocity = SeekBehaviour(target) + ObstacleAvoidanceBehaviour(feelers) * 2;
 		}
 		break;
 	case Flee:
@@ -173,6 +173,11 @@ Vector2D B013432f_Behaviours::AStarBehaviour()
 		{
 			SeekBehaviour(mClosestTank);
 			return ArriveBehaviour(tanksPosition, 0.0);
+		}
+
+		if (distToEnd < 25)
+		{
+			return ArriveBehaviour(target, distToEnd);
 		}
 
 		if (dist <= 20 && path.size() > 0)
@@ -316,7 +321,7 @@ Vector2D B013432f_Behaviours::ObstacleAvoidanceBehaviour(vector<Vector2D> feeler
 			{
 				collisionDir = Vector2D((mObstacles[i].x - feeler.x), (mObstacles[i].y - feeler.y));
 				cout << "Colliding With: " << mObstacles[i].x << " " << mObstacles[i].y << endl;
-				 ;
+				return FleeBehaviour(Vector2D(mObstacles[i].x + mObstacles[i].width/2, mObstacles[i].y + mObstacles[i].height/2));
 			}	
 		}	
 	}
