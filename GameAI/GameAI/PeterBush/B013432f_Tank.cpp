@@ -120,6 +120,7 @@ void B013432f_Tank::Update(float deltaTime, SDL_Event e)
 	vector <BaseTank*> Tanks = mTanksICanSee;
 	mPath = _tankBehaviour->GetPath();
 
+	_tankBehaviour->SetObstacles(mCollisionManager->GetWalls());
 	_tankBehaviour->SetClosestTank(FindClosestTank(_tankManager, Tanks));
 	_tankBehaviour->tanksPosition = GetCentralPosition();
 	_tankBehaviour->ChooseBehaviour(e);
@@ -221,10 +222,21 @@ void B013432f_Tank::Render()
 	BaseTank::Render();
 	DrawDebugLine(GetCentralPosition(), GetCentralPosition() + mHeading*kFieldOfViewLength, 255, 0, 255);
 
+	vector<Rect2D> wall = mCollisionManager->GetWalls();
+
+	for (int i = 0; i < wall.size(); i++)
+	{
+		DrawDebugLine(Vector2D(wall[i].x, wall[i].y), Vector2D(wall[i].x, wall[i].height), 255, 255, 25); // Draw the left side of the box
+		DrawDebugLine(Vector2D(wall[i].x + wall[i].width, wall[i].y), Vector2D(wall[i].x + wall[i].width, wall[i].height), 255, 255, 25); // Draw the right side of the box
+		DrawDebugLine(Vector2D(wall[i].x, wall[i].y), Vector2D(wall[i].x + wall[i].width, wall[i].y), 255, 255, 25); // Draw the Top side of the box
+		DrawDebugLine(Vector2D(wall[i].x, wall[i].y + wall[i].height), Vector2D(wall[i].x + wall[i].width, wall[i].y + wall[i].height), 255, 255, 25); // Draw the Bottom side of the box
+	}
+
 	DrawDebugCircle(Vector2D(35, 35), 5, 0, 255, 25);
 	DrawDebugCircle(Vector2D(35, 605), 5, 0, 255, 25);
 	DrawDebugCircle(Vector2D(925, 35), 5, 0, 255, 25);
 	DrawDebugCircle(Vector2D(925, 605), 5, 0, 255, 25);
+	DrawDebugCircle(Vector2D(30, 200), 2, 0, 255, 25);
 
 	if (!mPath.empty())
 	{

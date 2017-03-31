@@ -306,79 +306,19 @@ Vector2D B013432f_Behaviours::EvadeBehaviour(BaseTank* pursuer)
 
 Vector2D B013432f_Behaviours::ObstacleAvoidanceBehaviour(vector<Vector2D> feelers)
 {
-	vector<GameObject*> objects = ObstacleManager::Instance()->GetObstacles();
-	for (int i = 0; i < objects.size(); i++)
+	Vector2D collisionDir;
+
+	for (int i = 0; i < mObstacles.size(); i++)
 	{
-
-		Rect2D rect = Rect2D(objects[i]->GetPosition().x, objects[i]->GetPosition().y,
-			(objects[i]->GetCentralPosition().x - objects[i]->GetPosition().x) * 2,
-			(objects[i]->GetCentralPosition().y - objects[i]->GetPosition().y) * 2);
-		Vector2D distance = objects[i]->GetCentralPosition() + tanksPosition;
-
-		string headingx;
-		string headingy;
-
-		if (tankHeading.x < 0)
-			headingx = "Negative X ";
-		else
-			headingx = "Positive X ";
-
-		if (tankHeading.y < 0)
-			headingy = "Negative Y ";
-		else
-			headingy = "Positive Y ";
-
-		for (int j = 0; j < feelers.size(); j++)
+		for each (Vector2D feeler in feelers)
 		{
-			if ((tankHeading.x < 0 && tankHeading.y > 0) || (tankHeading.x > 0 && tankHeading.y < 0))
+			if ((feeler.x > mObstacles[i].x && feeler.x < (mObstacles[i].x + mObstacles[i].width)) && (feeler.y > mObstacles[i].y && feeler.y < (mObstacles[i].y + mObstacles[i].height)))
 			{
-				if ((feelers[0].x >= rect.x && feelers[0].x <= rect.x + rect.width) && (feelers[0].y >= rect.y && feelers[0].y <= rect.y + rect.height))
-				{
-					return FleeBehaviour(distance.Perp() * -90);
-				}
-
-				if ((feelers[1].x >= rect.x && feelers[1].x <= rect.x + rect.width) && (feelers[1].y >= rect.y && feelers[1].y <= rect.y + rect.height))
-				{
-					return FleeBehaviour(distance.Perp() * -2);
-				}
-				if ((feelers[2].x >= rect.x && feelers[2].x <= rect.x + rect.width) && (feelers[2].y >= rect.y && feelers[2].y <= rect.y + rect.height))
-				{
-					return FleeBehaviour(distance.Perp() * -2);
-				}
-				if ((feelers[3].x >= rect.x && feelers[3].x <= rect.x + rect.width) && (feelers[3].y >= rect.y && feelers[3].y <= rect.y + rect.height))
-				{
-					return FleeBehaviour(distance.Perp() * 2);
-				}
-				if ((feelers[4].x >= rect.x && feelers[4].x <= rect.x + rect.width) && (feelers[4].y >= rect.y && feelers[4].y <= rect.y + rect.height))
-				{
-					return FleeBehaviour(distance.Perp() * 2);
-				}
-			}
-			else if ((tankHeading.x > 0 && tankHeading.y > 0) || (tankHeading.x < 0 && tankHeading.y < 0))
-			{
-				if ((feelers[0].x >= rect.x && feelers[0].x <= rect.x + rect.width) && (feelers[0].y >= rect.y && feelers[0].y <= rect.y + rect.height))
-				{
-					return FleeBehaviour(distance.Perp() * 90);
-				}
-
-				if ((feelers[1].x >= rect.x && feelers[1].x <= rect.x + rect.width) && (feelers[1].y >= rect.y && feelers[1].y <= rect.y + rect.height))
-				{
-					return FleeBehaviour(distance.Perp() * 2);
-				}
-				if ((feelers[2].x >= rect.x && feelers[2].x <= rect.x + rect.width) && (feelers[2].y >= rect.y && feelers[2].y <= rect.y + rect.height))
-				{
-					return FleeBehaviour(distance.Perp() * 2);
-				}
-				if ((feelers[3].x >= rect.x && feelers[3].x <= rect.x + rect.width) && (feelers[3].y >= rect.y && feelers[3].y <= rect.y + rect.height))
-				{
-					return FleeBehaviour(distance.Perp() * 2);
-				}
-				if ((feelers[4].x >= rect.x && feelers[4].x <= rect.x + rect.width) && (feelers[4].y >= rect.y && feelers[4].y <= rect.y + rect.height))
-				{
-					return FleeBehaviour(distance.Perp() * 2);
-				}
-			}
-		}		
+				collisionDir = Vector2D((mObstacles[i].x - feeler.x), (mObstacles[i].y - feeler.y));
+				cout << "Colliding With: " << mObstacles[i].x << " " << mObstacles[i].y << endl;
+				 ;
+			}	
+		}	
 	}
 	return Vector2D(0, 0);
 }

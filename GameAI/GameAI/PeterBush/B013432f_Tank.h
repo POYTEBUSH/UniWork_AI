@@ -2,6 +2,7 @@
 #define B013432FTANK_H
 
 #include "B013432f_Behaviours.h"
+#include "B013432F_CollisionManager.h"
 
 //---------------------------------------------------------------
 
@@ -50,6 +51,7 @@ private:
 
 	BaseTank*				_baseTank;
 	TankManager*			_tankManager;
+	B013432F_CollisionManager* mCollisionManager = new B013432F_CollisionManager();
 
 	//TankState				_tankState;
 
