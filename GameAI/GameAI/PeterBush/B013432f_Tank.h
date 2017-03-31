@@ -51,7 +51,7 @@ private:
 
 	BaseTank*				_baseTank;
 	TankManager*			_tankManager;
-	B013432F_CollisionManager* mCollisionManager;
+	B013432F_CollisionManager* mCollisionManager = new B013432F_CollisionManager();
 
 	//TankState				_tankState;
 

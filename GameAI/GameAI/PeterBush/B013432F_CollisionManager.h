@@ -11,7 +11,7 @@ public:
 	~B013432F_CollisionManager();
 
 	void FindWalls();
-	vector<Vector2D> GetWalls() { return mWalls; };
+	vector<Rect2D> GetWalls() { return mWalls; };
 	bool CheckForCollisions(B013432F_CollisionManager);
 
 private:
@@ -19,7 +19,6 @@ private:
 	ObstacleManager* mObstacleManager;
 
 	vector<GameObject*> mObstacles;
-	vector<Vector2D> mWalls;
-
+	vector<Rect2D> mWalls;
 };
 

@@ -4,7 +4,8 @@ B013432F_CollisionManager::B013432F_CollisionManager()
 {
 	mCollisionManager	= Collisions::Instance();
 	mObstacleManager	= ObstacleManager::Instance();
-	mObstacles = mObstacleManager->GetObstacles();
+	mObstacles = mObstacleManager->GetObstacles(); 
+	FindWalls();
 }
 
 B013432F_CollisionManager::~B013432F_CollisionManager()
@@ -14,10 +15,15 @@ B013432F_CollisionManager::~B013432F_CollisionManager()
 
 void B013432F_CollisionManager::FindWalls()
 {
-	mWalls.push_back(mObstacles.at(0)->GetCentralPosition());
-	mWalls.push_back(mObstacles.at(1)->GetCentralPosition());
-	mWalls.push_back(mObstacles.at(2)->GetCentralPosition());
-	mWalls.push_back(mObstacles.at(3)->GetCentralPosition());
+	Rect2D wallL(1, 1, 30, 638);
+	Rect2D wallR(928, 1, 30, 638);
+	Rect2D wallT(30, 1, 898, 30);
+	Rect2D wallB(30, 935, 898, 30);
+
+	mWalls.push_back(wallL);
+	mWalls.push_back(wallR);
+	mWalls.push_back(wallT);
+	mWalls.push_back(wallB);
 }
 
 bool B013432F_CollisionManager::CheckForCollisions(B013432F_CollisionManager)

@@ -1,10 +1,7 @@
 ﻿  B013432f_Tank.cpp
-c:\users\b013432f\documents\uniwork_ai\gameai\gameai\peterbush\b013432f_tank.cpp(85): warning C4018: '<': signed/unsigned mismatch
-c:\users\b013432f\documents\uniwork_ai\gameai\gameai\peterbush\b013432f_tank.cpp(237): warning C4018: '<': signed/unsigned mismatch
-c:\users\b013432f\documents\uniwork_ai\gameai\gameai\peterbush\b013432f_tank.cpp(253): warning C4018: '<': signed/unsigned mismatch
-  Generating Code...
-  Skipping... (no relevant changes detected)
-  TankManager.cpp
-  B013432F_CollisionManager.cpp
-  GameAI.vcxproj -> C:\Users\b013432f\Documents\UniWork_AI\GameAI\Debug\GameAI.exe
-  GameAI.vcxproj -> C:\Users\b013432f\Documents\UniWork_AI\GameAI\Debug\GameAI.pdb (Full PDB)
+d:\documents\work repos\uniwork_ai\gameai\gameai\peterbush\b013432f_tank.cpp(85): warning C4018: '<': signed/unsigned mismatch
+d:\documents\work repos\uniwork_ai\gameai\gameai\peterbush\b013432f_tank.cpp(226): warning C4018: '<': signed/unsigned mismatch
+d:\documents\work repos\uniwork_ai\gameai\gameai\peterbush\b013432f_tank.cpp(262): warning C4018: '<': signed/unsigned mismatch
+d:\documents\work repos\uniwork_ai\gameai\gameai\peterbush\b013432f_tank.cpp(278): warning C4018: '<': signed/unsigned mismatch
+  GameAI.vcxproj -> D:\Documents\Work Repos\UniWork_AI\GameAI\Debug\GameAI.exe
+  GameAI.vcxproj -> D:\Documents\Work Repos\UniWork_AI\GameAI\Debug\GameAI.pdb (Full PDB)
