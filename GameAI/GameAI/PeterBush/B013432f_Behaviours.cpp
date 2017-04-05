@@ -9,6 +9,13 @@ B013432f_Behaviours::B013432f_Behaviours(BaseTank* thisTank)
 	_baseTank = thisTank;
 	mTargetPickup = false;
 	srand(time(NULL));
+
+	mTargetPickup = true;
+	target = TargetPickup();
+	path = _AStarManager->GetPathBetweenPoint(tanksPosition, target);
+	cout << "Target Set: " << target.x << " " << target.y << endl;
+	tankBehaviour = AStar;
+	moving = true;
 }
 
 B013432f_Behaviours::~B013432f_Behaviours()
@@ -44,81 +51,7 @@ void B013432f_Behaviours::ChooseBehaviour(SDL_Event e)
 {
 	distance = DistanceFromTargetCheck(target);
 	ObstacleAvoidanceBehaviour(feelers);
-
-	switch (e.type)
-	{
-
-	case SDL_MOUSEBUTTONDOWN:
-		switch(e.button.button)
-		{
-		case SDL_BUTTON_LEFT:
-			mTargetPickup = false;
-			target = GetMousePos();
-			path = _AStarManager->GetPathBetweenPoint(tanksPosition, target);
-			cout << "Target Set: " << target.x << " " << target.y << endl;
-		break;	
-		case SDL_BUTTON_RIGHT:
-			mTargetPickup = true;
-			target = TargetPickup();
-			path = _AStarManager->GetPathBetweenPoint(tanksPosition, target);
-			cout << "Target Set: " << target.x << " " << target.y << endl;
-		break;
-		}
-	case SDL_KEYDOWN:
-		switch (e.key.keysym.sym)
-		{
-		case SDLK_q:
-			tankBehaviour = Seek;
-			cout << "Key Q Pressed" << endl;
-			moving = true;
-			break;
-		case SDLK_w:
-			tankBehaviour = Flee;
-			cout << "Key W Pressed" << endl;
-			moving = true;
-			break;
-		case SDLK_e:
-			tankBehaviour = Arrive;
-			cout << "Key E Pressed" << endl;
-			break;
-		case SDLK_r:
-			if (pursuit == false && targetBool == true)
-			{
-				pursuit = true;
-				cout << "Pursuit Set" << endl;
-			}
-			else if (pursuit == true && targetBool == true)
-			{
-				pursuit = false;
-				cout << "Evade Set" << endl;
-			}			
-			break;
-		case SDLK_t:
-			if (targetBool == false)
-			{
-				targetBool = true;
-				cout << "Now Targeting" << endl;
-			}
-			else
-			{
-				targetBool = false;
-				cout << "No Longer Targeting" << endl;
-			}
-			break;
-		case SDLK_y:
-			if (pathing == false)
-			{
-				mTargetPickup = true;
-				target = TargetPickup();
-				path = _AStarManager->GetPathBetweenPoint(tanksPosition, target);
-				cout << "Target Set: " << target.x << " " << target.y << endl;
-				tankBehaviour = AStar;
-				moving = true;
-			}
-			break;
-		}
-	}
-
+	
 	switch (tankBehaviour)
 	{
 	case Seek:
@@ -152,7 +85,7 @@ void B013432f_Behaviours::ChooseBehaviour(SDL_Event e)
 		}
 		break;
 	case AStar:
-		outputVelocity = AStarBehaviour();
+		outputVelocity = AStarBehaviour() + ObstacleAvoidanceBehaviour(feelers) * 2;
 		break;
 	}
 }
@@ -169,10 +102,15 @@ Vector2D B013432f_Behaviours::AStarBehaviour()
 		Vector2D toTarget = path[0] - tanksPosition;		
 		double dist = tanksPosition.Distance(path[0]);
 
-		if (tanksPosition.Distance(mClosestTank) <= 50)
+		if (tanksPosition.Distance(mClosestTank) <= 200)
 		{
-			SeekBehaviour(mClosestTank);
-			return ArriveBehaviour(tanksPosition, 0.0);
+			if (tanksPosition.Distance(mClosestTank) <= 100)
+				_baseTank->ChangeState(TANKSTATE_MANFIRE);
+			if (tanksPosition.Distance(mClosestTank) <= 100)
+				_baseTank->ChangeState(TANKSTATE_MANFIRE);
+			if (tanksPosition.Distance(mClosestTank) <= 10)
+				_baseTank->ChangeState(TANKSTATE_DROPMINE);
+			return SeekBehaviour(mClosestTank);
 		}
 
 		if (distToEnd < 25)
@@ -200,12 +138,11 @@ Vector2D B013432f_Behaviours::AStarBehaviour()
 	}
 
 	pathing = false;
-	if (pickupLocation == Vector2D(0, 0))
-		path = _AStarManager->GetPathBetweenPoint(tanksPosition, _AStarManager->GetNearestWaypoint(Vector2D(rand() % (925 - 35 + 1) + 35, rand() % (605 - 35 + 1) + 35))->GetPosition());
-	else if (pickupLocation.x >= 35 && pickupLocation.x <= 925 && pickupLocation.y >= 35 && pickupLocation.y <= 605)
+	
+	if (pickupLocation.x >= 35 && pickupLocation.x <= 925 && pickupLocation.y >= 35 && pickupLocation.y <= 605)
 		return SeekBehaviour(pickupLocation);
-	else
-		return ArriveBehaviour(tanksPosition, 0.0);
+
+	path = _AStarManager->GetPathBetweenPoint(tanksPosition, _AStarManager->GetNearestWaypoint(Vector2D(rand() % (925 - 35 + 1) + 35, rand() % (605 - 35 + 1) + 35))->GetPosition());
 }
 
 Vector2D B013432f_Behaviours::DetectPickup()

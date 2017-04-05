@@ -221,12 +221,6 @@ void B013432f_Tank::Render()
 {
 	BaseTank::Render();
 	DrawDebugLine(GetCentralPosition(), GetCentralPosition() + mHeading*kFieldOfViewLength, 255, 0, 255);
-
-
-	for (int i = 0; i < feelers.size(); i++)
-	{
-		DrawDebugCircle(feelers[i], mFeelerRadius, 255, 255, 50); 
-	}
 }
 
 //--------------------------------------------------------------------------------------------------
