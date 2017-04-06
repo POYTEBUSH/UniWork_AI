@@ -102,16 +102,16 @@ Vector2D B013432f_Behaviours::AStarBehaviour()
 		Vector2D toTarget = path[0] - tanksPosition;		
 		double dist = tanksPosition.Distance(path[0]);
 
-		if (tanksPosition.Distance(mClosestTank) <= 200)
+		if (_baseTank->GetBullets() > 0 && _baseTank->GetMines() > 0)
 		{
-			if (tanksPosition.Distance(mClosestTank) <= 100)
+			if (tanksPosition.Distance(mClosestTank) <= 200)
+			{
 				_baseTank->ChangeState(TANKSTATE_MANFIRE);
-			if (tanksPosition.Distance(mClosestTank) <= 100)
-				_baseTank->ChangeState(TANKSTATE_MANFIRE);
-			if (tanksPosition.Distance(mClosestTank) <= 10)
-				_baseTank->ChangeState(TANKSTATE_DROPMINE);
-			return SeekBehaviour(mClosestTank);
-		}
+				if (tanksPosition.Distance(mClosestTank) <= 10)
+					_baseTank->ChangeState(TANKSTATE_DROPMINE);
+				return SeekBehaviour(mClosestTank);
+			}
+		}		
 
 		if (distToEnd < 25)
 		{
@@ -122,7 +122,6 @@ Vector2D B013432f_Behaviours::AStarBehaviour()
 		{
 			_baseTank->ChangeState(TANKSTATE_DROPMINE);
 			path.erase(path.begin());
-			cout << "Moving To: " << path[0].x << " " << path[0].y <<  " | Distance To Next Node: " << tanksPosition.Distance(path[0]) << "m | Fuel Left: " << _baseTank->GetFuel() << endl;
 		}
 
 		_baseTank->ChangeState(TANKSTATE_IDLE);
@@ -139,7 +138,7 @@ Vector2D B013432f_Behaviours::AStarBehaviour()
 
 	pathing = false;
 	
-	if (pickupLocation.x >= 35 && pickupLocation.x <= 925 && pickupLocation.y >= 35 && pickupLocation.y <= 605)
+	if (pickupLocation.x >= 35 && pickupLocation.x <= 925 && pickupLocation.y >= 35 && pickupLocation.y <= 605 && pickupLocation  != Vector2D(0.0f,0.0f))
 		return SeekBehaviour(pickupLocation);
 
 	path = _AStarManager->GetPathBetweenPoint(tanksPosition, _AStarManager->GetNearestWaypoint(Vector2D(rand() % (925 - 35 + 1) + 35, rand() % (605 - 35 + 1) + 35))->GetPosition());
@@ -257,7 +256,6 @@ Vector2D B013432f_Behaviours::ObstacleAvoidanceBehaviour(vector<Vector2D> feeler
 			if ((feeler.x > mObstacles[i].x && feeler.x < (mObstacles[i].x + mObstacles[i].width)) && (feeler.y > mObstacles[i].y && feeler.y < (mObstacles[i].y + mObstacles[i].height)))
 			{
 				collisionDir = Vector2D((mObstacles[i].x - feeler.x), (mObstacles[i].y - feeler.y));
-				cout << "Colliding With: " << mObstacles[i].x << " " << mObstacles[i].y << endl;
 				return FleeBehaviour(Vector2D(mObstacles[i].x + mObstacles[i].width/2, mObstacles[i].y + mObstacles[i].height/2));
 			}	
 		}	
