@@ -5533,3 +5533,129 @@ Tanks destroyed: 0	= 0
 Crates collected: 0	= 0
 Survival bonus': 0	= 0
 -------------------------------------------------------------
+-------------------------------------------------------------
+Tank name: ControlledTank   SCORE: 2
+Bullets hit: 0		= 0
+Rockets hit: 0		= 0
+Mines hit: 0		= 0
+Tanks destroyed: 0	= 0
+Crates collected: 0	= 0
+Survival bonus': 2	= 2
+-------------------------------------------------------------
+-------------------------------------------------------------
+Tank name: ControlledTank   SCORE: 2
+Bullets hit: 0		= 0
+Rockets hit: 0		= 0
+Mines hit: 0		= 0
+Tanks destroyed: 0	= 0
+Crates collected: 0	= 0
+Survival bonus': 2	= 2
+-------------------------------------------------------------
+-------------------------------------------------------------
+Tank name: B013432f_Tank   SCORE: 7.7
+Bullets hit: 14		= 2.8
+Rockets hit: 0		= 0
+Mines hit: 3		= 0.9
+Tanks destroyed: 0	= 0
+Crates collected: 4	= 2
+Survival bonus': 2	= 2
+-------------------------------------------------------------
+-------------------------------------------------------------
+Tank name: ControlledTank   SCORE: 1.5
+Bullets hit: 0		= 0
+Rockets hit: 0		= 0
+Mines hit: 0		= 0
+Tanks destroyed: 0	= 0
+Crates collected: 1	= 0.5
+Survival bonus': 1	= 1
+-------------------------------------------------------------
+-------------------------------------------------------------
+Tank name: DumbTank   SCORE: 12.2
+Bullets hit: 51		= 10.2
+Rockets hit: 0		= 0
+Mines hit: 0		= 0
+Tanks destroyed: 0	= 0
+Crates collected: 0	= 0
+Survival bonus': 2	= 2
+-------------------------------------------------------------
+-------------------------------------------------------------
+Tank name: B013432f_Tank   SCORE: 20
+Bullets hit: 85		= 17
+Rockets hit: 0		= 0
+Mines hit: 1		= 0.3
+Tanks destroyed: 2	= 4
+Crates collected: 5	= 2.5
+Survival bonus': 4	= 4
+-------------------------------------------------------------
+-------------------------------------------------------------
+Tank name: ControlledTank   SCORE: 1
+Bullets hit: 0		= 0
+Rockets hit: 0		= 0
+Mines hit: 0		= 0
+Tanks destroyed: 0	= 0
+Crates collected: 0	= 0
+Survival bonus': 1	= 1
+-------------------------------------------------------------
+-------------------------------------------------------------
+Tank name: DumbTank   SCORE: 10.4
+Bullets hit: 37		= 7.4
+Rockets hit: 0		= 0
+Mines hit: 0		= 0
+Tanks destroyed: 0	= 0
+Crates collected: 0	= 0
+Survival bonus': 3	= 3
+-------------------------------------------------------------
+-------------------------------------------------------------
+Tank name: B013432f_Tank   SCORE: 20
+Bullets hit: 134		= 26.8
+Rockets hit: 0		= 0
+Mines hit: 0		= 0
+Tanks destroyed: 1	= 2
+Crates collected: 1	= 0.5
+Survival bonus': 4	= 4
+-------------------------------------------------------------
+-------------------------------------------------------------
+Tank name: ControlledTank   SCORE: 1
+Bullets hit: 0		= 0
+Rockets hit: 0		= 0
+Mines hit: 0		= 0
+Tanks destroyed: 0	= 0
+Crates collected: 0	= 0
+Survival bonus': 1	= 1
+-------------------------------------------------------------
+-------------------------------------------------------------
+Tank name: ControlledTank   SCORE: 2
+Bullets hit: 0		= 0
+Rockets hit: 0		= 0
+Mines hit: 0		= 0
+Tanks destroyed: 0	= 0
+Crates collected: 0	= 0
+Survival bonus': 2	= 2
+-------------------------------------------------------------
+-------------------------------------------------------------
+Tank name: ControlledTank   SCORE: 2
+Bullets hit: 0		= 0
+Rockets hit: 0		= 0
+Mines hit: 0		= 0
+Tanks destroyed: 0	= 0
+Crates collected: 0	= 0
+Survival bonus': 2	= 2
+-------------------------------------------------------------
+-------------------------------------------------------------
+Tank name: ControlledTank   SCORE: 2
+Bullets hit: 0		= 0
+Rockets hit: 0		= 0
+Mines hit: 0		= 0
+Tanks destroyed: 0	= 0
+Crates collected: 0	= 0
+Survival bonus': 2	= 2
+-------------------------------------------------------------
+-------------------------------------------------------------
+Tank name: B013432f_Tank   SCORE: 12
+Bullets hit: 22		= 4.4
+Rockets hit: 0		= 0
+Mines hit: 7		= 2.1
+Tanks destroyed: 0	= 0
+Crates collected: 5	= 2.5
+Survival bonus': 3	= 3
+-------------------------------------------------------------

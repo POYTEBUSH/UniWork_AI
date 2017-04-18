@@ -15,7 +15,7 @@
 
 using namespace std;
 
-enum BehaviourType
+enum B013432FBehaviourType
 {
 	Seek,				//Seeks to find where the target is going
 	Flee,				//Tries to run in the complete opposite way the target is going
@@ -92,6 +92,7 @@ public:
 	Vector2D PathFollowBehaviour();
 	Vector2D OffsetPusuitBehaviour();
 	Vector2D AStarBehaviour();
+	void ClosestTank(TankManager* tankManager, vector<BaseTank*> Tanks);
 
 	void RotateManByRadian(double radian, int sign, float deltaTime);
 	bool RotateManToFacePosition(Vector2D target, float deltaTime);
@@ -105,7 +106,7 @@ public:
 	#pragma endregion
 
 private:
-	BehaviourType tankBehaviour;
+	B013432FBehaviourType tankBehaviour;
 	BaseTank* _closestTank;
 	BaseTank* _baseTank;
 	B013432f_AStar*	_AStarManager = new B013432f_AStar();

@@ -122,6 +122,7 @@ void B013432f_Tank::Update(float deltaTime, SDL_Event e)
 
 	_tankBehaviour->SetObstacles(mCollisionManager->GetWalls());
 	_tankBehaviour->SetClosestTank(FindClosestTank(_tankManager, Tanks));
+	_tankBehaviour->ClosestTank(_tankManager, Tanks);
 	_tankBehaviour->tanksPosition = GetCentralPosition();
 	_tankBehaviour->ChooseBehaviour(e);
 	_tankBehaviour->tankMaxSpeed = GetMaxSpeed();

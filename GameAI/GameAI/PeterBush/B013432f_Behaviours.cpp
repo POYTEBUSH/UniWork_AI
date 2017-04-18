@@ -39,6 +39,19 @@ void B013432f_Behaviours::TargetClosest(TankManager* tankManager, vector<BaseTan
 	}
 }
 
+void B013432f_Behaviours::ClosestTank(TankManager* tankManager, vector<BaseTank*> Tanks)
+{
+	Vector2D closestDistance = Vector2D(0.0f, 0.0f);
+	BaseTank* closestTank = nullptr;
+
+	for (int i = 0; i < Tanks.size(); i++)
+	{
+		targetPursuit = Tanks[i]->GetCentralPosition();
+
+		_closestTank = Tanks[i];
+	}
+}
+
 Vector2D B013432f_Behaviours::GetMousePos()
 {
 	int x, y;
@@ -102,25 +115,29 @@ Vector2D B013432f_Behaviours::AStarBehaviour()
 		Vector2D toTarget = path[0] - tanksPosition;		
 		double dist = tanksPosition.Distance(path[0]);
 
-		if (_baseTank->GetBullets() > 0 && _baseTank->GetMines() > 0)
-		{
-			if (tanksPosition.Distance(mClosestTank) <= 200)
-			{
-				_baseTank->ChangeState(TANKSTATE_MANFIRE);
-				if (tanksPosition.Distance(mClosestTank) <= 10)
-					_baseTank->ChangeState(TANKSTATE_DROPMINE);
-				return SeekBehaviour(mClosestTank);
-			}
-		}		
 
-		if (distToEnd < 25)
+		if (tanksPosition.Distance(mClosestTank) <= 200 && _baseTank->GetBullets() > 0)
 		{
+			_baseTank->ChangeState(TANKSTATE_MANFIRE);
+			if (tanksPosition.Distance(mClosestTank) <= 10)
+				_baseTank->ChangeState(TANKSTATE_DROPMINE);
+			if (_closestTank != nullptr)
+				return PursuitBehaviour(_closestTank);
+			else
+				return ArriveBehaviour(tanksPosition, 0.0f);
+		}	
+
+		if (pickupLocation.x >= 35 && pickupLocation.x <= 925 && pickupLocation.y >= 35 && pickupLocation.y <= 605 && pickupLocation != Vector2D(0.0f, 0.0f))
+			return SeekBehaviour(pickupLocation);
+
+		if (distToEnd < 25 && _baseTank->GetCurrentSpeed() > 5)
+		{
+			_baseTank->ChangeState(TANKSTATE_DROPMINE);
 			return ArriveBehaviour(target, distToEnd);
 		}
 
 		if (dist <= 20 && path.size() > 0)
-		{
-			_baseTank->ChangeState(TANKSTATE_DROPMINE);
+		{			
 			path.erase(path.begin());
 		}
 
@@ -137,10 +154,6 @@ Vector2D B013432f_Behaviours::AStarBehaviour()
 	}
 
 	pathing = false;
-	
-	if (pickupLocation.x >= 35 && pickupLocation.x <= 925 && pickupLocation.y >= 35 && pickupLocation.y <= 605 && pickupLocation  != Vector2D(0.0f,0.0f))
-		return SeekBehaviour(pickupLocation);
-
 	path = _AStarManager->GetPathBetweenPoint(tanksPosition, _AStarManager->GetNearestWaypoint(Vector2D(rand() % (925 - 35 + 1) + 35, rand() % (605 - 35 + 1) + 35))->GetPosition());
 }
 
