@@ -1,3 +1,7 @@
+//------------------------------------------------------------------------
+//  Author: Paul Roberts 2017
+//------------------------------------------------------------------------
+
 #include "GameObject.h"
 #include "Texture2D.h"
 #include <SDL.h>
@@ -7,7 +11,7 @@ using namespace::std;
 
 //--------------------------------------------------------------------------------------------------
 
-GameObject::GameObject(SDL_Renderer* renderer, GAMEOBJECT_TYPE typeOfGameObject, Vector2D startPosition, string imagePath)
+GameObject::GameObject(SDL_Renderer* renderer, Vector2D startPosition, string imagePath)
 {
 	mRenderer = renderer;
 
@@ -16,7 +20,6 @@ GameObject::GameObject(SDL_Renderer* renderer, GAMEOBJECT_TYPE typeOfGameObject,
 
 	mPosition		 = startPosition;
 	mRotationAngle	 = 0.0f;
-	mGameObjectType  = typeOfGameObject;
 
 	mCollisionRadius   = 0.0f;
 	mCollisionRadiusSq = 0.0f;
@@ -39,7 +42,7 @@ GameObject::~GameObject()
 
 //--------------------------------------------------------------------------------------------------
 
-void GameObject::Update(float deltaTime, SDL_Event e)
+void GameObject::Update(size_t deltaTime, SDL_Event e)
 {
 	UpdateAdjustedBoundingBox();
 
@@ -50,10 +53,9 @@ void GameObject::Update(float deltaTime, SDL_Event e)
 
 void GameObject::Render()
 {
-	mTexture->Render(mPosition, mRotationAngle);
+	mTexture->Render(mPosition, SDL_FLIP_NONE, mRotationAngle);
 
 	//Draw the collision information.
-	DrawDebugCircle(GetCentralPosition(), mCollisionRadius, 0, 0, 255);
 	DrawCollisionBox();
 }
 
@@ -73,11 +75,11 @@ void GameObject::UpdateAdjustedBoundingBox()
 	//This assumes there is only one image on the texture.
 	Vector2D center = GetCentralPosition();
 
-	float minX = center.x - (mTexture->GetWidth() / 2);
-	float minY = center.y - (mTexture->GetHeight() / 2);
+	float minX = center.x - (mTexture->GetWidth() * 0.5f);
+	float minY = center.y - (mTexture->GetHeight() * 0.5f);
 
-	float maxX = center.x + (mTexture->GetWidth() / 2);
-	float maxY = center.y + (mTexture->GetHeight() / 2);
+	float maxX = center.x + (mTexture->GetWidth() * 0.5f);
+	float maxY = center.y + (mTexture->GetHeight() * 0.5f);
 
 	double botLeftXRotated = (minX - center.x) * cos(mRotationAngle * M_PI / 180) - (minY - center.y) * sin(mRotationAngle * M_PI / 180);
 	double botLeftYRotated = (minX - center.x) * sin(mRotationAngle * M_PI / 180) + (minY - center.y) * cos(mRotationAngle * M_PI / 180);
