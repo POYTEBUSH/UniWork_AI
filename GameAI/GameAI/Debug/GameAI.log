@@ -1,1 +1,8 @@
-﻿  GameAI.vcxproj -> E:\Documents\UniWork_AI\GameAI\Debug\GameAI.exe
+﻿  B013432f_Behaviours.cpp
+d:\documents\work repos\uniwork_ai\gameai\gameai\peterbush\b013432f_behaviours.cpp(11): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+d:\documents\work repos\uniwork_ai\gameai\gameai\peterbush\b013432f_behaviours.cpp(30): warning C4018: '<': signed/unsigned mismatch
+d:\documents\work repos\uniwork_ai\gameai\gameai\peterbush\b013432f_behaviours.cpp(47): warning C4018: '<': signed/unsigned mismatch
+d:\documents\work repos\uniwork_ai\gameai\gameai\peterbush\b013432f_behaviours.cpp(265): warning C4018: '<': signed/unsigned mismatch
+d:\documents\work repos\uniwork_ai\gameai\gameai\peterbush\b013432f_behaviours.cpp(158): warning C4715: 'B013432f_Behaviours::AStarBehaviour': not all control paths return a value
+  GameAI.vcxproj -> D:\Documents\Work Repos\UniWork_AI\GameAI\Debug\GameAI.exe
+  GameAI.vcxproj -> D:\Documents\Work Repos\UniWork_AI\GameAI\Debug\GameAI.pdb (Partial PDB)
