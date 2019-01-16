@@ -1,3 +1,7 @@
+//------------------------------------------------------------------------
+//  Author: Paul Roberts 2015
+//------------------------------------------------------------------------
+
 #ifndef COMMONS_H
 #define COMMONS_H
 
@@ -6,112 +10,22 @@
 
 using namespace::std;
 
-#define WAYPOINTS_VISIBLE
-#define AUDIO_VISIBLE 
-#define DEBUG_LINES_VISIBLE
-
-const string kBulletPath			= "Images/Bullet.png";
-const string kRocketPath			= "Images/Rocket.png";
-const string kMinePath				= "Images/Mine.png";
-const string kCannonPath			= "Images/Cannon.png";
-const string kWaypointPath			= "Images/Waypoint.png";
-const string kHealthPickUpPath		= "Images/CrateHealth.png";
-const string kRocketPickUpPath		= "Images/CrateRockets.png";
-const string kBulletPickUpPath		= "Images/CrateBullets.png";
-const string kMinePickUpPath		= "Images/CrateMines.png";
-const string kFuelPickUpPath		= "Images/CrateFuel.png";
-const string kExplosionImagePath	= "Images/Explosion.png";
-
-enum Deceleration
-{ 
-	slow = 3, 
-	normal = 2, 
-	fast = 1 
-};
-
-enum GAMEOBJECT_TYPE
-{
-	GAMEOBJECT_UNKNOWN,
-	GAMEOBJECT_OBSTACLE,
-	GAMEOBJECT_OBSTACLE_BORDER,
-	GAMEOBJECT_BULLET,
-	GAMEOBJECT_MINE,
-	GAMEOBJECT_ROCKET,
-	GAMEOBJECT_TANK,
-	GAMEOBJECT_PICKUP_HEALTH,
-	GAMEOBJECT_PICKUP_BULLETS,
-	GAMEOBJECT_PICKUP_ROCKETS,
-	GAMEOBJECT_PICKUP_MINES,
-	GAMEOBJECT_PICKUP_FUEL
-};
-
-enum TANK_TYPE
-{
-	TANK_UNKNOWN,
-	TANK_SMALL,
-	TANK_MEDIUM,
-	TANK_LARGE
-};
-
-enum SCORE_TYPE
-{
-	SCORE_BULLETHIT,
-	SCORE_ROCKETHIT,
-	SCORE_MINEHIT,
-	SCORE_SURVIVAL,
-	SCORE_DESTROYEDTANK,
-	SCORE_COLLECTEDPICKUP
-};
+//------------------------------------------------------------------------
 
 enum SCREENS
 {
 	SCREEN_INTRO = 0,
 	SCREEN_MENU,
-	SCREEN_PLAYGROUND,
-	SCREEN_ARENA,
-	SCREEN_GAMEOVER,
-	SCREEN_HIGHSCORES
+	SCREEN_CHESS,
+	SCREEN_CONWAY,
+	SCREEN_CLUSTERING,
+	SCREEN_LEMMINGS,
+	SCREEN_SNAKE,
+
+	SCREEN_MAX
 };
 
-enum BASE_TANK_STATE
-{
-	TANKSTATE_IDLE,
-	TANKSTATE_DEAD,
-	TANKSTATE_MANFIRE,
-	TANKSTATE_CANNONFIRE,
-	TANKSTATE_DROPMINE,
-	
-	TANKSTATE_MAX
-};
-
-enum TURN_DIRECTION
-{
-	DIRECTION_UNKNOWN,
-	DIRECTION_LEFT,
-	DIRECTION_RIGHT
-};
-
-enum MOVE_DIRECTION
-{
-	DIRECTION_NONE,
-	DIRECTION_FORWARD,
-	DIRECTION_BACKWARD
-};
-
-enum STEERING_BEHAVIOUR
-{
-	STEERING_SEEK,
-	STEERING_FLEE,
-	STEERING_ARRIVE,
-	STEERING_INTRPOSE,
-	STEERING_OBSTACLEAVOIDANCE,
-	STEERING_WALLAVOIDANCE,
-	STEERING_PATHFOLLOWING,
-	STEERING_WANDER,
-	STEERING_PURSUIT,
-	STEERING_EVADE,
-	STEERING_HIDE
-};
+//------------------------------------------------------------------------
 
 struct RotatedRect2D
 {
@@ -121,6 +35,8 @@ struct RotatedRect2D
 	double maxY;
 };
 
+//------------------------------------------------------------------------
+
 struct Rect2D
 {
 	double x;
@@ -128,12 +44,20 @@ struct Rect2D
 	double width;
 	double height;
 
+	Rect2D()
+	{
+		x = 0.0;
+		y = 0.0;
+		width = 0.0;
+		height = 0.0;
+	};
+
 	Rect2D(double initialX, double initialY, double initialWidth, double initialHeight)
 	{
-		x		= initialX;
-		y		= initialY;
-		width	= initialWidth;
-		height	= initialHeight;
+		x = initialX;
+		y = initialY;
+		width = initialWidth;
+		height = initialHeight;
 	}
 
 	RotatedRect2D RotateRect(double theta)
@@ -142,17 +66,17 @@ struct Rect2D
 		double centreX = x + width*0.5f;
 		double centreY = y + height*0.5f;
 
-		double cosTheta = cos( theta );
-		double sinTheta = sin( theta );
+		double cosTheta = cos(theta);
+		double sinTheta = sin(theta);
 
 		double heightCosTheta = (height*0.5) * cosTheta;
-		double widthCosTheta  = (width*0.5)  * cosTheta;
+		double widthCosTheta = (width*0.5)  * cosTheta;
 		double heightSinTheta = (height*0.5) * sinTheta;
-		double widthSinTheta  = (width*0.5)  * sinTheta;
+		double widthSinTheta = (width*0.5)  * sinTheta;
 
-		if ( theta > 0 )
+		if (theta > 0)
 		{
-			if ( theta < 90.0f )
+			if (theta < 90.0f)
 			{
 				// 0 < theta < 90
 				rotatedRect.minY = centreY;
@@ -171,7 +95,7 @@ struct Rect2D
 		}
 		else
 		{
-			if ( theta > -90.0f )
+			if (theta > -90.0f)
 			{
 				// -90 < theta <= 0
 				rotatedRect.minY = centreY + widthSinTheta;
@@ -193,6 +117,18 @@ struct Rect2D
 	}
 };
 
+//-------------------------------------------------------------------------
+
+static float RandomFloat(float min, float max)
+{
+	float random = ((float)rand()) / (float)RAND_MAX;
+	float range = max - min;
+	return (random*range) + min;
+};
+
+//------------------------------------------------------------------------
+//  Author: Mat Buckland
+//------------------------------------------------------------------------
 //compares two real numbers. Returns true if they are equal
 inline bool isEqual(float a, float b)
 {
@@ -212,6 +148,7 @@ inline bool isEqual(double a, double b)
 
 //------------------------------------------------------------------------
 //  Vector2d - Author: Mat Buckland
+//  Modified by Paul Roberts
 //------------------------------------------------------------------------
 #include <windows.h>
 #include <limits>
@@ -375,11 +312,11 @@ inline int Vector2D::Sign(const Vector2D& v2)const
 {
   if (y*v2.x > x*v2.y)
   { 
-    return clockwise;
+    return anticlockwise;
   }
   else 
   {
-    return anticlockwise;
+    return clockwise;
   }
 }
 
@@ -643,37 +580,150 @@ inline bool isSecondInFOVOfFirst(Vector2D posFirst,
 }
 
 //-----------------------------------------------------------------------------
+// Collisions - Paul Roberts
+//-----------------------------------------------------------------------------
 
-struct TankSetupDetails
+inline bool PointInBox(Vector2D point, Rect2D rect2)
 {
-	std::string StudentName;
-	int			TankType;
-	Vector2D	StartPosition;
-	std::string TankImagePath;
-	std::string ManImagePath;
-	float		TurnRate;
-	int			Health;
-	float		Fuel;
-	float		Mass;
-	float		MaxSpeed;
-	int			NumOfBullets;
-	int			NumOfRockets;
-	int			NumOfMines;
-	bool		LeftCannonAttached;
-	bool		RightCannonAttached;
-};
+	if (point.x > rect2.x &&
+		point.x < (rect2.x + rect2.width) &&
+		point.y > rect2.y &&
+		point.y < (rect2.y + rect2.height))
+	{
+		return true;
+	}
+
+	return false;
+}
 
 //-----------------------------------------------------------------------------
 
-struct ProjectileSetupDetails
+inline bool CircleCollision(Vector2D circle1_Pos, float circle1_Radius, Vector2D circle2_Pos, float circle2_Radius)
 {
-	GAMEOBJECT_TYPE GameObjectType;
-	std::string		ImagePath;
-	Vector2D		StartPosition;
-	Vector2D		Direction;
-	double			RotationAngle;
-	//BaseTank*		Firer;
-};
+	Vector2D vec = Vector2D((circle1_Pos.x - circle2_Pos.x), (circle1_Pos.y - circle2_Pos.y));
+	double distance = sqrt((vec.x*vec.x) + (vec.y*vec.y));
+
+	double combinedDistance = (circle1_Radius + circle2_Radius);
+	return distance < combinedDistance;
+}
+
+//-----------------------------------------------------------------------------
+
+inline bool BoxCollision(Rect2D rect1, Rect2D rect2)
+{
+	if (rect1.x + (rect1.width / 2) > rect2.x &&
+		rect1.x + (rect1.width / 2) < rect2.x + rect2.width &&
+		rect1.y + (rect1.height / 2) > rect2.y &&
+		rect1.y + (rect1.height / 2) < rect2.y + rect2.height)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+//-----------------------------------------------------------------------------
+
+inline bool TriangleCollision(Vector2D A, Vector2D B, Vector2D C, Vector2D P)
+{
+	//http://www.blackpawn.com/texts/pointinpoly/
+
+	//Compute Vectors
+	Vector2D v0 = C - A;
+	Vector2D v1 = B - A;
+	Vector2D v2 = P - A;
+
+	//Compute dot product
+	double dot00 = v0.Dot(v0);
+	double dot01 = v0.Dot(v1);
+	double dot02 = v0.Dot(v2);
+	double dot11 = v1.Dot(v1);
+	double dot12 = v1.Dot(v2);
+
+	// Compute barycentric coordinates
+	double invDenom = 1 / (dot00 * dot11 - dot01 * dot01);
+	double u = (dot11 * dot02 - dot01 * dot12) * invDenom;
+	double v = (dot00 * dot12 - dot01 * dot02) * invDenom;
+
+	// Check if point is in triangle
+	return (u >= 0) && (v >= 0) && (u + v < 1);
+}
+
+//-----------------------------------------------------------------------------
+
+// a1 is line1 start, a2 is line1 end, b1 is line2 start, b2 is line2 end
+inline bool LineIntersect(Vector2D a1, Vector2D a2, Vector2D b1, Vector2D b2)
+{
+	Vector2D intersection = Vector2D();
+
+	Vector2D b = a2 - a1;
+	Vector2D d = b2 - b1;
+	double bDotDPerp = b.x * d.y - b.y * d.x;
+
+	// if b dot d == 0, it means the lines are parallel so have infinite intersection points
+	if (bDotDPerp == 0)
+		return false;
+
+	Vector2D c = b1 - a1;
+	double t = (c.x * d.y - c.y * d.x) / bDotDPerp;
+	if (t < 0 || t > 1)
+		return false;
+
+	double u = (c.x * b.y - c.y * b.x) / bDotDPerp;
+	if (u < 0 || u > 1)
+		return false;
+
+	intersection = a1 + (b*t);
+
+	return true;
+}
+
+//-----------------------------------------------------------------------------
+
+inline bool TriangleRectangleCollision(Vector2D A, Vector2D B, Vector2D C, Rect2D R)
+{
+	Vector2D a = A;
+	Vector2D b = B;
+
+	//Do line interescts on each of the lines.
+	for (int i = 0; i < 3; i++)
+	{
+		//Get the relevant line from the triangle.
+		switch (i)
+		{
+		case 0:
+			a = A;
+			b = B;
+			break;
+
+		case 1:
+			a = B;
+			b = C;
+			break;
+
+		case 2:
+			a = C;
+			b = A;
+			break;
+
+		default:
+			break;
+		}
+
+		//Does this line interesct with any of the Rectangle lines?
+		if (LineIntersect(a, b, Vector2D(R.x, R.y), Vector2D(R.x + R.width, R.y)))
+			return true;
+		if (LineIntersect(a, b, Vector2D(R.x + R.width, R.y), Vector2D(R.x + R.width, R.y + R.height)))
+			return true;
+		if (LineIntersect(a, b, Vector2D(R.x + R.width, R.y + R.height), Vector2D(R.x, R.y + R.height)))
+			return true;
+		if (LineIntersect(a, b, Vector2D(R.x, R.y + R.height), Vector2D(R.x, R.y)))
+			return true;
+	}
+
+	//Non of the conditions were met.
+	return false;
+}
 
 //-----------------------------------------------------------------------------
 

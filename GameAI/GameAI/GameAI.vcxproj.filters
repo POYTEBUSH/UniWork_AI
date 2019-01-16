@@ -9,34 +9,27 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="TinyXML">
       <UniqueIdentifier>{1d544555-3274-48e7-8786-45b7fe063987}</UniqueIdentifier>
     </Filter>
-    <Filter Include="XML Data Files">
-      <UniqueIdentifier>{b9834924-ea92-46ba-8dd5-33a1015f005b}</UniqueIdentifier>
+    <Filter Include="Chess">
+      <UniqueIdentifier>{a3224e69-b1c0-4e54-b414-8fc014825f23}</UniqueIdentifier>
     </Filter>
-    <Filter Include="PeterBush">
-      <UniqueIdentifier>{081c1468-9b3e-44d7-beaa-dee812aab109}</UniqueIdentifier>
+    <Filter Include="Conway">
+      <UniqueIdentifier>{79a913a3-f589-4dbf-96d7-501ce476cfc2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NeuralNetworks_Clustering">
+      <UniqueIdentifier>{fcb9fa91-8cb4-413e-91d4-de0e74151ab0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lemmings">
+      <UniqueIdentifier>{f4dc07c9-08da-43be-836a-fff110c19e32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Snake">
+      <UniqueIdentifier>{5219e8dc-be46-4ec7-8bd1-aaba8b72e74f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Waypoint.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WaypointManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BaseTank.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="C2DMatrix.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Collisions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Commons.h">
@@ -45,34 +38,10 @@
     <ClInclude Include="Constants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ControlledTank.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GameScreen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameScreenLevel1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GameScreenManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ObstacleManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PickUpManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Projectile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ProjectileManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TankManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Texture2D.h">
@@ -84,84 +53,102 @@
     <ClInclude Include="TinyXML\tinyxml.h">
       <Filter>TinyXML</Filter>
     </ClInclude>
-    <ClInclude Include="DumbTank.h">
+    <ClInclude Include="Chess\ChessConstants.h">
+      <Filter>Chess</Filter>
+    </ClInclude>
+    <ClInclude Include="Chess\GameScreen_Chess.h">
+      <Filter>Chess</Filter>
+    </ClInclude>
+    <ClInclude Include="Chess\ChessCommons.h">
+      <Filter>Chess</Filter>
+    </ClInclude>
+    <ClInclude Include="Chess\ChessPlayer.h">
+      <Filter>Chess</Filter>
+    </ClInclude>
+    <ClInclude Include="Chess\ChessMoveManager.h">
+      <Filter>Chess</Filter>
+    </ClInclude>
+    <ClInclude Include="Conway\GameScreen_Conway.h">
+      <Filter>Conway</Filter>
+    </ClInclude>
+    <ClInclude Include="Conway\ConwayConstants.h">
+      <Filter>Conway</Filter>
+    </ClInclude>
+    <ClInclude Include="NeuralNetworks_Clustering\ClusteringConstants.h">
+      <Filter>NeuralNetworks_Clustering</Filter>
+    </ClInclude>
+    <ClInclude Include="NeuralNetworks_Clustering\GameScreen_Clustering.h">
+      <Filter>NeuralNetworks_Clustering</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LevelMap.h">
+    <ClInclude Include="Lemmings\Character_Lemmings.h">
+      <Filter>Lemmings</Filter>
+    </ClInclude>
+    <ClInclude Include="Lemmings\Commons_Lemmings.h">
+      <Filter>Lemmings</Filter>
+    </ClInclude>
+    <ClInclude Include="Lemmings\Constants_Lemmings.h">
+      <Filter>Lemmings</Filter>
+    </ClInclude>
+    <ClInclude Include="Lemmings\GameManager_Lemmings.h">
+      <Filter>Lemmings</Filter>
+    </ClInclude>
+    <ClInclude Include="Lemmings\GameScreen_Lemmings.h">
+      <Filter>Lemmings</Filter>
+    </ClInclude>
+    <ClInclude Include="Lemmings\Landscape_Lemmings.h">
+      <Filter>Lemmings</Filter>
+    </ClInclude>
+    <ClInclude Include="Lemmings\PhysicsObject_Lemmings.h">
+      <Filter>Lemmings</Filter>
+    </ClInclude>
+    <ClInclude Include="Lemmings\UIManager_Lemmings.h">
+      <Filter>Lemmings</Filter>
+    </ClInclude>
+    <ClInclude Include="Lemmings\VirtualJoypad_Lemmings.h">
+      <Filter>Lemmings</Filter>
+    </ClInclude>
+    <ClInclude Include="Lemmings\ObjectManager_Lemmings.h">
+      <Filter>Lemmings</Filter>
+    </ClInclude>
+    <ClInclude Include="Snake\GameScreen_Snake.h">
+      <Filter>Snake</Filter>
+    </ClInclude>
+    <ClInclude Include="Snake\SnakeConstants.h">
+      <Filter>Snake</Filter>
+    </ClInclude>
+    <ClInclude Include="Snake\SnakeCommons.h">
+      <Filter>Snake</Filter>
+    </ClInclude>
+    <ClInclude Include="VirtualJoypad.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Mine.h">
+    <ClInclude Include="b013432fHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PeterBush\B013432f_Tank.h">
-      <Filter>PeterBush</Filter>
+    <ClInclude Include="Lemmings\Gene_Lemmings.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PeterBush\B013432f_Behaviours.h">
-      <Filter>PeterBush</Filter>
+    <ClInclude Include="Lemmings\GeneFileManager.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PeterBush\B013432f_FuSMManager.h">
-      <Filter>PeterBush</Filter>
-    </ClInclude>
-    <ClInclude Include="PeterBush\B013432f_Commons.h">
-      <Filter>PeterBush</Filter>
-    </ClInclude>
-    <ClInclude Include="PeterBush\B013432f_AStar.h">
-      <Filter>PeterBush</Filter>
-    </ClInclude>
-    <ClInclude Include="PeterBush\B013432F_CollisionManager.h">
-      <Filter>PeterBush</Filter>
+    <ClInclude Include="Lemmings\StateManager_Lemmings.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="WaypointManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BaseTank.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Collisions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ControlledTank.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GameScreen.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameScreenLevel1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameScreenManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LevelMap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ObstacleManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PickUpManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Projectile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ProjectileManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TankManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Texture2D.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Waypoint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TinyXML\tinystr.cpp">
@@ -176,26 +163,65 @@
     <ClCompile Include="TinyXML\tinyxmlparser.cpp">
       <Filter>TinyXML</Filter>
     </ClCompile>
-    <ClCompile Include="DumbTank.cpp">
+    <ClCompile Include="Chess\GameScreen_Chess.cpp">
+      <Filter>Chess</Filter>
+    </ClCompile>
+    <ClCompile Include="Chess\ChessPlayer.cpp">
+      <Filter>Chess</Filter>
+    </ClCompile>
+    <ClCompile Include="Chess\ChessMoveManager.cpp">
+      <Filter>Chess</Filter>
+    </ClCompile>
+    <ClCompile Include="Conway\GameScreen_Conway.cpp">
+      <Filter>Conway</Filter>
+    </ClCompile>
+    <ClCompile Include="NeuralNetworks_Clustering\GameScreen_Clustering.cpp">
+      <Filter>NeuralNetworks_Clustering</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Mine.cpp">
+    <ClCompile Include="Lemmings\GameManager_Lemmings.cpp">
+      <Filter>Lemmings</Filter>
+    </ClCompile>
+    <ClCompile Include="Lemmings\GameScreen_Lemmings.cpp">
+      <Filter>Lemmings</Filter>
+    </ClCompile>
+    <ClCompile Include="Lemmings\Landscape_Lemmings.cpp">
+      <Filter>Lemmings</Filter>
+    </ClCompile>
+    <ClCompile Include="Lemmings\PhysicsObject_Lemmings.cpp">
+      <Filter>Lemmings</Filter>
+    </ClCompile>
+    <ClCompile Include="Lemmings\UIManager_Lemmings.cpp">
+      <Filter>Lemmings</Filter>
+    </ClCompile>
+    <ClCompile Include="Lemmings\VirtualJoypad_Lemmings.cpp">
+      <Filter>Lemmings</Filter>
+    </ClCompile>
+    <ClCompile Include="Lemmings\ObjectManager_Lemmings.cpp">
+      <Filter>Lemmings</Filter>
+    </ClCompile>
+    <ClCompile Include="Snake\GameScreen_Snake.cpp">
+      <Filter>Snake</Filter>
+    </ClCompile>
+    <ClCompile Include="VirtualJoypad.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PeterBush\B013432f_Tank.cpp">
-      <Filter>PeterBush</Filter>
+    <ClCompile Include="Lemmings\Character_Lemmings.cpp">
+      <Filter>Lemmings</Filter>
     </ClCompile>
-    <ClCompile Include="PeterBush\B013432f_Behaviours.cpp">
-      <Filter>PeterBush</Filter>
+    <ClCompile Include="b013432fHelper.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PeterBush\B013432f_FuSMManager.cpp">
-      <Filter>PeterBush</Filter>
+    <ClCompile Include="Lemmings\Gene_Lemmings.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PeterBush\B013432f_AStar.cpp">
-      <Filter>PeterBush</Filter>
+    <ClCompile Include="Lemmings\GeneFileManager.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PeterBush\B013432F_CollisionManager.cpp">
-      <Filter>PeterBush</Filter>
+    <ClCompile Include="Lemmings\StateManager_Lemmings.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -205,22 +231,8 @@
     <Library Include="SDL\SDL2main.lib" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="XML Data Files\GameAI.xml">
-      <Filter>XML Data Files</Filter>
-    </Xml>
-    <Xml Include="XML Data Files\GameAIOneBuilding.xml">
-      <Filter>XML Data Files</Filter>
-    </Xml>
-    <Xml Include="XML Data Files\TankData.xml">
-      <Filter>XML Data Files</Filter>
-    </Xml>
-    <Xml Include="XML Data Files\Arena.xml">
-      <Filter>XML Data Files</Filter>
-    </Xml>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="XML Data Files\LevelData.xml">
-      <Filter>XML Data Files</Filter>
+    <None Include="Conway\ConwaySeed.xml">
+      <Filter>Conway</Filter>
     </None>
   </ItemGroup>
 </Project>

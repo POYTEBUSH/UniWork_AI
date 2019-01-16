@@ -1,3 +1,7 @@
+//------------------------------------------------------------------------
+//  Author: Paul Roberts 2015
+//------------------------------------------------------------------------
+
 #include "Texture2D.h"
 #include <iostream>
 #include <SDL_image.h>
@@ -31,22 +35,22 @@ bool Texture2D::LoadFromFile( string path )
 	//Remove the memory used for a previous texture.
 	Free();
 
-	SDL_Texture* pTexture = NULL;
+	mTexture = NULL;
 
 	//Load the image.
-	SDL_Surface* pSurface = IMG_Load( path.c_str() );
-	if(pSurface != NULL)
+	mSurface = IMG_Load( path.c_str() );
+	if(mSurface != NULL)
 	{
 		//Colour key the image - The colour to be transparent.
-		SDL_SetColorKey(pSurface, SDL_TRUE, SDL_MapRGB(pSurface->format, 0, 0xFF, 0xFF));
+		SDL_SetColorKey(mSurface, SDL_TRUE, SDL_MapRGB(mSurface->format, 0, 0xFF, 0xFF));
 
 		//Create the texture from the pixels on the surface.
-		pTexture = SDL_CreateTextureFromSurface(mRenderer, pSurface);
-		if(pTexture != NULL)
+		mTexture = SDL_CreateTextureFromSurface(mRenderer, mSurface);
+		if(mTexture != NULL)
 		{
 			//Set the dimensions.
-			mWidth  = pSurface->w;
-			mHeight = pSurface->h;
+			mWidth  = mSurface->w;
+			mHeight = mSurface->h;
 		}
 		else
 		{
@@ -54,18 +58,29 @@ bool Texture2D::LoadFromFile( string path )
 		}
 
 		//Remove the loaded surface now that we have the texture.
-		SDL_FreeSurface(pSurface);
+		//SDL_FreeSurface(mSurface);
 	}
 	else
 	{
 		cout << "Image not loaded. Error: " << SDL_GetError() << endl;
 	}
 
-	//Set the internal texture.
-	mTexture = pTexture;
-
 	//Return whether the process was successful.
 	return mTexture != NULL;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+void Texture2D::RefreshTextureFromSurface()
+{
+	SDL_DestroyTexture(mTexture);
+	mTexture = SDL_CreateTextureFromSurface(mRenderer, mSurface);
+	if (mTexture != NULL)
+	{
+		//Set the dimensions.
+		mWidth = mSurface->w;
+		mHeight = mSurface->h;
+	}
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -84,10 +99,13 @@ void Texture2D::Free()
 
 //--------------------------------------------------------------------------------------------------
 
-void Texture2D::Render(double x, double y, SDL_RendererFlip flip, double angle)
+void Texture2D::Render(double x, double y, SDL_RendererFlip flip, double angle, int alpha)
 {
 	//Set where to render the texture.
 	SDL_Rect renderLocation = {(int)x, (int)y, mWidth, mHeight};
+
+	//Set the opacity.
+	SDL_SetTextureAlphaMod(mTexture, alpha);
 
 	//Render to screen.
 	SDL_RenderCopyEx(mRenderer, mTexture, NULL, &renderLocation, angle, NULL, flip);
@@ -95,40 +113,20 @@ void Texture2D::Render(double x, double y, SDL_RendererFlip flip, double angle)
 
 //--------------------------------------------------------------------------------------------------
 
-void Texture2D::Render(double x, double y, double angle)
+void Texture2D::Render(Vector2D newPosition, SDL_RendererFlip flip, double angle, int alpha)
 {
-	//No flip required.
-	Render(x, y, SDL_FLIP_NONE, angle);
+	Render(newPosition.x, newPosition.y, flip, angle, alpha);
 }
 
 //--------------------------------------------------------------------------------------------------
 
-void Texture2D::Render(Vector2D newPosition, SDL_RendererFlip flip, double angle)
+void Texture2D::Render(SDL_Rect srcRect, SDL_Rect destRect, SDL_RendererFlip flip, double angle, int alpha)
 {
-	Render(newPosition.x, newPosition.y, flip, angle);
-}
+	//Set the opacity.
+	SDL_SetTextureAlphaMod(mTexture, alpha);
 
-//--------------------------------------------------------------------------------------------------
-
-void Texture2D::Render(Vector2D newPosition, double angle)
-{
-	Render(newPosition.x, newPosition.y, SDL_FLIP_NONE, angle);
-}
-
-//--------------------------------------------------------------------------------------------------
-
-void Texture2D::Render(SDL_Rect srcRect, SDL_Rect destRect, SDL_RendererFlip flip, double angle)
-{
 	//Render to screen.
 	SDL_RenderCopyEx(mRenderer, mTexture, &srcRect, &destRect, angle, NULL, flip);
-}
-
-//--------------------------------------------------------------------------------------------------
-
-void Texture2D::Render(SDL_Rect srcRect, SDL_Rect destRect, double angle)
-{
-	//Render to screen.
-	Render(srcRect, destRect, SDL_FLIP_NONE, angle);
 }
 
 //--------------------------------------------------------------------------------------------------
