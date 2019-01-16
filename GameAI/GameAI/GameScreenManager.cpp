@@ -1,14 +1,6 @@
-//------------------------------------------------------------------------
-//  Author: Paul Roberts 2015
-//------------------------------------------------------------------------
-
 #include "GameScreenManager.h"
 #include "GameScreen.h"
-#include "Chess\GameScreen_Chess.h"
-#include "Conway\GameScreen_Conway.h"
-#include "NeuralNetworks_Clustering\GameScreen_Clustering.h"
-#include "Lemmings\GameScreen_Lemmings.h"
-#include "Snake\GameScreen_Snake.h"
+#include "GameScreenLevel1.h"
 
 //--------------------------------------------------------------------------------------------------
 
@@ -40,7 +32,7 @@ void GameScreenManager::Render()
 
 //--------------------------------------------------------------------------------------------------
 
-void GameScreenManager::Update(size_t deltaTime, SDL_Event e)
+void GameScreenManager::Update(float deltaTime, SDL_Event e)
 {
 	mCurrentScreen->Update(deltaTime, e);
 }
@@ -55,8 +47,9 @@ void GameScreenManager::ChangeScreen(SCREENS newScreen)
 		delete mCurrentScreen;
 	}
 
+	GameScreenLevel1* tempScreen1;
+
 	//Initialise the new screen.
-	mCurrentScreenID = newScreen;
 	switch(newScreen)
 	{
 		case SCREEN_INTRO:
@@ -65,24 +58,19 @@ void GameScreenManager::ChangeScreen(SCREENS newScreen)
 		case SCREEN_MENU:
 		break;
 
-		case SCREEN_CHESS:
-			mCurrentScreen = (GameScreen*)new GameScreen_Chess(mRenderer);
+		case SCREEN_PLAYGROUND:
+			tempScreen1 = new GameScreenLevel1(mRenderer);
+			mCurrentScreen = (GameScreen*)tempScreen1;
+			tempScreen1 = NULL;
 		break;
 		
-		case SCREEN_CONWAY:
-			mCurrentScreen = (GameScreen*)new GameScreen_Conway(mRenderer);
+		case SCREEN_ARENA:
 		break;
 
-		case SCREEN_CLUSTERING:
-			mCurrentScreen = (GameScreen*)new GameScreen_Clustering(mRenderer);
+		case SCREEN_GAMEOVER:
 		break;
-
-		case SCREEN_LEMMINGS:
-			mCurrentScreen = (GameScreen*)new GameScreen_Lemmings(mRenderer);
-		break;
-
-		case SCREEN_SNAKE:
-			mCurrentScreen = (GameScreen*)new GameScreen_Snake(mRenderer);
+		
+		case SCREEN_HIGHSCORES:
 		break;
 		
 		default:

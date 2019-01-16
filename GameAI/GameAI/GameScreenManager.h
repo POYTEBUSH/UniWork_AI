@@ -1,7 +1,3 @@
-//------------------------------------------------------------------------
-//  Author: Paul Roberts 2015
-//------------------------------------------------------------------------
-
 #ifndef _GAMESCREENMANAGER_H
 #define _GAMESCREENMANAGER_H
 
@@ -11,27 +7,22 @@
 
 class GameScreen;
 
-//------------------------------------------------------------------------
 class GameScreenManager
 {
-//------------------------------------------------------------------------
 public:
 	GameScreenManager(SDL_Renderer* renderer, SCREENS startScreen);
 	~GameScreenManager();
 
 	void Render();
-	void Update(size_t deltaTime, SDL_Event e);
+	void Update(float deltaTime, SDL_Event e);
 
 	void ChangeScreen(SCREENS newScreen);
 
-	bool IsInScreen(SCREENS screen) { return screen == mCurrentScreenID; }
-
-//------------------------------------------------------------------------
 private:
 	SDL_Renderer* mRenderer;
-	GameScreen*   mCurrentScreen;
-	SCREENS		  mCurrentScreenID;
+	GameScreen* mCurrentScreen;
+
 };
 
-//------------------------------------------------------------------------
+
 #endif //_GAMESCREENLEVEL1_H

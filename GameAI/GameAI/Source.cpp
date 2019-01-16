@@ -1,7 +1,3 @@
-//------------------------------------------------------------------------
-//  Author: Paul Roberts 2015
-//------------------------------------------------------------------------
-
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_mixer.h>
@@ -13,12 +9,6 @@
 #include "Commons.h"
 #include "Texture2D.h"
 #include "GameScreenManager.h"
-#include "Chess\ChessConstants.h"
-#include "Conway\ConwayConstants.h"
-#include "NeuralNetworks_Clustering\ClusteringConstants.h"
-#include "Lemmings\Constants_Lemmings.h"
-#include "Snake\SnakeConstants.h"
-#include <time.h>
 
 using namespace::std;
 
@@ -29,8 +19,8 @@ SDL_Surface* LoadSurface(string path);
 void		 LoadMusic(string path);
 void CloseSDL();
 
-void Render(size_t percentThroughFrame);
-bool Update(size_t deltaTime);
+void Render();
+bool Update();
 
 //-----------------------------------------------------------------------------------------------------
 //Globals.
@@ -49,61 +39,24 @@ int main(int argc, char* args[])
 	//Initialise SDL.
 	if(InitSDL())
 	{
-		srand((unsigned int)time(NULL));
-
-		//Set up the game screen manager.
-		//gameScreenManager = new GameScreenManager(gRenderer, SCREEN_CONWAY);
-		gameScreenManager = new GameScreenManager(gRenderer, SCREEN_LEMMINGS);
-		//gameScreenManager = new GameScreenManager(gRenderer, SCREEN_CHESS);
-		//gameScreenManager = new GameScreenManager(gRenderer, SCREEN_SNAKE);
-		//gameScreenManager = new GameScreenManager(gRenderer, SCREEN_CLUSTERING);
-
+		//Set up the game screen manager - Start with Level1
+		gameScreenManager = new GameScreenManager(gRenderer, SCREEN_PLAYGROUND);
+		
 		//Start the music.
-//		LoadMusic("Audio/Lemmings/Lemmings.mod");
-//		if(Mix_PlayingMusic() == 0)
-//		{
-//			Mix_PlayMusic(gMusic, -1);
-//		}
+		//LoadMusic("Music/.mp3");
+		if(Mix_PlayingMusic() == 0)
+		{
+			Mix_PlayMusic(gMusic, -1);
+		}
 
 		bool quit = false;
 		gOldTime = SDL_GetTicks();
-		size_t currentTime = 0;
-		size_t AccumulatedElapsedTime = 0;
-		size_t nextUpdate = 0;
 
 		//Game Loop.
 		while(!quit)
 		{
-			currentTime = SDL_GetTicks();
-			//cout << "CurrentTime: " << currentTime << endl;
-
-			size_t elapsedTime = currentTime - gOldTime;
-			size_t interpolationPercent = 0;	
-
-			//We want Chess to process as fast as possible.
-			if (gameScreenManager->IsInScreen(SCREEN_CHESS))
-			{
-				//Variable step update.
-				quit = Update(elapsedTime);
-			}
-			else
-			{
-				//Fixed step update - 16ms per update = 1000/60 = milliseconds in a second / fps
-				while (currentTime - nextUpdate >= MS_PER_UPDATE)
-				{
-					quit = Update(MS_PER_UPDATE);
-					nextUpdate += MS_PER_UPDATE;
-
-					//cout << "Update - NextUpdate: " << nextUpdate << endl;
-				}
-			}
-
-			gOldTime = currentTime;
-			interpolationPercent = ((currentTime - nextUpdate) * 100) / MS_PER_UPDATE;
-			//cout << "Interpolation Percent: " << interpolationPercent << endl;
-
-			Render(interpolationPercent);
-			
+			quit = Update();
+			Render();
 		}	
 	}
 
@@ -132,12 +85,7 @@ bool InitSDL()
 		}
 
 		//All good, so attempt to create the window.
-		//gWindow = SDL_CreateWindow("Staffordshire University - Conways Game of Life", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, kConwayScreenWidth, kConwayScreenHeight, SDL_WINDOW_SHOWN);
-		gWindow = SDL_CreateWindow("Staffordshire University - Genetic Algorithms - Lemmings", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, kLemmingsScreenWidth, kLemmingsScreenHeight, SDL_WINDOW_SHOWN);
-		//gWindow = SDL_CreateWindow("Staffordshire University - Chess", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, kChessScreenWidth, kChessScreenHeight, SDL_WINDOW_SHOWN);
-		//gWindow = SDL_CreateWindow("Staffordshire University - Neural Networks - SNAKE", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, kSnakeScreenWidth, kSnakeScreenHeight, SDL_WINDOW_SHOWN);
-		//gWindow = SDL_CreateWindow("Staffordshire University - Neural Networks - Clustering", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, kClusteringScreenWidth, kClusteringScreenHeight, SDL_WINDOW_SHOWN);
-
+		gWindow = SDL_CreateWindow("Game AI", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, kScreenWidth, kScreenHeight, SDL_WINDOW_SHOWN);
 		//Did the window get created?
 		if(gWindow != NULL)
 		{
@@ -158,12 +106,12 @@ bool InitSDL()
 				return false;
 			}
 			
-			//Initialise the Mixer.
+/*			//Initialise the Mixer.
 			if(Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0)
 			{
 				cout << "Mixer could not initialise. Error: " << Mix_GetError();
 				return false;
-			}
+			}*/
 		}
 		else
 		{
@@ -243,10 +191,10 @@ void CloseSDL()
 
 //-----------------------------------------------------------------------------------------------------
 
-void Render(size_t percentThroughFrame)
+void Render()
 {
 	//Clear the screen.
-	SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 0xFF);
+	SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 	SDL_RenderClear(gRenderer);
 
 	gameScreenManager->Render();
@@ -257,17 +205,32 @@ void Render(size_t percentThroughFrame)
 
 //-----------------------------------------------------------------------------------------------------
 
-bool Update(size_t deltaTime)
+bool Update()
 {
+	//Get the new time.
+	Uint32 newTime = SDL_GetTicks();
+
 	//Event Handler.
 	SDL_Event e;
 
 	//Get the events.
 	SDL_PollEvent(&e);
-	
-	//Finally do the update.
-	//cout << elapsedTime << endl;
-	gameScreenManager->Update(deltaTime, e);
+
+	//Handle any events.
+	switch(e.type)
+	{
+		//Click the 'X' to quit.
+		case SDL_QUIT:
+			return true;
+		break;
+
+		default:
+			gameScreenManager->Update((float)(newTime-gOldTime)/1000.0f, e);
+		break;
+	}
+
+	//Set the current time to be the old time.
+	gOldTime = newTime;
 
 	return false;
 }

@@ -1,26 +1,21 @@
-//------------------------------------------------------------------------
-//  Author: Paul Roberts 2017
-//------------------------------------------------------------------------
-
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 
+#include "Texture2D.h"
 #include "Commons.h"
 #include <SDL.h>
 #include <vector>
 
 //---------------------------------------------------------------
 
-class Texture2D;
-
 class GameObject
 {
 //---------------------------------------------------------------
 public:
-	GameObject(SDL_Renderer* renderer, Vector2D startPosition, string imagePath);
+	GameObject(SDL_Renderer* renderer, GAMEOBJECT_TYPE typeOfGameObject, Vector2D startPosition, string imagePath);
 	~GameObject();
 
-	virtual void				Update(size_t deltaTime, SDL_Event e);
+	virtual void				Update(float deltaTime, SDL_Event e);
 	virtual void				Render();
 
 	virtual void				UpdateAdjustedBoundingBox();
@@ -31,6 +26,8 @@ public:
 	void						SetCollisionRadius(double newCollisionRadius)						{mCollisionRadius = newCollisionRadius; mCollisionRadiusSq = newCollisionRadius*newCollisionRadius;}
 	double						GetCollisionRadius()												{return mCollisionRadius;}
 	double						GetCollisionRadiusSq()												{return mCollisionRadiusSq;}
+
+	GAMEOBJECT_TYPE				GetGameObjectType()													{return mGameObjectType;}
 
 //---------------------------------------------------------------
 protected:
@@ -49,6 +46,10 @@ protected:
 
 	double			 mCollisionRadius;
 	double			 mCollisionRadiusSq;
+
+//---------------------------------------------------------------
+private:
+	GAMEOBJECT_TYPE mGameObjectType;
 };
 
 //---------------------------------------------------------------

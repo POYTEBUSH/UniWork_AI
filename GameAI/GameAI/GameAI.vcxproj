@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -13,7 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{A4D8BD75-EDFE-4721-9570-86201AAB00D4}</ProjectGuid>
     <RootNamespace>GameAI</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -27,7 +27,7 @@
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -50,7 +50,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(PROJECTDIR)\SDL;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Console</SubSystem>
-      <StackReserveSize>8000000</StackReserveSize>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -67,72 +66,65 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="b013432fHelper.h" />
+    <ClInclude Include="BaseTank.h" />
     <ClInclude Include="C2DMatrix.h" />
-    <ClInclude Include="Chess\ChessCommons.h" />
-    <ClInclude Include="Chess\ChessConstants.h" />
-    <ClInclude Include="Chess\ChessMoveManager.h" />
-    <ClInclude Include="Chess\GameScreen_Chess.h" />
-    <ClInclude Include="Chess\ChessPlayer.h" />
+    <ClInclude Include="Collisions.h" />
     <ClInclude Include="Commons.h" />
     <ClInclude Include="Constants.h" />
-    <ClInclude Include="Conway\ConwayConstants.h" />
-    <ClInclude Include="Conway\GameScreen_Conway.h" />
+    <ClInclude Include="ControlledTank.h" />
+    <ClInclude Include="DumbTank.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameScreen.h" />
+    <ClInclude Include="GameScreenLevel1.h" />
     <ClInclude Include="GameScreenManager.h" />
-    <ClInclude Include="Lemmings\Character_Lemmings.h" />
-    <ClInclude Include="Lemmings\Commons_Lemmings.h" />
-    <ClInclude Include="Lemmings\Constants_Lemmings.h" />
-    <ClInclude Include="Lemmings\GameManager_Lemmings.h" />
-    <ClInclude Include="Lemmings\GameScreen_Lemmings.h" />
-    <ClInclude Include="Lemmings\GeneFileManager.h" />
-    <ClInclude Include="Lemmings\Gene_Lemmings.h" />
-    <ClInclude Include="Lemmings\Landscape_Lemmings.h" />
-    <ClInclude Include="Lemmings\ObjectManager_Lemmings.h" />
-    <ClInclude Include="Lemmings\PhysicsObject_Lemmings.h" />
-    <ClInclude Include="Lemmings\StateManager_Lemmings.h" />
-    <ClInclude Include="Lemmings\UIManager_Lemmings.h" />
-    <ClInclude Include="Lemmings\VirtualJoypad_Lemmings.h" />
-    <ClInclude Include="NeuralNetworks_Clustering\ClusteringConstants.h" />
-    <ClInclude Include="NeuralNetworks_Clustering\GameScreen_Clustering.h" />
-    <ClInclude Include="Snake\GameScreen_Snake.h" />
-    <ClInclude Include="Snake\SnakeCommons.h" />
-    <ClInclude Include="Snake\SnakeConstants.h" />
+    <ClInclude Include="LevelMap.h" />
+    <ClInclude Include="Mine.h" />
+    <ClInclude Include="ObstacleManager.h" />
+    <ClInclude Include="PeterBush\B013432f_AStar.h" />
+    <ClInclude Include="PeterBush\B013432f_Behaviours.h" />
+    <ClInclude Include="PeterBush\B013432F_CollisionManager.h" />
+    <ClInclude Include="PeterBush\B013432f_Commons.h" />
+    <ClInclude Include="PeterBush\B013432f_FuSMManager.h" />
+    <ClInclude Include="PeterBush\B013432f_Tank.h" />
+    <ClInclude Include="PickUpManager.h" />
+    <ClInclude Include="Projectile.h" />
+    <ClInclude Include="ProjectileManager.h" />
+    <ClInclude Include="TankManager.h" />
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="TinyXML\tinystr.h" />
     <ClInclude Include="TinyXML\tinyxml.h" />
-    <ClInclude Include="VirtualJoypad.h" />
+    <ClInclude Include="Waypoint.h" />
+    <ClInclude Include="WaypointManager.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="b013432fHelper.cpp" />
-    <ClCompile Include="Chess\ChessMoveManager.cpp" />
-    <ClCompile Include="Chess\GameScreen_Chess.cpp" />
-    <ClCompile Include="Chess\ChessPlayer.cpp" />
-    <ClCompile Include="Conway\GameScreen_Conway.cpp" />
+    <ClCompile Include="BaseTank.cpp" />
+    <ClCompile Include="Collisions.cpp" />
+    <ClCompile Include="ControlledTank.cpp" />
+    <ClCompile Include="DumbTank.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameScreen.cpp" />
+    <ClCompile Include="GameScreenLevel1.cpp" />
     <ClCompile Include="GameScreenManager.cpp" />
-    <ClCompile Include="Lemmings\Character_Lemmings.cpp" />
-    <ClCompile Include="Lemmings\GameManager_Lemmings.cpp" />
-    <ClCompile Include="Lemmings\GameScreen_Lemmings.cpp" />
-    <ClCompile Include="Lemmings\GeneFileManager.cpp" />
-    <ClCompile Include="Lemmings\Gene_Lemmings.cpp" />
-    <ClCompile Include="Lemmings\Landscape_Lemmings.cpp" />
-    <ClCompile Include="Lemmings\ObjectManager_Lemmings.cpp" />
-    <ClCompile Include="Lemmings\PhysicsObject_Lemmings.cpp" />
-    <ClCompile Include="Lemmings\StateManager_Lemmings.cpp" />
-    <ClCompile Include="Lemmings\UIManager_Lemmings.cpp" />
-    <ClCompile Include="Lemmings\VirtualJoypad_Lemmings.cpp" />
-    <ClCompile Include="NeuralNetworks_Clustering\GameScreen_Clustering.cpp" />
-    <ClCompile Include="Snake\GameScreen_Snake.cpp" />
+    <ClCompile Include="LevelMap.cpp" />
+    <ClCompile Include="Mine.cpp" />
+    <ClCompile Include="ObstacleManager.cpp" />
+    <ClCompile Include="PeterBush\B013432f_AStar.cpp" />
+    <ClCompile Include="PeterBush\B013432f_Behaviours.cpp" />
+    <ClCompile Include="PeterBush\B013432F_CollisionManager.cpp" />
+    <ClCompile Include="PeterBush\B013432f_FuSMManager.cpp" />
+    <ClCompile Include="PeterBush\B013432f_Tank.cpp" />
+    <ClCompile Include="PickUpManager.cpp" />
+    <ClCompile Include="Projectile.cpp" />
+    <ClCompile Include="ProjectileManager.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="TankManager.cpp" />
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="TinyXML\tinystr.cpp" />
     <ClCompile Include="TinyXML\tinyxml.cpp" />
     <ClCompile Include="TinyXML\tinyxmlerror.cpp" />
     <ClCompile Include="TinyXML\tinyxmlparser.cpp" />
-    <ClCompile Include="VirtualJoypad.cpp" />
+    <ClCompile Include="Waypoint.cpp" />
+    <ClCompile Include="WaypointManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="SDL\SDL2.lib" />
@@ -141,7 +133,17 @@
     <Library Include="SDL\SDL2_mixer.lib" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Conway\ConwaySeed.xml">
+    <Xml Include="XML Data Files\Arena.xml" />
+    <Xml Include="XML Data Files\GameAI.xml">
+      <SubType>Designer</SubType>
+    </Xml>
+    <Xml Include="XML Data Files\GameAIOneBuilding.xml" />
+    <Xml Include="XML Data Files\TankData.xml">
+      <SubType>Designer</SubType>
+    </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="XML Data Files\LevelData.xml">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>

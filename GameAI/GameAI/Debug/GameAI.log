@@ -1,13 +1,8 @@
-﻿E:\Program Files\Visual Studio 17\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (GameAI-DESKTOP-L6NVBAS.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  StateManager_Lemmings.cpp
-e:\git_repos\aisecondyear\gameai\gameai\lemmings\statemanager_lemmings.cpp(124): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-e:\git_repos\aisecondyear\gameai\gameai\lemmings\statemanager_lemmings.cpp(145): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-e:\git_repos\aisecondyear\gameai\gameai\lemmings\statemanager_lemmings.cpp(185): warning C4244: '-=': conversion from 'double' to 'int', possible loss of data
-e:\git_repos\aisecondyear\gameai\gameai\lemmings\statemanager_lemmings.cpp(190): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-e:\git_repos\aisecondyear\gameai\gameai\lemmings\statemanager_lemmings.cpp(200): warning C4244: 'initializing': conversion from '_Rep' to 'unsigned int', possible loss of data
-          with
-          [
-              _Rep=std::chrono::system_clock::rep
-          ]
-e:\git_repos\aisecondyear\gameai\gameai\lemmings\genefilemanager.h(20): warning C4715: 'GeneFileManager::GetHighestChromosome': not all control paths return a value
-  GameAI.vcxproj -> E:\Git_Repos\AISecondYear\GameAI\Debug\GameAI.exe
+﻿  B013432f_Behaviours.cpp
+d:\documents\work repos\uniwork_ai\gameai\gameai\peterbush\b013432f_behaviours.cpp(11): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+d:\documents\work repos\uniwork_ai\gameai\gameai\peterbush\b013432f_behaviours.cpp(30): warning C4018: '<': signed/unsigned mismatch
+d:\documents\work repos\uniwork_ai\gameai\gameai\peterbush\b013432f_behaviours.cpp(47): warning C4018: '<': signed/unsigned mismatch
+d:\documents\work repos\uniwork_ai\gameai\gameai\peterbush\b013432f_behaviours.cpp(265): warning C4018: '<': signed/unsigned mismatch
+d:\documents\work repos\uniwork_ai\gameai\gameai\peterbush\b013432f_behaviours.cpp(158): warning C4715: 'B013432f_Behaviours::AStarBehaviour': not all control paths return a value
+  GameAI.vcxproj -> D:\Documents\Work Repos\UniWork_AI\GameAI\Debug\GameAI.exe
+  GameAI.vcxproj -> D:\Documents\Work Repos\UniWork_AI\GameAI\Debug\GameAI.pdb (Partial PDB)
